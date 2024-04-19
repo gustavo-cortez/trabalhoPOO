@@ -10,7 +10,6 @@ public class Tarifa {
     private Date inicio;
     private double valorPrimeiraHora;
     private double valorHoraSubsequente;
-    private Date fim;
     private DiaSemana[] diasSemana;
              
     // Construtor e métodos getters e setters
@@ -20,7 +19,6 @@ public class Tarifa {
         this.valorPrimeiraHora = valorPrimeiraHora;
         this.valorHoraSubsequente = valorHoraSubsequente;
         this.diasSemana = diasSemana;
-        this.fim = fim;
     }
 
     public Date getInicio() {
@@ -38,10 +36,6 @@ public class Tarifa {
     public DiaSemana[] getDiasSemana() {
         return diasSemana;
     }
-
-    public Date getFim() {
-        return fim;
-    }
     
     public void setInicio(Date inicio) {
         this.inicio = inicio;
@@ -57,10 +51,6 @@ public class Tarifa {
 
     public void setDiasSemana(DiaSemana[] diasSemana) {
         this.diasSemana = diasSemana;
-    }
-
-    public void setFim(Date fim) {
-        this.fim = fim;
     }
     
 }
