@@ -1,5 +1,5 @@
 package classes;
-import java.util.Date;
+import java.time.LocalDate;
 /**
  * 
  * @author Gustavo
@@ -7,21 +7,21 @@ import java.util.Date;
 
 // Classe Tarifa para armazenar os valores das tarifas
 public class Tarifa {
-    private Date inicio;
+    private LocalDate inicio;
     private double valorPrimeiraHora;
     private double valorHoraSubsequente;
     private DiaSemana[] diasSemana;
              
     // Construtor e métodos getters e setters
 
-    public Tarifa(Date inicio, double valorPrimeiraHora, double valorHoraSubsequente, DiaSemana[] diasSemana, Date fim) {
+    public Tarifa(LocalDate inicio, double valorPrimeiraHora, double valorHoraSubsequente, DiaSemana[] diasSemana) {
         this.inicio = inicio;
         this.valorPrimeiraHora = valorPrimeiraHora;
         this.valorHoraSubsequente = valorHoraSubsequente;
         this.diasSemana = diasSemana;
     }
 
-    public Date getInicio() {
+    public LocalDate getInicio() {
         return inicio;
     }
 
@@ -37,7 +37,7 @@ public class Tarifa {
         return diasSemana;
     }
     
-    public void setInicio(Date inicio) {
+    public void setInicio(LocalDate inicio) {
         this.inicio = inicio;
     }
 

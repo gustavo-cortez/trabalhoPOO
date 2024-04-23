@@ -2,14 +2,13 @@
  * Trabalho POO Estacionamento
  * @author Gustavo e Gabriel
  */
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 import classes.*;
 import funcoes.*;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 // Classe Estacionamento para gerenciar o sistema
 public class Estacionamento {
@@ -22,8 +21,6 @@ public class Estacionamento {
         FunCliente clienteIns = new FunCliente();
         FunVagas vagasIns = new FunVagas();
         
-        
-        Estacionamento estacionamento = new Estacionamento();
         Scanner scanner = new Scanner(System.in);
         int opcao;
         do {
@@ -102,13 +99,19 @@ public class Estacionamento {
                                     case 1:
                                         String tipoVeiculo;
                                         String veiculoPlaca;
+                                        String corVeiculo;
+                                        String modeloVeiculo;
                                         System.out.println("Informe o documento:");
                                         documentoCli = scanner.nextLine();
                                         System.out.println("\nInforme a placa do veiculo:");
                                         veiculoPlaca = scanner.nextLine();
+                                        System.out.println("Informe o modelo do veiculo:");
+                                        modeloVeiculo = scanner.nextLine();
+                                        System.out.println("\nInforme a cor do veiculo:");
+                                        corVeiculo = scanner.nextLine();
                                         System.out.println("Informe o tipo do veiculo(CARRO, MOTO ou CAMINHAO):");
                                         tipoVeiculo = scanner.nextLine();
-                                        clienteIns.adicionarVeiculoCliente(veiculoPlaca, tipoVeiculo , documentoCli);
+                                        clienteIns.adicionarVeiculoCliente(veiculoPlaca, tipoVeiculo , documentoCli, corVeiculo, modeloVeiculo);
                                         break;
                                     case 2:
                                         System.out.println("Informe o documento:");
@@ -303,7 +306,7 @@ public class Estacionamento {
                                 System.out.println("Digite o número da vaga para estacionar o veículo");
                                 numVaga = scanner.nextInt();
                                 scanner.nextLine();
-                                vagasIns.estacionarVeiculo(clienteIns.consultarPlaca(PlacaEstacionar), numVaga);
+                                ticketsIns.gerarTicket(clienteIns.consultarPlaca(PlacaEstacionar), clienteIns.clienteconsultarPlaca(PlacaEstacionar), numVaga);
                                 break;
                             case 2:
                                 // Implementar função para retirar veículo
@@ -313,7 +316,7 @@ public class Estacionamento {
                                 numVagaRetirar = scanner.nextInt();
                                 scanner.nextLine();
                                 valor = vagasIns.retirarVeiculo(numVagaRetirar);
-                                if (valor != -1) {
+                                if (valor != -1.0) {
                                     
                                     System.out.println("Veículo retirado com sucesso. VALOR: R$ " + valor);
                                    
@@ -334,7 +337,29 @@ public class Estacionamento {
                                 break;
                             case 4:
                                 // Implementar função para gerenciar tarifas
-                                break;
+                                System.out.println("Informe a data de início (formato yyyy-MM-dd):");
+                                String dataStr = scanner.nextLine();
+                                LocalDate data = LocalDate.parse(dataStr);
+
+                                System.out.println("Informe a tarifa base:");
+                                double tarifaBase = scanner.nextDouble();
+
+                                System.out.println("Informe a taxa adicional:");
+                                double taxaAdicional = scanner.nextDouble();
+
+                                // Solicitar os dias da semana ao usuário
+                                System.out.println("Informe os dias da semana em que a tarifa será aplicada (Ex: SEGUNDA, TERCA):");
+                                scanner.nextLine(); // Consumir a quebra de linha pendente
+                                String diasStr = scanner.nextLine();
+                                String[] diasArray = diasStr.split(",\\s*"); // Dividir a string em um array
+                                
+                                DiaSemana[] diasDaSemana = new DiaSemana[diasArray.length];
+                                for (int i = 0; i < diasArray.length; i++) {
+                                    diasDaSemana[i] = DiaSemana.valueOf(diasArray[i].toUpperCase()); // Converter a string para o enum
+                                }
+                                
+                                // Cadastrar a tarifa com os dados fornecidos pelo usuário
+                                tarifasIns.cadastrarTarifa(data, tarifaBase, taxaAdicional, diasDaSemana);
                             case 5:
                                 System.out.println("Voltando ao menu principal...");
                                 break;
@@ -372,25 +397,24 @@ public class Estacionamento {
                     break;
 
                 case 5:
+
                     // Implementar consulta de faturamento em um período
                     System.out.print("Digite a data de início (formato dd/mm/yyyy): ");
                     String dataInicioStr = scanner.next();
                     System.out.print("Digite a data de fim (formato dd/mm/yyyy): ");
                     String dataFimStr = scanner.next();
 
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                    try {
-                        Date inicioPeriodo = formatter.parse(dataInicioStr);
-                        Date fimPeriodo = formatter.parse(dataFimStr);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDateTime inicioPeriodo = LocalDateTime.parse(dataInicioStr, formatter);
+                    LocalDateTime fimPeriodo = LocalDateTime.parse(dataFimStr, formatter);
 
-                        double faturamentoPeriodo = tarifasIns.consultarFaturamentoPeriodo(inicioPeriodo, fimPeriodo);
-                        System.out.println("Total faturado no período: R$ " + faturamentoPeriodo);
-                    } catch (ParseException e) {
-                        System.out.println("Formato de data inválido. Use o formato dd/mm/yyyy.");
-                    }
+                    double faturamentoPeriodo = tarifasIns.consultarFaturamentoPeriodo(inicioPeriodo, fimPeriodo);
+                    System.out.println("Total faturado no período: R$ " + faturamentoPeriodo);
+
                     break;
                 case 6:
                     System.out.println("Saindo do programa...");
+                    scanner.close();
                     break;
                 default:
                     System.out.println("Opção inválida. Por favor, escolha uma opção válida.");

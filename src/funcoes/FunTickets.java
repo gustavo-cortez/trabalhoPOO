@@ -1,8 +1,9 @@
 package funcoes;
 import classes.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.time.Duration;
 
 /**
  *
@@ -30,18 +31,18 @@ public class FunTickets {
     // Método para calcular o valor total do ticket
     public double calcularValorTicket(Ticket ticket) {
         FunTarifas tarifasIns = new FunTarifas();
-        Date inicio = ticket.getInicio();
-        Date fim = ticket.getFim();
-        long diffInMillies = Math.abs(fim.getTime() - inicio.getTime());
-        long diffInMinutes = diffInMillies / (60 * 1000);
+        LocalDateTime inicio = ticket.getInicio();
+        LocalDateTime fim = ticket.getFim();
+
+        // Calcular a diferença entre o início e o fim do ticket
+        Duration diff = Duration.between(inicio, fim);
+        long diffInMinutes = diff.toMinutes();
 
         // Encontrar a tarifa correspondente ao dia da semana
         Tarifa tarifa = null;
         for (Tarifa t : tarifasIns.tarifas) {
-            
             tarifa = t;
             break;
-            
         }
 
         if (tarifa == null) {
@@ -54,14 +55,16 @@ public class FunTickets {
 
         return valorTotal;
     }
+
     
     // Método para gerar um ticket de estacionamento
-    public Ticket gerarTicket(Veiculo veiculo, Cliente cliente) {
-        FunVagas vagaIns = new FunVagas();
+    public Ticket gerarTicket(Veiculo veiculo, Cliente cliente, int numvaga) {
+        FunVagas vagasIns = new FunVagas();
+        FunTickets ticketsIns = new FunTickets();
         // Encontrar uma vaga disponível para o veículo
         Vagas vagaDisponivel = null;
-        for (Vagas vaga : vagaIns.vagas) {
-            if (vaga.getStatus() == VagaStatus.DISPONIVEL && vaga.getTipoVeiculo() == veiculo.getTipo()) {
+        for (Vagas vaga : vagasIns.vagas) {
+            if (vaga.getStatus() == VagaStatus.DISPONIVEL && vaga.getTipoVeiculo() == veiculo.getTipo() && vaga.getNumero() == numvaga){
                 vagaDisponivel = vaga;
                 break;
             }
@@ -73,16 +76,20 @@ public class FunTickets {
             return null;
         }
 
+        // Estacionar o veículo na vaga disponível
+        vagasIns.estacionarVeiculo(veiculo, vagaDisponivel.getNumero());
+
         // Criar um novo ticket
-        Ticket novoTicket = new Ticket(new Date(), new Date(), veiculo, 0.0, vagaDisponivel);
+        Ticket novoTicket = new Ticket(LocalDateTime.now(), null, veiculo, 0.0, vagaDisponivel);
 
         // Atualizar o status da vaga para ocupada
         vagaDisponivel.setStatus(VagaStatus.OCUPADA);
 
         // Adicionar o ticket à lista de tickets
-        tickets.add(novoTicket);
+        ticketsIns.tickets.add(novoTicket);
 
         System.out.println("Ticket gerado com sucesso!");
         return novoTicket;
     }
+
 }

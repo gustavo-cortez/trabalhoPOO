@@ -72,12 +72,12 @@ public class FunCliente {
     }
     
         // Método para adicionar um veículo a um cliente
-    public void adicionarVeiculoCliente(String placa, String tipo, String documentoCliente) {
+    public void adicionarVeiculoCliente(String placa, String tipo, String documentoCliente, String cor, String modelo) {
         String nomeCliente;
         TipoVeiculo tipoVeiculo = TipoVeiculo.valueOf(tipo.toUpperCase());
         Cliente cliente = consultarCliente(documentoCliente);
         if (cliente != null) {
-            Veiculo veiculo = new Veiculo(placa, consultarCliente(documentoCliente) ,tipoVeiculo);
+            Veiculo veiculo = new Veiculo(placa, consultarCliente(documentoCliente) ,tipoVeiculo, cor, modelo);
             cliente.adicionarVeiculo(veiculo);
             nomeCliente = cliente.getNome();
             System.out.println("Veículo adicionado com sucesso ao cliente " + nomeCliente);
@@ -117,4 +117,17 @@ public class FunCliente {
         }
         return null; // Retorna null se nenhum veículo com a placa especificada for encontrado
     }
+    
+    // Método para consultar veículo por placa
+    public Cliente clienteconsultarPlaca(String placaCarro) {
+        for (Cliente cliente : clientes) {
+            for (Veiculo veiculo : cliente.getVeiculos()) {
+                if (veiculo.getPlaca().equals(placaCarro)) {
+                    return cliente;
+                }
+            }
+        }
+        return null; // Retorna null se nenhum veículo com a placa especificada for encontrado
+    }
+
 }

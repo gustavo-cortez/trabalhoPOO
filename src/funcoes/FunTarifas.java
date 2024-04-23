@@ -1,9 +1,11 @@
 package funcoes;
+import classes.DiaSemana;
 import classes.Tarifa;
 import classes.Ticket;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -17,10 +19,12 @@ public class FunTarifas {
         this.tarifas = new ArrayList<>();
     }
     
-    // Métodos para gerenciar tarifas
-    public void cadastrarTarifa(Tarifa tarifa) {
+    // Método para cadastrar uma nova tarifa
+    public void cadastrarTarifa(LocalDate inicio, double valorPrimeiraHora, double valorHoraSubsequente, DiaSemana[] diasSemana) {
+        Tarifa tarifa = new Tarifa(inicio, valorPrimeiraHora, valorHoraSubsequente, diasSemana);
         tarifas.add(tarifa);
     }
+
     
     // Método para listar todas as tarifas cadastradas
     public List<Tarifa> listarTarifas() {
@@ -32,7 +36,7 @@ public class FunTarifas {
         tarifas.add(tarifa);
     }
 
-    public Tarifa buscarTarifaPorPeriodo(Date inicioPeriodo, Date fimPeriodo) {
+    public Tarifa buscarTarifaPorPeriodo(LocalDate inicioPeriodo, LocalDate fimPeriodo) {
         for (Tarifa tarifa : tarifas) {
             if (tarifa.getInicio().equals(inicioPeriodo) && tarifa.getInicio().equals(fimPeriodo)) {
                 return tarifa;
@@ -40,20 +44,20 @@ public class FunTarifas {
         }
         return null; // Tarifa não encontrada para o período especificado
     }
-
     // Método para consultar o faturamento em um período específico
-    public double consultarFaturamentoPeriodo(Date inicioPeriodo, Date fimPeriodo) {
+    public double consultarFaturamentoPeriodo(LocalDateTime inicioPeriodo, LocalDateTime fimPeriodo) {
         FunTickets ticketsIns = new FunTickets();
         double faturamento = 0;
         for (Ticket ticket : ticketsIns.tickets) {
-            Date inicioTicket = ticket.getInicio();
-            Date fimTicket = ticket.getFim();
-            if (inicioTicket.after(inicioPeriodo) && fimTicket.before(fimPeriodo)) {
+            LocalDateTime inicioTicket = ticket.getInicio();
+            LocalDateTime fimTicket = ticket.getFim();
+            if (inicioTicket.isAfter(inicioPeriodo) && fimTicket.isBefore(fimPeriodo)) {
                 double valorTicket = ticketsIns.calcularValorTicket(ticket);
                 faturamento += valorTicket;
             }
         }
         return faturamento;
     }
+
     
 }

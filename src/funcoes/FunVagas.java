@@ -5,8 +5,8 @@ import classes.TipoVeiculo;
 import classes.VagaStatus;
 import classes.Vagas;
 import classes.Veiculo;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,36 +81,39 @@ public class FunVagas {
         }
         return vagasDisponiveis;
     }
+
     // Método para estacionar um veículo
     public void estacionarVeiculo(Veiculo veiculo, int numeroVaga) {
         FunTickets ticketIns = new FunTickets();
         Vagas vaga = buscarVaga(numeroVaga);
         if (vaga != null && vaga.getStatus() == VagaStatus.DISPONIVEL && veiculo.getTipo() == vaga.getTipoVeiculo()) {
             vaga.setStatus(VagaStatus.OCUPADA);
-            Ticket ticket = new Ticket(new Date(), new Date(), veiculo, 0.0, vaga);
+            Ticket ticket = new Ticket(LocalDateTime.now(), null, veiculo, 0.0, vaga);
             ticketIns.tickets.add(ticket);
             System.out.println("Veículo estacionado com sucesso");
         } else {
-            
             System.out.println("Erro ao estacionar veículo, vaga não correspondente ou indisponível");
-            
         }
     }
+
     
     public double retirarVeiculo(int numeroVaga) {
-        FunTickets ticketIns = new FunTickets();
-        Vagas vaga = buscarVaga(numeroVaga);
-        if (vaga != null && vaga.getStatus() == VagaStatus.OCUPADA) {
-            vaga.setStatus(VagaStatus.DISPONIVEL);
-            Ticket ticket = ticketIns.buscarTicketPorVaga(numeroVaga);
-            ticket.setFim(new Date());
-
+    FunTickets ticketIns = new FunTickets();
+    Vagas vaga = buscarVaga(numeroVaga);
+    if (vaga != null && vaga.getStatus() == VagaStatus.OCUPADA) {
+        vaga.setStatus(VagaStatus.DISPONIVEL);
+        Ticket ticket = ticketIns.buscarTicketPorVaga(numeroVaga);
+        if (ticket != null) { // Verifica se o ticket não é nulo
+            ticket.setFim(LocalDateTime.now());
             double valorTotal = ticketIns.calcularValorTicket(ticket);
-
-            ticketIns.tickets.remove(ticket); // Remover ticket da lista de tickets
-
             return valorTotal;
+        } else {
+            System.out.println("Nenhum ticket encontrado para a vaga especificada.");
+            return -1.0;
         }
-        return -1; // Vaga não ocupada ou inexistente
     }
+    return -1.0; // Vaga não ocupada ou inexistente
+    }
+
+
 }

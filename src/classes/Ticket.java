@@ -1,20 +1,20 @@
 package classes;
-import java.util.Date;
+import java.time.LocalDateTime;
 /**
  *
  * @author Gustavo
  */
 // Classe Ticket para representar um ticket de estacionamento
 public class Ticket{
-    private Date inicio;
-    private Date fim;
+    private LocalDateTime inicio;
+    private LocalDateTime fim;
     private Veiculo veiculo;
     private double valor;
     private Vagas vaga;
 
     // Métodos getters e setters
 
-    public Ticket(Date inicio, Date fim, Veiculo veiculo, double valor, Vagas vaga) {
+    public Ticket(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga) {
         this.inicio = inicio;
         this.fim = fim;
         this.veiculo = veiculo;
@@ -22,11 +22,11 @@ public class Ticket{
         this.vaga = vaga;
     }
     
-    public Date getInicio() {
+    public LocalDateTime getInicio() {
         return inicio;
     }
 
-    public Date getFim() {
+    public LocalDateTime getFim() {
         return fim;
     }
 
@@ -43,11 +43,11 @@ public class Ticket{
     }
 
 
-    public void setInicio(Date inicio) {
+    public void setInicio(LocalDateTime inicio) {
         this.inicio = inicio;
     }
 
-    public void setFim(Date fim) {
+    public void setFim(LocalDateTime fim) {
         this.fim = fim;
     }
 
