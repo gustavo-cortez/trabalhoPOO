@@ -64,14 +64,14 @@ public class FunTarifas {
         return null; // Tarifa não encontrada para o período especificado
     }
     // Método para consultar o faturamento em um período específico
-    public double consultarFaturamentoPeriodo(LocalDateTime inicioPeriodo, LocalDateTime fimPeriodo) {
+    public double consultarFaturamentoPeriodo(LocalDateTime inicioPeriodo, LocalDateTime fimPeriodo, FunTarifas tarifaIns) {
         FunTickets ticketsIns = new FunTickets();
         double faturamento = 0;
         for (Ticket ticket : ticketsIns.tickets) {
             LocalDateTime inicioTicket = ticket.getInicio();
             LocalDateTime fimTicket = ticket.getFim();
             if (inicioTicket.isAfter(inicioPeriodo) && fimTicket.isBefore(fimPeriodo)) {
-                double valorTicket = ticketsIns.calcularValorTicket(ticket);
+                double valorTicket = ticketsIns.calcularValorTicket(ticket, tarifaIns);
                 faturamento += valorTicket;
             }
         }

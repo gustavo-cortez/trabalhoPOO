@@ -9,7 +9,6 @@ import funcoes.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 // Classe Estacionamento para gerenciar o sistema
 public class Estacionamento {
 
@@ -315,7 +314,7 @@ public class Estacionamento {
                                 System.out.println("Digite o número da vaga para retirar o veículo");
                                 numVagaRetirar = scanner.nextInt();
                                 scanner.nextLine();
-                                valor = vagasIns.retirarVeiculo(ticketsIns, numVagaRetirar);
+                                valor = vagasIns.retirarVeiculo(ticketsIns, numVagaRetirar, tarifasIns);
                                 System.out.println("Veículo retirado com sucesso. VALOR: R$ " + valor);
                               
                                 break;
@@ -400,16 +399,16 @@ public class Estacionamento {
                 case 5:
 
                     // Implementar consulta de faturamento em um período
-                    System.out.print("Digite a data de início (formato dd/mm/yyyy): ");
+                    System.out.print("Digite a data de início (formato dd/mm/yyyy-HH:mm): ");
                     String dataInicioStr = scanner.next();
-                    System.out.print("Digite a data de fim (formato dd/mm/yyyy): ");
+                    System.out.print("Digite a data de fim (formato dd/mm/yyyy-HH:mm): ");
                     String dataFimStr = scanner.next();
 
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
                     LocalDateTime inicioPeriodo = LocalDateTime.parse(dataInicioStr, formatter);
                     LocalDateTime fimPeriodo = LocalDateTime.parse(dataFimStr, formatter);
 
-                    double faturamentoPeriodo = tarifasIns.consultarFaturamentoPeriodo(inicioPeriodo, fimPeriodo);
+                    double faturamentoPeriodo = tarifasIns.consultarFaturamentoPeriodo(inicioPeriodo, fimPeriodo, tarifasIns);
                     System.out.println("Total faturado no período: R$ " + faturamentoPeriodo);
 
                     break;

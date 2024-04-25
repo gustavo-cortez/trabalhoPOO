@@ -26,12 +26,13 @@ public class FunTickets {
     
     public Ticket buscarTicketPorVaga(int numeroVaga) {
         for (Ticket ticket : tickets) {
-            if (ticket.getVaga().getNumero() == numeroVaga) {
+            if (ticket.getVaga().getNumero() == numeroVaga && ticket.getFim() == null) {
                 return ticket;
             }
         }
-        return null; // Ticket não encontrado para a vaga especificada
+        return null; // Ticket não encontrado para a vaga especificada ou já foi encerrado
     }
+    
 
     
     // Método para listar todas as vagas disponíveis
@@ -42,8 +43,8 @@ public class FunTickets {
     }
     
     // Método para calcular o valor total do ticket
-    public double calcularValorTicket(Ticket ticket) {
-        FunTarifas tarifasIns = new FunTarifas();
+    public double calcularValorTicket(Ticket ticket, FunTarifas tarifaIns) {
+
         LocalDateTime inicio = ticket.getInicio();
         LocalDateTime fim = ticket.getFim();
 
@@ -53,7 +54,7 @@ public class FunTickets {
 
         // Encontrar a tarifa correspondente ao dia da semana do início do ticket
         Tarifa tarifa = null;
-        for (Tarifa t : tarifasIns.tarifas) {
+        for (Tarifa t : tarifaIns.tarifas) {
             for (DiaSemana dia : t.getDiasSemana()) {
                 if (dia.getOpcaodia() == inicio.getDayOfWeek().getValue()) {
                     tarifa = t;
@@ -66,6 +67,7 @@ public class FunTickets {
         }
 
         if (tarifa == null) {
+            System.out.println("Tarifa não encontrada para o dia da semana");
             return -1.0; // Tarifa não encontrada para o dia da semana
         }
 
@@ -79,7 +81,7 @@ public class FunTickets {
             long horasSubsequentes = (long) Math.ceil((double) (diffInMinutes - 60) / 60);
             valorTotal += horasSubsequentes * tarifa.getValorHoraSubsequente();
         }
-
+        System.out.println("Valor:" + valorTotal);
         return valorTotal;
     }
 

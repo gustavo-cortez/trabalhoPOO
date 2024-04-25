@@ -93,14 +93,14 @@ public class FunVagas {
         }
     }
 
-    public double retirarVeiculo(FunTickets ticketIns, int numeroVaga) {
+    public double retirarVeiculo(FunTickets ticketIns, int numeroVaga, FunTarifas tarifaIns) {
         Vagas vaga = buscarVaga(numeroVaga);
         if (vaga != null && vaga.getStatus() == VagaStatus.OCUPADA) {
             vaga.setStatus(VagaStatus.DISPONIVEL);
             Ticket ticket = ticketIns.buscarTicketPorVaga(numeroVaga);
             if (ticket != null) {
                 ticket.setFim(LocalDateTime.now());
-                double valorTotal = ticketIns.calcularValorTicket(ticket);
+                double valorTotal = ticketIns.calcularValorTicket(ticket, tarifaIns);
                 return valorTotal;
             } else {
                 System.out.println("Nenhum ticket encontrado para a vaga especificada.");
