@@ -82,38 +82,36 @@ public class FunVagas {
         return vagasDisponiveis;
     }
 
-    // Método para estacionar um veículo
-    public void estacionarVeiculo(Veiculo veiculo, int numeroVaga) {
-        FunTickets ticketIns = new FunTickets();
+    public void estacionarVeiculo(FunTickets ticketIns, Veiculo veiculo, int numeroVaga) {
         Vagas vaga = buscarVaga(numeroVaga);
         if (vaga != null && vaga.getStatus() == VagaStatus.DISPONIVEL && veiculo.getTipo() == vaga.getTipoVeiculo()) {
             vaga.setStatus(VagaStatus.OCUPADA);
-            Ticket ticket = new Ticket(LocalDateTime.now(), null, veiculo, 0.0, vaga);
-            ticketIns.tickets.add(ticket);
+            ticketIns.cadastrarTicket(LocalDateTime.now(), null, veiculo, 0.0, vaga); // Adiciona o ticket à lista de tickets
             System.out.println("Veículo estacionado com sucesso");
         } else {
             System.out.println("Erro ao estacionar veículo, vaga não correspondente ou indisponível");
         }
     }
 
-    
-    public double retirarVeiculo(int numeroVaga) {
-    FunTickets ticketIns = new FunTickets();
-    Vagas vaga = buscarVaga(numeroVaga);
-    if (vaga != null && vaga.getStatus() == VagaStatus.OCUPADA) {
-        vaga.setStatus(VagaStatus.DISPONIVEL);
-        Ticket ticket = ticketIns.buscarTicketPorVaga(numeroVaga);
-        if (ticket != null) { // Verifica se o ticket não é nulo
-            ticket.setFim(LocalDateTime.now());
-            double valorTotal = ticketIns.calcularValorTicket(ticket);
-            return valorTotal;
+    public double retirarVeiculo(FunTickets ticketIns, int numeroVaga) {
+        Vagas vaga = buscarVaga(numeroVaga);
+        if (vaga != null && vaga.getStatus() == VagaStatus.OCUPADA) {
+            vaga.setStatus(VagaStatus.DISPONIVEL);
+            Ticket ticket = ticketIns.buscarTicketPorVaga(numeroVaga);
+            if (ticket != null) {
+                ticket.setFim(LocalDateTime.now());
+                double valorTotal = ticketIns.calcularValorTicket(ticket);
+                return valorTotal;
+            } else {
+                System.out.println("Nenhum ticket encontrado para a vaga especificada.");
+                return -1.0;
+            }
         } else {
-            System.out.println("Nenhum ticket encontrado para a vaga especificada.");
+            System.out.println("Vaga não ocupada ou inexistente");
             return -1.0;
         }
     }
-    return -1.0; // Vaga não ocupada ou inexistente
-    }
+
 
 
 }

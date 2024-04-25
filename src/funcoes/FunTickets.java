@@ -18,16 +18,29 @@ public class FunTickets {
         this.tickets = new ArrayList<>();
     }
     
-    // Método auxiliar para buscar um ticket pelo número da vaga
+    // Método para cadastrar um novo cliente
+    public void cadastrarTicket(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga) {
+        Ticket ticket = new Ticket(inicio, fim, veiculo , valor, vaga);
+        tickets.add(ticket);
+    }
+    
     public Ticket buscarTicketPorVaga(int numeroVaga) {
         for (Ticket ticket : tickets) {
             if (ticket.getVaga().getNumero() == numeroVaga) {
                 return ticket;
             }
         }
-        return null; // Ticket não encontrado
+        return null; // Ticket não encontrado para a vaga especificada
     }
 
+    
+    // Método para listar todas as vagas disponíveis
+    public void listarTickets() {
+        for (Ticket ticket : tickets) {
+            System.out.println("Inicio: " + ticket.getInicio() + ", Fim: " + ticket.getFim() + ", Valor: " + ticket.getValor());
+        }
+    }
+    
     // Método para calcular o valor total do ticket
     public double calcularValorTicket(Ticket ticket) {
         FunTarifas tarifasIns = new FunTarifas();
@@ -38,58 +51,37 @@ public class FunTickets {
         Duration diff = Duration.between(inicio, fim);
         long diffInMinutes = diff.toMinutes();
 
-        // Encontrar a tarifa correspondente ao dia da semana
+        // Encontrar a tarifa correspondente ao dia da semana do início do ticket
         Tarifa tarifa = null;
         for (Tarifa t : tarifasIns.tarifas) {
-            tarifa = t;
-            break;
-        }
-
-        if (tarifa == null) {
-            return -1; // Tarifa não encontrada para o dia da semana
-        }
-
-        double valorTotal = tarifa.getValorPrimeiraHora();
-        long horasSubsequentes = (long) Math.ceil((double) (diffInMinutes - 60) / 60);
-        valorTotal += horasSubsequentes * tarifa.getValorHoraSubsequente();
-
-        return valorTotal;
-    }
-
-    
-    // Método para gerar um ticket de estacionamento
-    public Ticket gerarTicket(Veiculo veiculo, Cliente cliente, int numvaga) {
-        FunVagas vagasIns = new FunVagas();
-        FunTickets ticketsIns = new FunTickets();
-        // Encontrar uma vaga disponível para o veículo
-        Vagas vagaDisponivel = null;
-        for (Vagas vaga : vagasIns.vagas) {
-            if (vaga.getStatus() == VagaStatus.DISPONIVEL && vaga.getTipoVeiculo() == veiculo.getTipo() && vaga.getNumero() == numvaga){
-                vagaDisponivel = vaga;
+            for (DiaSemana dia : t.getDiasSemana()) {
+                if (dia.getOpcaodia() == inicio.getDayOfWeek().getValue()) {
+                    tarifa = t;
+                    break;
+                }
+            }
+            if (tarifa != null) {
                 break;
             }
         }
 
-        // Verificar se há vagas disponíveis
-        if (vagaDisponivel == null) {
-            System.out.println("Não há vagas disponíveis para estacionar o veículo.");
-            return null;
+        if (tarifa == null) {
+            return -1.0; // Tarifa não encontrada para o dia da semana
         }
 
-        // Estacionar o veículo na vaga disponível
-        vagasIns.estacionarVeiculo(veiculo, vagaDisponivel.getNumero());
+        double valorTotal;
 
-        // Criar um novo ticket
-        Ticket novoTicket = new Ticket(LocalDateTime.now(), null, veiculo, 0.0, vagaDisponivel);
+        // Calcula o valor da primeira hora
+        if (diffInMinutes <= 60) {
+            valorTotal = tarifa.getValorPrimeiraHora();
+        } else {
+            valorTotal = tarifa.getValorPrimeiraHora() + tarifa.getValorHoraSubsequente(); // Primeira hora completa
+            long horasSubsequentes = (long) Math.ceil((double) (diffInMinutes - 60) / 60);
+            valorTotal += horasSubsequentes * tarifa.getValorHoraSubsequente();
+        }
 
-        // Atualizar o status da vaga para ocupada
-        vagaDisponivel.setStatus(VagaStatus.OCUPADA);
-
-        // Adicionar o ticket à lista de tickets
-        ticketsIns.tickets.add(novoTicket);
-
-        System.out.println("Ticket gerado com sucesso!");
-        return novoTicket;
+        return valorTotal;
     }
+
 
 }

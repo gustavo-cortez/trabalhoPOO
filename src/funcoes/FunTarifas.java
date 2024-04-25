@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Scanner;
 
 /**
  *
@@ -20,20 +21,38 @@ public class FunTarifas {
     }
     
     // Método para cadastrar uma nova tarifa
-    public void cadastrarTarifa(LocalDate inicio, double valorPrimeiraHora, double valorHoraSubsequente, DiaSemana[] diasSemana) {
-        Tarifa tarifa = new Tarifa(inicio, valorPrimeiraHora, valorHoraSubsequente, diasSemana);
+    public void cadastrarTarifa(LocalDate inicio, double valorPrimeiraHora, double valorHoraSubsequente) {
+        Scanner scanner = new Scanner(System.in);
+        List<DiaSemana> diasSemana = new ArrayList<>();
+        // Solicitar os dias da semana ao usuário
+        int dia;
+        System.out.println("Informe os dias da semana em que a tarifa será aplicada:");
+        dia = scanner.nextInt();
+        while(dia <= 7 && dia > 0){
+            DiaSemana diaSemana = DiaSemana.getByOpcao(dia); // Obtém o enum correspondente ao dia informado
+            diasSemana.add(diaSemana); // Adiciona o dia à lista
+            System.out.println("Informe os dias da semana em que a tarifa será aplicada:");
+            dia = scanner.nextInt();
+        }
+        Tarifa tarifa = new Tarifa(inicio, valorPrimeiraHora, valorHoraSubsequente, diasSemana.toArray(new DiaSemana[0]));
         tarifas.add(tarifa);
-    }
-
-    
-    // Método para listar todas as tarifas cadastradas
-    public List<Tarifa> listarTarifas() {
-        return tarifas;
     }
     
     // Métodos para gerenciar tarifas de acordo com períodos específicos
     public void cadastrarTarifaPeriodo(Tarifa tarifa) {
         tarifas.add(tarifa);
+    }
+    
+    // Método para listar todas as vagas disponíveis
+    public void listarTarifas() {
+        for (Tarifa tarifa : tarifas) {
+            System.out.println("Inicio: " + tarifa.getInicio() + ", Valor primeira hora: " + tarifa.getValorPrimeiraHora() + ", Valor hora subsequente: " + tarifa.getValorHoraSubsequente() + ", Dias da semana: ");
+            // Itera sobre os dias da semana da tarifa
+            for (DiaSemana dia : tarifa.getDiasSemana()) {
+                System.out.print(dia.getDescricao() + " ");
+            }
+            System.out.println(" ");
+        }
     }
 
     public Tarifa buscarTarifaPorPeriodo(LocalDate inicioPeriodo, LocalDate fimPeriodo) {

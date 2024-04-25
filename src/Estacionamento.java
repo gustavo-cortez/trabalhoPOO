@@ -306,7 +306,7 @@ public class Estacionamento {
                                 System.out.println("Digite o número da vaga para estacionar o veículo");
                                 numVaga = scanner.nextInt();
                                 scanner.nextLine();
-                                ticketsIns.gerarTicket(clienteIns.consultarPlaca(PlacaEstacionar), clienteIns.clienteconsultarPlaca(PlacaEstacionar), numVaga);
+                                vagasIns.estacionarVeiculo(ticketsIns, clienteIns.consultarPlaca(PlacaEstacionar), numVaga);
                                 break;
                             case 2:
                                 // Implementar função para retirar veículo
@@ -315,17 +315,9 @@ public class Estacionamento {
                                 System.out.println("Digite o número da vaga para retirar o veículo");
                                 numVagaRetirar = scanner.nextInt();
                                 scanner.nextLine();
-                                valor = vagasIns.retirarVeiculo(numVagaRetirar);
-                                if (valor != -1.0) {
-                                    
-                                    System.out.println("Veículo retirado com sucesso. VALOR: R$ " + valor);
-                                   
-                                    
-                                }else{
-                                    
-                                    System.out.println("Vaga não ocupada.");
-                                    
-                                }
+                                valor = vagasIns.retirarVeiculo(ticketsIns, numVagaRetirar);
+                                System.out.println("Veículo retirado com sucesso. VALOR: R$ " + valor);
+                              
                                 break;
                             case 3:
                                 // Implementar função para listar todas as vagas disponíveis
@@ -336,30 +328,39 @@ public class Estacionamento {
                                 }
                                 break;
                             case 4:
-                                // Implementar função para gerenciar tarifas
-                                System.out.println("Informe a data de início (formato yyyy-MM-dd):");
-                                String dataStr = scanner.nextLine();
-                                LocalDate data = LocalDate.parse(dataStr);
+                                int opcaoVeiculo;
+                                System.out.println("\nSubmenu - Gerenciar Veículos:");
+                                System.out.println("1 - Cadastrar tarifa");
+                                System.out.println("2 - Consultar tarifas cadastradas");
+                                System.out.println("3 - Voltar");
+                                opcaoVeiculo = scanner.nextInt();
+                                scanner.nextLine();
+                                switch (opcaoVeiculo){
+                                    
+                                    case 1:
+                                        // Implementar função para gerenciar tarifas
+                                        System.out.println("Informe a data de início (formato dd/MM/yyyy):");
+                                        String dataStr = scanner.nextLine();
+                                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                        LocalDate data = LocalDate.parse(dataStr, formatter);
 
-                                System.out.println("Informe a tarifa base:");
-                                double tarifaBase = scanner.nextDouble();
+                                        System.out.println("Informe a tarifa base:");
+                                        double tarifaBase = scanner.nextDouble();
 
-                                System.out.println("Informe a taxa adicional:");
-                                double taxaAdicional = scanner.nextDouble();
-
-                                // Solicitar os dias da semana ao usuário
-                                System.out.println("Informe os dias da semana em que a tarifa será aplicada (Ex: SEGUNDA, TERCA):");
-                                scanner.nextLine(); // Consumir a quebra de linha pendente
-                                String diasStr = scanner.nextLine();
-                                String[] diasArray = diasStr.split(",\\s*"); // Dividir a string em um array
-                                
-                                DiaSemana[] diasDaSemana = new DiaSemana[diasArray.length];
-                                for (int i = 0; i < diasArray.length; i++) {
-                                    diasDaSemana[i] = DiaSemana.valueOf(diasArray[i].toUpperCase()); // Converter a string para o enum
+                                        System.out.println("Informe o valor das horas subsequentes:");
+                                        double taxaAdicional = scanner.nextDouble();
+                                       
+                                        // Cadastrar a tarifa com os dados fornecidos pelo usuário
+                                        tarifasIns.cadastrarTarifa(data, tarifaBase, taxaAdicional);
+                                        break;
+                                    case 2:
+                                        tarifasIns.listarTarifas();
+                                        break;
+                                        
+                                    case 3:
+                                        System.out.println("Voltando...");
+                                        break;
                                 }
-                                
-                                // Cadastrar a tarifa com os dados fornecidos pelo usuário
-                                tarifasIns.cadastrarTarifa(data, tarifaBase, taxaAdicional, diasDaSemana);
                             case 5:
                                 System.out.println("Voltando ao menu principal...");
                                 break;
@@ -385,7 +386,7 @@ public class Estacionamento {
                                 // Implementar função para cadastrar tarifa
                                 break;
                             case 2:
-                                // Implementar função para cadastrar cliente
+                                ticketsIns.listarTickets();
                                 break;
                             case 3:
                                 System.out.println("Voltando ao menu principal...");
