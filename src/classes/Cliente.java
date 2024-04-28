@@ -7,12 +7,12 @@ import java.util.List;
  * @author Gustavo
  */
 
-// Classe Cliente para representar um cliente do estacionamento
+/*Classe Cliente para representar um cliente do estacionamento*/
 public class Cliente {
     private String nome;
     private String documento;
-    private List<Veiculo> veiculos; // Lista de veículos associados ao cliente
-    // Construtor e métodos getters e setters
+    private List<Veiculo> veiculos; /*Lista de veículos associados ao cliente*/
+    /*Construtor e métodos getters e setters do cliente*/
 
     public Cliente(String nome, String documento) {
         this.nome = nome;
@@ -39,6 +39,12 @@ public class Cliente {
     public void setDocumento(String documento) {
         this.documento = documento;
     }
+
+    public void setVeiculos(List<Veiculo> veiculos) {
+        this.veiculos = veiculos;
+    }
+    
+    
 
     // Método para adicionar um veículo à lista de veículos do cliente
     public void adicionarVeiculo(Veiculo veiculo) {

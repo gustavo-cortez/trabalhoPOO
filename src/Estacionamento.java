@@ -9,10 +9,12 @@ import funcoes.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-// Classe Estacionamento para gerenciar o sistema
+/* Classe Estacionamento para gerenciar o sistema atráves da main em comunicação com as outras classes*/
 public class Estacionamento {
 
-    // Método principal para executar o programa
+    /*Método principal para executar o programa, optamos por usar switch na main mesmo ao inves de utilizar ENUM
+    e optamos também por trabalhar com o terminal mesmo ao invés de telas, mesmo com os problemas relacionados a pontuação
+    e também optei por trocar cadastros gerais para funções gerais afinal não fazia sentido cadastro gerais*/
     public static void main(String[] args) {
         
         FunTickets ticketsIns = new FunTickets();
@@ -27,7 +29,7 @@ public class Estacionamento {
             System.out.println("1 - Gerenciar clientes");
             System.out.println("2 - Gerenciar vagas");
             System.out.println("3 - Gerenciar estacionamento");
-            System.out.println("4 - Cadastros gerais");
+            System.out.println("4 - Funções gerais");
             System.out.println("5 - Consultar total faturado em um período");
             System.out.println("6 - Sair do programa");
             System.out.print("Escolha uma opção: ");
@@ -36,7 +38,7 @@ public class Estacionamento {
 
             switch (opcao) {
                 case 1:
-                    // Submenu para gerenciar clientes
+                    /*Submenu para gerenciar clientes*/
                     int opcaoClientes;
                     String nomeCli;
                     String documentoCli;
@@ -78,7 +80,7 @@ public class Estacionamento {
                                 clienteIns.excluirCliente(documentoCli);
                                 break;
                             case 4:
-                                // Área de edição do cliente, informando seu nome e documento
+                                /*Área de edição do cliente, informando seu nome e documento*/
                                 System.out.println("\nInforme o nome:");
                                 nomeCli = scanner.nextLine();
                                 System.out.println("Informe o documento:");
@@ -90,7 +92,8 @@ public class Estacionamento {
                                 System.out.println("\nSubmenu - Gerenciar Veículos:");
                                 System.out.println("1 - Cadastrar veículos");
                                 System.out.println("2 - Consultar veículos por documento");
-                                System.out.println("3 - Voltar");
+                                System.out.println("3 - Excluir veiculo do cliente");
+                                System.out.println("4 - Voltar");
                                 opcaoVeiculo = scanner.nextInt();
                                 scanner.nextLine();
                                 switch (opcaoVeiculo){
@@ -102,15 +105,15 @@ public class Estacionamento {
                                         String modeloVeiculo;
                                         System.out.println("Informe o documento:");
                                         documentoCli = scanner.nextLine();
-                                        System.out.println("\nInforme a placa do veiculo:");
+                                        System.out.println("Informe a placa do veiculo:");
                                         veiculoPlaca = scanner.nextLine();
                                         System.out.println("Informe o modelo do veiculo:");
                                         modeloVeiculo = scanner.nextLine();
-                                        System.out.println("\nInforme a cor do veiculo:");
+                                        System.out.println("Informe a cor do veiculo:");
                                         corVeiculo = scanner.nextLine();
                                         System.out.println("Informe o tipo do veiculo(CARRO, MOTO ou CAMINHAO):");
                                         tipoVeiculo = scanner.nextLine();
-                                        clienteIns.adicionarVeiculoCliente(veiculoPlaca, tipoVeiculo , documentoCli, corVeiculo, modeloVeiculo);
+                                        clienteIns.adicionarVeiculoCliente(veiculoPlaca, tipoVeiculo , documentoCli, modeloVeiculo, corVeiculo);
                                         break;
                                     case 2:
                                         System.out.println("Informe o documento:");
@@ -118,8 +121,14 @@ public class Estacionamento {
                                         clienteIns.consultarVeiculo(documentoCli);
                                         break;
                                     case 3:
+                                        System.out.println("Informe o documento do cliente:");
+                                        documentoCli = scanner.nextLine();
+                                        System.out.println("Informe a placa do veiculo que deseja excluir:");
+                                        veiculoPlaca = scanner.nextLine();
+                                        clienteIns.excluirVeiculo(documentoCli, veiculoPlaca);
                                         break;
-                                    
+                                    case 4:
+                                        break;
                                     default:
                                         System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
                                 } 
@@ -136,7 +145,7 @@ public class Estacionamento {
                     } while (opcaoClientes != 7);
                     break;
                 case 2:
-                    // Submenu para gerenciar vagas
+                    /*Submenu para gerenciar vagas*/
                     int opcaoVagas;
                     do {
                         System.out.println("\nSubmenu - Gerenciar vagas:");
@@ -152,7 +161,6 @@ public class Estacionamento {
 
                         switch (opcaoVagas) {
                             case 1:
-                                // Implementar cadastro de vaga
                                 int numeroVaga;
                                 String ruaVaga;
                                 String Vaga;
@@ -161,7 +169,7 @@ public class Estacionamento {
                                 scanner.nextLine();
                                 System.out.println("Digite a rua da vaga");
                                 ruaVaga = scanner.nextLine();
-                                System.out.println("Digite o tipo da vaga");
+                                System.out.println("Digite o tipo da vaga(CARRO, MOTO ou CAMINHAO)");
                                 Vaga = scanner.nextLine();
                                 if(Vaga.toUpperCase().equals("CARRO")){
                                     
@@ -187,8 +195,8 @@ public class Estacionamento {
                                 }
                                 break;
                             case 2:
-                                // Implementar consulta de vaga por número
                                 int numVaga;
+                                System.out.print("Informe o número da vaga que deseja ser consultada: ");
                                 numVaga = scanner.nextInt();
                                 Vagas vagaConsulta = vagasIns.buscarVaga(numVaga);;
                                 if(vagaConsulta != null){
@@ -197,17 +205,15 @@ public class Estacionamento {
                                     System.out.println("Status: " + vagaConsulta.getStatus());
                                     System.out.println("Tipo: " + vagaConsulta.getTipoVeiculo());
                                 }else{
-                                    System.out.println("Cliente não encontrado.");
+                                    System.out.println("Vaga não encontrada.");
                                 }
                                 break;
                             case 3:
-                                // Implementar exclusão de vaga
                                 System.out.print("Informe o número da vaga a ser excluída: ");
                                 int numeroVagaExcluir = scanner.nextInt();
                                 vagasIns.excluirVaga(numeroVagaExcluir);
                                 break;
                             case 4:
-                                // Implementar edição de vaga
                                 int numeroVagaEditar;
                                 String ruaVagaEditar;
                                 String VagaEditar;
@@ -242,7 +248,6 @@ public class Estacionamento {
                                 }
                                 break;
                             case 5:
-                                // Implementar alteração de disponibilidade de vaga
                                 int numeroVagaDispo;
                                 String VagaDispo;
                                 System.out.println("Digite o número da vaga que dejesa editar o status");
@@ -282,7 +287,7 @@ public class Estacionamento {
                     } while (opcaoVagas != 6);
                     break;
                 case 3:
-                    // Submenu para gerenciar estacionamento
+                    /*Submenu para gerenciar estacionamento*/
                     int opcaoEstacionamento;
                     do {
                         System.out.println("\nSubmenu - Gerenciar estacionamento:");
@@ -297,7 +302,6 @@ public class Estacionamento {
 
                         switch (opcaoEstacionamento) {
                             case 1:
-                                // Implementar função para estacionar veículo
                                 String PlacaEstacionar;
                                 int numVaga;
                                 System.out.println("Digite a placa do veículo a ser estacionado");
@@ -308,36 +312,46 @@ public class Estacionamento {
                                 vagasIns.estacionarVeiculo(ticketsIns, clienteIns.consultarPlaca(PlacaEstacionar), numVaga);
                                 break;
                             case 2:
-                                // Implementar função para retirar veículo
                                 int numVagaRetirar;
                                 double valor;
                                 System.out.println("Digite o número da vaga para retirar o veículo");
                                 numVagaRetirar = scanner.nextInt();
                                 scanner.nextLine();
                                 valor = vagasIns.retirarVeiculo(ticketsIns, numVagaRetirar, tarifasIns);
-                                System.out.println("Veículo retirado com sucesso. VALOR: R$ " + valor);
+                                if(valor != -1.0){
+                                    System.out.println("Veículo retirado com sucesso. VALOR: R$ " + valor);
+                                }
+                                else{
+                                    System.out.println("Erro ao retirar o veículo da vaga.");
+                                }
+                                
                               
                                 break;
                             case 3:
-                                // Implementar função para listar todas as vagas disponíveis
                                 List<Vagas> vagasDisponiveis = vagasIns.listarVagasDisponiveis();
-                                System.out.println("Vagas disponíveis:");
-                                for (Vagas vaga : vagasDisponiveis) {
-                                    System.out.println("Número: " + vaga.getNumero() + ", Rua: " + vaga.getRua() + ", Tipo: " + vaga.getTipoVeiculo());
+                                if(!vagasDisponiveis.isEmpty()){
+                                    System.out.println("Vagas disponíveis:");
+                                    for (Vagas vaga : vagasDisponiveis) {   
+                                        System.out.println("Número: " + vaga.getNumero() + ", Rua: " + vaga.getRua() + ", Tipo: " + vaga.getTipoVeiculo());
+                                    }
                                 }
+                                else{
+                                    System.out.println("Sem vagas disponíveis!");
+                                }
+                                
                                 break;
                             case 4:
+                                /*Submenu para gerenciar tarifas*/
                                 int opcaoVeiculo;
-                                System.out.println("\nSubmenu - Gerenciar Veículos:");
+                                System.out.println("\nSubmenu - Gerenciar Tarifas:");
                                 System.out.println("1 - Cadastrar tarifa");
-                                System.out.println("2 - Consultar tarifas cadastradas");
+                                System.out.println("2 - Listar tarifas cadastradas");
                                 System.out.println("3 - Voltar");
                                 opcaoVeiculo = scanner.nextInt();
                                 scanner.nextLine();
                                 switch (opcaoVeiculo){
                                     
                                     case 1:
-                                        // Implementar função para gerenciar tarifas
                                         System.out.println("Informe a data de início (formato dd/MM/yyyy):");
                                         String dataStr = scanner.nextLine();
                                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -369,36 +383,31 @@ public class Estacionamento {
                     } while (opcaoEstacionamento != 5);
                     break;
                 case 4:
-                    // Submenu para cadastros gerais
+                    /*Submenu de funções gerais*/
                     int opcaoCadastros;
                     do {
-                        System.out.println("\nSubmenu - Cadastros gerais:");
-                        System.out.println("1 - Cadastrar tarifa");
-                        System.out.println("2 - Cadastrar cliente");
-                        System.out.println("3 - Voltar");
+                        System.out.println("\nSubmenu - Funções gerais:");
+                        System.out.println("1 - Listar Tickets");
+                        System.out.println("2 - Voltar");
                         System.out.print("Escolha uma opção: ");
                         opcaoCadastros = scanner.nextInt();
                         scanner.nextLine();
 
                         switch (opcaoCadastros) {
                             case 1:
-                                // Implementar função para cadastrar tarifa
-                                break;
-                            case 2:
                                 ticketsIns.listarTickets();
                                 break;
-                            case 3:
+                            case 2:
                                 System.out.println("Voltando ao menu principal...");
                                 break;
                             default:
                                 System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
                         }
-                    } while (opcaoCadastros != 3);
+                    } while (opcaoCadastros != 2);
                     break;
 
                 case 5:
 
-                    // Implementar consulta de faturamento em um período
                     System.out.print("Digite a data de início (formato dd/mm/yyyy-HH:mm): ");
                     String dataInicioStr = scanner.next();
                     System.out.print("Digite a data de fim (formato dd/mm/yyyy-HH:mm): ");
@@ -408,7 +417,7 @@ public class Estacionamento {
                     LocalDateTime inicioPeriodo = LocalDateTime.parse(dataInicioStr, formatter);
                     LocalDateTime fimPeriodo = LocalDateTime.parse(dataFimStr, formatter);
 
-                    double faturamentoPeriodo = tarifasIns.consultarFaturamentoPeriodo(inicioPeriodo, fimPeriodo, tarifasIns);
+                    double faturamentoPeriodo = tarifasIns.consultarFaturamentoPeriodo(inicioPeriodo, fimPeriodo, tarifasIns, ticketsIns);
                     System.out.println("Total faturado no período: R$ " + faturamentoPeriodo);
 
                     break;

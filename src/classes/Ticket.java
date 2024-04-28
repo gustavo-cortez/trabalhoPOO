@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
  *
  * @author Gustavo
  */
-// Classe Ticket para representar um ticket de estacionamento
+/*Classe Ticket para representar um ticket de estacionamento*/
 public class Ticket{
     private LocalDateTime inicio;
     private LocalDateTime fim;
@@ -12,7 +12,7 @@ public class Ticket{
     private double valor;
     private Vagas vaga;
 
-    // Métodos getters e setters
+    /*Métodos getters e setters dos tickets*/
 
     public Ticket(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga) {
         this.inicio = inicio;

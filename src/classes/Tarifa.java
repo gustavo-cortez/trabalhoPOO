@@ -5,14 +5,14 @@ import java.time.LocalDate;
  * @author Gustavo
  */
 
-// Classe Tarifa para armazenar os valores das tarifas
+/*Classe Tarifa para armazenar os valores das tarifas*/
 public class Tarifa {
     private LocalDate inicio;
     private double valorPrimeiraHora;
     private double valorHoraSubsequente;
     private DiaSemana[] diasSemana;
              
-    // Construtor e métodos getters e setters
+    /*Construtor e métodos getters e setters da tarifa*/
 
     public Tarifa(LocalDate inicio, double valorPrimeiraHora, double valorHoraSubsequente, DiaSemana[] diasSemana) {
         this.inicio = inicio;

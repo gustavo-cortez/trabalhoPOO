@@ -4,14 +4,14 @@ package classes;
  *
  * @author Gustavo
  */
-// Classe Veiculo para representar um veículo
+/*Classe Veiculo para representar um veículo*/
 public class Veiculo {
     private String placa;
     private String cor;
     private String modelo;
     private Cliente proprietario;
     private TipoVeiculo tipo;
-    // Construtor e métodos getters e setters
+    /*Construtor e métodos getters e setters do véiculo*/
 
     public Veiculo(String placa, Cliente proprietario, TipoVeiculo tipo, String modelo, String cor) {
         this.placa = placa;

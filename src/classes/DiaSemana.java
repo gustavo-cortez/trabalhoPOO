@@ -4,7 +4,7 @@ package classes;
  *
  * @author Gustavo
  */
-// Enumeração para os dias da semana
+/*Enumeração para os dias da semana*/
 public enum DiaSemana {
     DOMINGO(1, "DOMINGO"),
     SEGUNDA(2, "SEGUNDA-FEIRA"),
@@ -33,7 +33,7 @@ public enum DiaSemana {
         return descricao;
     }
     
-    // Método para obter o enum correspondente ao número do dia
+    /*Método para obter o enum correspondente ao número do dia*/
     public static DiaSemana getByOpcao(int opcao) {
         if (opcao >= 1 && opcao <= 7) {
             for (DiaSemana dia : DiaSemana.values()) {
