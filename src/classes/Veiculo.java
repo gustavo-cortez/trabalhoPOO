@@ -1,5 +1,7 @@
 package classes;
 
+import enums.*;
+
 /**
  *
  * @author Gustavo
@@ -10,15 +12,17 @@ public class Veiculo {
     private String cor;
     private String modelo;
     private Cliente proprietario;
-    private TipoVeiculo tipo;
+    private EnumTipoVeiculo tipo;
+    private EnumUsoEstacionamento TipoUso;
     /*Construtor e métodos getters e setters do véiculo*/
 
-    public Veiculo(String placa, Cliente proprietario, TipoVeiculo tipo, String modelo, String cor) {
+    public Veiculo(String placa, Cliente proprietario, EnumTipoVeiculo tipo, String modelo, String cor, EnumUsoEstacionamento TipoUso) {
         this.placa = placa;
         this.proprietario = proprietario;
         this.tipo = tipo;
         this.modelo = modelo;
         this.cor = cor;
+        this.TipoUso = TipoUso;
     }
 
     public String getPlaca() {
@@ -29,7 +33,7 @@ public class Veiculo {
         return proprietario;
     }
 
-    public TipoVeiculo getTipo() {
+    public EnumTipoVeiculo getTipo() {
         return tipo;
     }
 
@@ -41,7 +45,15 @@ public class Veiculo {
         return modelo;
     }
 
-    public void setTipo(TipoVeiculo tipo) {
+    public EnumUsoEstacionamento getTipoUso() {
+        return TipoUso;
+    }
+
+    public void setTipoUso(EnumUsoEstacionamento TipoUso) {
+        this.TipoUso = TipoUso;
+    }
+
+    public void setTipo(EnumTipoVeiculo tipo) {
         this.tipo = tipo;
     }
     

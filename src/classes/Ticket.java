@@ -1,27 +1,32 @@
 package classes;
+import enums.EnumStatus;
+import funcoes.FunTarifas;
+import funcoesVisual.FunTarifasVisual;
 import java.time.LocalDateTime;
 /**
  *
  * @author Gustavo
  */
 /*Classe Ticket para representar um ticket de estacionamento*/
-public class Ticket{
+public abstract class Ticket {
     private LocalDateTime inicio;
     private LocalDateTime fim;
     private Veiculo veiculo;
     private double valor;
     private Vagas vaga;
-
-    /*Métodos getters e setters dos tickets*/
-
+    private EnumStatus status;
     public Ticket(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga) {
         this.inicio = inicio;
         this.fim = fim;
         this.veiculo = veiculo;
         this.valor = valor;
         this.vaga = vaga;
+        this.status = EnumStatus.EM_ABERTO;
     }
-    
+    public Ticket() {
+
+    }
+
     public LocalDateTime getInicio() {
         return inicio;
     }
@@ -42,6 +47,20 @@ public class Ticket{
         return vaga;
     }
 
+    public EnumStatus getStatus() {
+        return status;
+    }
+    
+    public String getTipo() {
+        
+        if(this instanceof TicketMensalista){
+            return "Mensalista";
+        }
+        else{
+            return "Horista";
+        }
+        
+    }
 
     public void setInicio(LocalDateTime inicio) {
         this.inicio = inicio;
@@ -62,7 +81,15 @@ public class Ticket{
     public void setVaga(Vagas vaga) {
         this.vaga = vaga;
     }
-
-
     
+    public void setStatus(EnumStatus status) {
+        this.status = status;
+    }
+    
+    // Método abstrato para calcular o valor do ticket
+    public abstract double calcularValor(FunTarifas tarifaIns);
+    
+    public abstract double calcularValor(FunTarifasVisual tarifaIns);
+
+    // Outros métodos comuns a todos os tipos de tickets
 }

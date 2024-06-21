@@ -1,5 +1,8 @@
 package classes;
 
+import enums.EnumVagaStatus;
+import enums.EnumTipoVeiculo;
+
 /**
  *
  * @author Gustavo
@@ -9,12 +12,12 @@ package classes;
 public class Vagas{
     private int numero;
     private String rua;
-    private VagaStatus status;
-    private TipoVeiculo tipoVeiculo; // Indica o tipo de veículo que pode estacionar nesta vaga
+    private EnumVagaStatus status;
+    private EnumTipoVeiculo tipoVeiculo; // Indica o tipo de veículo que pode estacionar nesta vaga
 
     // Construtor e métodos getters e setters
 
-    public Vagas(int numero, String rua, VagaStatus status, TipoVeiculo tipoVeiculo) {
+    public Vagas(int numero, String rua, EnumVagaStatus status, EnumTipoVeiculo tipoVeiculo) {
         this.numero = numero;
         this.rua = rua;
         this.status = status;
@@ -25,7 +28,7 @@ public class Vagas{
         return numero;
     }
 
-    public TipoVeiculo getTipoVeiculo() {
+    public EnumTipoVeiculo getTipoVeiculo() {
         return tipoVeiculo;
     }
     
@@ -33,7 +36,7 @@ public class Vagas{
         return rua;
     }
 
-    public VagaStatus getStatus() {
+    public EnumVagaStatus getStatus() {
         return status;
     }
 
@@ -45,11 +48,11 @@ public class Vagas{
         this.rua = rua;
     }
 
-    public void setStatus(VagaStatus status) {
+    public void setStatus(EnumVagaStatus status) {
         this.status = status;
     }
 
-    public void setTipoVeiculo(TipoVeiculo tipoVeiculo) {
+    public void setTipoVeiculo(EnumTipoVeiculo tipoVeiculo) {
         this.tipoVeiculo = tipoVeiculo;
     }
     

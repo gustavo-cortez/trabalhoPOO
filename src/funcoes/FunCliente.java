@@ -1,5 +1,6 @@
 package funcoes;
 import classes.*;
+import enums.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,42 +32,52 @@ public class FunCliente {
     }
 
     /*Método para excluir um cliente se ele não possuir veiculos*/
-    public boolean excluirCliente(String documento) {
+    public boolean excluirCliente(String documento, FunTickets ticketIns) {
         Cliente cliente = consultarCliente(documento);
-        if (cliente != null && cliente.getVeiculos().isEmpty()) {
+        if (cliente != null && cliente.getVeiculos().isEmpty() && consultarTicketsCliente(cliente, ticketIns).isEmpty()) {
             clientes.remove(cliente);
-            return true; /*Cliente removido com sucesso*/
+            return true; /* Cliente removido com sucesso */
         } else {
-            return false; /*Cliente não encontrado*/
+            return false; /* Cliente não encontrado ou possui veículos/tickets */
         }
     }
-    
-    /*Método para excluir um veiculo do cliente*/
-    public boolean excluirVeiculo(String documento, String placa) {
-    Cliente cliente = consultarCliente(documento);
-    Veiculo veiculo = consultarPlaca(placa);
-    if (cliente != null && veiculo != null) {
-        // Obtém a lista de veículos do cliente
-        List<Veiculo> veiculosCliente = cliente.getVeiculos();
-        
-        // Itera sobre a lista de veículos do cliente
-        Iterator<Veiculo> iterator = veiculosCliente.iterator();
-        while (iterator.hasNext()) {
-            Veiculo v = iterator.next();
-            // Verifica se o veículo atual é o veículo que queremos remover
-            if (v.getPlaca().equals(placa)) {
-                // Remove o veículo da lista
-                iterator.remove();
-                // Atualiza a lista de veículos do cliente
-                cliente.setVeiculos(veiculosCliente);
-                // Retorna verdadeiro indicando que o veículo foi removido com sucesso
-                return true;
+
+    /*Método para consultar os tickets de um cliente, precisa ser implementado de acordo com a estrutura do seu sistema*/
+    private List<Ticket> consultarTicketsCliente(Cliente cliente, FunTickets ticketIns) {
+        List<Ticket> ticketsDoCliente = new ArrayList<>();
+        for (Ticket ticket : ticketIns.tickets) {
+            if (ticket.getVeiculo().getProprietario().equals(cliente)) {
+                ticketsDoCliente.add(ticket);
             }
         }
+        return ticketsDoCliente;
     }
-    // Retorna falso se o cliente ou o veículo não foram encontrados
-    return false;
-}
+
+    
+    /*Método para excluir um veiculo do cliente*/
+    public boolean excluirVeiculo(String documento, String placa, FunTickets ticketIns) {
+        Cliente cliente = consultarCliente(documento);
+        Veiculo veiculo = consultarPlaca(placa);
+        if (cliente != null && veiculo != null) {
+            // Obtém a lista de veículos do cliente
+            List<Veiculo> veiculosCliente = cliente.getVeiculos();
+
+            // Itera sobre a lista de veículos do cliente
+            Iterator<Veiculo> iterator = veiculosCliente.iterator();
+            while (iterator.hasNext()) {
+                Veiculo v = iterator.next();
+                // Verifica se o veículo atual é o veículo que queremos remover
+                if (v.getPlaca().equals(placa) && consultarTicketsCliente(cliente, ticketIns).isEmpty()) {
+                    // Remove o veículo da lista
+                    iterator.remove();
+                    // Retorna verdadeiro indicando que o veículo foi removido com sucesso
+                    return true;
+                }
+            }
+        }
+        // Retorna falso se o cliente ou o veículo não foram encontrados ou há tickets com o veículo cadastrados
+        return false;
+    }
 
 
     /*Método para editar os dados de um cliente*/
@@ -98,14 +109,14 @@ public class FunCliente {
             System.out.println();
         }
     }
+
     
     /*Método para adicionar um veículo a um cliente*/
-    public void adicionarVeiculoCliente(String placa, String tipo, String documentoCliente, String cor, String modelo) {
+    public void adicionarVeiculoCliente(String placa, EnumTipoVeiculo tipoVeiculo, String documentoCliente, String cor, String modelo, EnumUsoEstacionamento tipoUso) {
         String nomeCliente;
-        TipoVeiculo tipoVeiculo = TipoVeiculo.valueOf(tipo.toUpperCase());
         Cliente cliente = consultarCliente(documentoCliente);
         if (cliente != null) {
-            Veiculo veiculo = new Veiculo(placa, consultarCliente(documentoCliente) ,tipoVeiculo, cor, modelo);
+            Veiculo veiculo = new Veiculo(placa, cliente ,tipoVeiculo, cor, modelo, tipoUso);
             cliente.adicionarVeiculo(veiculo);
             nomeCliente = cliente.getNome();
             System.out.println("Veículo adicionado com sucesso ao cliente " + nomeCliente);
@@ -115,7 +126,7 @@ public class FunCliente {
     }
     
     /*Método para consultar os veículos de um cliente por documento, esse métodos lista TODOS os veículos*/
-    public List<Veiculo> consultarVeiculo(String documentoCliente) {
+    public void consultarVeiculo(String documentoCliente) {
         Cliente cliente = consultarCliente(documentoCliente);
         if (cliente != null) {
             List<Veiculo> veiculosCliente = cliente.getVeiculos();
@@ -127,10 +138,8 @@ public class FunCliente {
                     System.out.println("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo() + "- Cor: " + veiculo.getCor() + ", Tipo: " + veiculo.getTipo());
                 }
             }
-            return veiculosCliente;
         } else {
             System.out.println("Cliente não encontrado.");
-            return null;
         }
     }
     

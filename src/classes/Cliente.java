@@ -43,8 +43,6 @@ public class Cliente {
     public void setVeiculos(List<Veiculo> veiculos) {
         this.veiculos = veiculos;
     }
-    
-    
 
     // Método para adicionar um veículo à lista de veículos do cliente
     public void adicionarVeiculo(Veiculo veiculo) {
