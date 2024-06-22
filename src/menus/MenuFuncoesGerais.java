@@ -1,35 +1,36 @@
 package menus;
 
-import classes.*;
-import funcoesVisual.*;
+import enums.EnumMenuFuncoesGerais;
 import interfaces.*;
-import javax.swing.JOptionPane;
 
 public class MenuFuncoesGerais implements MenuInterface {
     private Instancias instancias;
 
     @Override
     public void exibir(UserInterface Interface,Instancias instancias) {
-        String[] opcoesSubMenuFuncoesGerais = {
-            "Listar Tickets",
-            "Voltar"
-        };
 
-        int opcaoCadastros;
+        int opcao;
         do {
-            opcaoCadastros = JOptionPane.showOptionDialog(null, "Submenu - Funções gerais:", "Funções gerais",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesSubMenuFuncoesGerais, opcoesSubMenuFuncoesGerais[0]);
+            StringBuilder menu = new StringBuilder("Menu Clientes:\n");
+            for (EnumMenuFuncoesGerais option : EnumMenuFuncoesGerais.values()) {
+                menu.append(option).append("\n");
+            }
+            menu.append("Escolha uma opção:");
 
-            switch (opcaoCadastros) {
-                case 0:
+            String opcaoStr = Interface.solicitarEntrada(menu.toString());
+            opcao = Integer.parseInt(opcaoStr);
+
+            switch (opcao) {
+                case 1:
                     instancias.getTicketsIns().listarTickets();
                     break;
-                case 1:
-                    JOptionPane.showMessageDialog(null, "Voltando ao menu principal...");
+                case 2:
+                    Interface.exibirMensagem("Voltando ao menu principal...");
                     break;
                 default:
-                    JOptionPane.showMessageDialog(null, "Opção inválida. Por favor, escolha uma opção válida.");
+                    Interface.exibirErro("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcaoCadastros != 1);
+        } while (opcao != 2);
     }
 }
+ 

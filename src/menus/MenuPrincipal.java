@@ -3,7 +3,7 @@ import enums.EnumMenuPrincipal;
 import interfaces.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javax.swing.JOptionPane;
+import java.time.format.DateTimeParseException;
 
 /**
  *
@@ -48,21 +48,30 @@ public class MenuPrincipal implements MenuInterface{
                         instancias.getMenuFuncoesGerais().exibir(Interface, instancias);
                         break;
                     case CONSULTAR_FATURAMENTO:
-                        String dataInicioStr = JOptionPane.showInputDialog("Digite a data de início (formato dd/MM/yyyy-HH:mm)");
-                        String dataFimStr = JOptionPane.showInputDialog("Digite a data de fim (formato dd/MM/yyyy-HH:mm)");
+                        boolean continua = false;
+                        do{
+                            try{
+                                String dataInicioStr = Interface.solicitarEntrada("Digite a data de início (formato dd/MM/yyyy-HH:mm)");//verifica insercao
+                                String dataFimStr = Interface.solicitarEntrada("Digite a data de fim (formato dd/MM/yyyy-HH:mm)");
 
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
-                        LocalDateTime inicioPeriodo = LocalDateTime.parse(dataInicioStr, formatter);
-                        LocalDateTime fimPeriodo = LocalDateTime.parse(dataFimStr, formatter);
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
+                                LocalDateTime inicioPeriodo = LocalDateTime.parse(dataInicioStr, formatter);
+                                LocalDateTime fimPeriodo = LocalDateTime.parse(dataFimStr, formatter);
 
-                        double faturamentoPeriodo = instancias.getTicketsIns().consultarFaturamentoPeriodo(inicioPeriodo, fimPeriodo);
-                        JOptionPane.showMessageDialog(null, "Total faturado no período: R$ " + faturamentoPeriodo);
+                                double faturamentoPeriodo = instancias.getTicketsIns().consultarFaturamentoPeriodo(inicioPeriodo, fimPeriodo);
+                                Interface.exibirMensagem("Total faturado no período: R$ " + faturamentoPeriodo);
+                                continua = true;
+                            }
+                            catch(DateTimeParseException e){
+                                Interface.exibirErro("FORMATO DE ENTRADA INCORRETO");
+                            }
+                        }while(continua == false);
                         break;
                     case SAIR:
-                        JOptionPane.showMessageDialog(null, "Saindo do programa...");
+                        Interface.exibirMensagem("Saindo do programa...");
                         break;
                     default:
-                        JOptionPane.showMessageDialog(null, "Opção inválida. Por favor, escolha uma opção válida.");
+                        Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
                 }
             }
             catch (IllegalArgumentException e) {
@@ -71,3 +80,4 @@ public class MenuPrincipal implements MenuInterface{
         } while (opcao != 6);
     }
 }
+ 

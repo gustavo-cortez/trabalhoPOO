@@ -1,12 +1,8 @@
 package menus;
 
-import enums.EnumUsoEstacionamento;
 import classes.*;
 import enums.EnumMenuClientes;
-import funcoesVisual.FunClienteVisual;
-import funcoesVisual.FunTicketsVisual;
 import interfaces.UserInterface;
-import javax.swing.JOptionPane;
 
 public class MenuClientes implements MenuInterface {
     private Instancias instancias;
@@ -30,37 +26,37 @@ public class MenuClientes implements MenuInterface {
                 switch (opcaoEscolhida) {
                 case CADASTRAR_CLIENTE:
                     // Cadastrar cliente
-                    String nomeCli = JOptionPane.showInputDialog("Digite o nome do cliente:");
-                    String documentoCli = JOptionPane.showInputDialog("Digite o CPF do cliente:");
+                    String nomeCli = Interface.solicitarEntrada("Digite o nome do cliente:");
+                    String documentoCli = Interface.solicitarEntrada("Digite o CPF do cliente:");
                     instancias.getClienteIns().cadastrarCliente(nomeCli, documentoCli);
                     break;
 
                 case CONSULTAR_CLIENTE:
                     // Consultar cliente por documento
-                    documentoCli = JOptionPane.showInputDialog("Digite o CPF do cliente a ser consultado:");
+                    documentoCli = Interface.solicitarEntrada("Digite o CPF do cliente a ser consultado:");
                     Cliente clienteConsulta = instancias.getClienteIns().consultarCliente(documentoCli);
                     if (clienteConsulta != null) {
-                        JOptionPane.showMessageDialog(null, "Nome: " + clienteConsulta.getNome() + "\nDocumento: " + clienteConsulta.getDocumento());
+                        Interface.exibirMensagem("Nome: " + clienteConsulta.getNome() + "\nDocumento: " + clienteConsulta.getDocumento());
                     } else {
-                        JOptionPane.showMessageDialog(null, "Cliente não encontrado.");
+                        Interface.exibirMensagem("Cliente não encontrado.");
                     }
                     break;
 
                 case EXCLUIR_CLIENTE:
                     // Excluir cliente
-                    documentoCli = JOptionPane.showInputDialog("Digite o CPF do cliente a ser excluído:");
+                    documentoCli = Interface.solicitarEntrada("Digite o CPF do cliente a ser excluído:");
                     if(instancias.getClienteIns().excluirCliente(documentoCli, instancias.getTicketsIns()) == false){
-                        JOptionPane.showMessageDialog(null, "Erro ao excluir o cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        Interface.exibirErro("Erro ao excluir o cliente.");
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        Interface.exibirSucesso("Cliente excluido com sucesso.");
                     }
                     break;
 
                 case EDITAR_CLIENTE:
                     // Editar cliente
-                    nomeCli = JOptionPane.showInputDialog("Digite o novo nome do cliente:");
-                    documentoCli = JOptionPane.showInputDialog("Digite o CPF do cliente a ser alterado:");
+                    nomeCli = Interface.solicitarEntrada("Digite o novo nome do cliente:");
+                    documentoCli = Interface.solicitarEntrada("Digite o CPF do cliente a ser alterado:");
                     instancias.getClienteIns().editarCliente(nomeCli, documentoCli);
                     break;
 
@@ -76,11 +72,11 @@ public class MenuClientes implements MenuInterface {
 
                 case VOLTAR:
                     // Voltar
-                    JOptionPane.showMessageDialog(null, "Voltando ao menu principal...");
+                    Interface.exibirMensagem("Voltando ao menu principal...");
                     break;
 
                 default:
-                    JOptionPane.showMessageDialog(null, "Opção inválida. Por favor, escolha uma opção válida.");
+                    Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
             }
             }
             catch (IllegalArgumentException e) {

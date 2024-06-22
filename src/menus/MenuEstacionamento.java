@@ -2,34 +2,33 @@ package menus;
 
 import enums.EnumUsoEstacionamento;
 import classes.*;
-import funcoesVisual.*;
+import enums.EnumMenuEstacionamento;
 import interfaces.*;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 public class MenuEstacionamento implements MenuInterface {
     private Instancias instancias;
 
     @Override
     public void exibir(UserInterface Interface, Instancias instancias) {
-        String[] opcoesSubMenuEstacionamento = {
-            "Estacionar",
-            "Retirar",
-            "Listar todas as vagas disponíveis",
-            "Listar todas as vagas alugadas",
-            "Gerenciar tarifas",
-            "Voltar"
-        };
+        
         instancias.getTicketsIns().verificarTicketsMensalistas(instancias.getVagasIns());
-        int opcaoEstacionamento;
+        int opcao;
         do {
-            opcaoEstacionamento = JOptionPane.showOptionDialog(null, "Submenu - Gerenciar estacionamento:", "Gerenciar estacionamento",
-                    JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesSubMenuEstacionamento, opcoesSubMenuEstacionamento[0]);
+            StringBuilder menu = new StringBuilder("Menu Clientes:\n");
+            for (EnumMenuEstacionamento option : EnumMenuEstacionamento.values()) {
+                menu.append(option).append("\n");
+            }
+            menu.append("Escolha uma opção:");
 
-            switch (opcaoEstacionamento) {
-                case 0:
-                    String placaEstacionar = JOptionPane.showInputDialog("Digite a placa do veículo a ser estacionado"); 
-                    int numVaga = Integer.parseInt(JOptionPane.showInputDialog("Digite o número da vaga para estacionar o veículo"));
+            String opcaoStr = Interface.solicitarEntrada(menu.toString());
+            opcao = Integer.parseInt(opcaoStr);
+            
+
+            switch (opcao) {
+                case 1:
+                    String placaEstacionar = Interface.solicitarEntrada("Digite a placa do veículo a ser estacionado"); 
+                    int numVaga = (Interface.solicitarInt("Digite o número da vaga para estacionar o veículo"));
                     if(instancias.getClienteIns().consultarPlaca(placaEstacionar) != null){
                         if(instancias.getClienteIns().consultarPlaca(placaEstacionar).getTipoUso().equals(EnumUsoEstacionamento.HORISTA)){
                             instancias.getVagasIns().estacionarVeiculo(instancias.getTicketsIns(), instancias.getClienteIns().consultarPlaca(placaEstacionar), numVaga, instancias.getTarifasIns());
@@ -39,14 +38,14 @@ public class MenuEstacionamento implements MenuInterface {
                         }
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "Veículo não encontrado ou cliente inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        Interface.exibirErro("Veículo não encontrado ou cliente inexistente.");//mensagem de erro
                     }
                     break;
-                case 1:
-                    numVaga = Integer.parseInt(JOptionPane.showInputDialog("Digite o número da vaga para retirar o veículo", JOptionPane.OK_OPTION));
+                case 2:
+                    numVaga = Interface.solicitarInt("Digite o número da vaga para retirar o veículo");
                     if(instancias.getTicketsIns().buscarTicketPorVaga(numVaga) != null){
                         
-                        if(instancias.getTicketsIns().buscarTicketPorVaga(numVaga).getTipo().equals(EnumUsoEstacionamento.HORISTA)){
+                        if(instancias.getTicketsIns().buscarTicketPorVaga(numVaga) instanceof TicketHorista){
                             instancias.getVagasIns().retirarVeiculo(instancias.getTicketsIns(), numVaga, instancias.getTarifasIns());
                         }
                         else{
@@ -54,43 +53,43 @@ public class MenuEstacionamento implements MenuInterface {
                         }
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "Vaga não ocupada ou inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        Interface.exibirErro("Vaga não ocupada ou inexistente.");
                     }
                     
                     break;
-                case 2:
+                case 3:
                     List<Vagas> vagasDisponiveis = instancias.getVagasIns().listarVagasDisponiveis();
                     if (!vagasDisponiveis.isEmpty()) {
                         StringBuilder mensagem = new StringBuilder("Vagas disponíveis:");
                         for (Vagas vaga : vagasDisponiveis) {
                             mensagem.append("\nNúmero: ").append(vaga.getNumero()).append(", Rua: ").append(vaga.getRua()).append(", Tipo: ").append(vaga.getTipoVeiculo());
                         }
-                        JOptionPane.showMessageDialog(null, mensagem.toString());
+                        Interface.exibirMensagem(mensagem.toString());
                     } else {
-                        JOptionPane.showMessageDialog(null, "Sem vagas disponíveis!");
+                        Interface.exibirMensagem("Sem vagas disponíveis!");
                     }
                     break;
-                case 3:
+                case 4:
                     List<Vagas> vagasAlugadas = instancias.getVagasIns().listarVagasAlugadas();
                     if (!vagasAlugadas.isEmpty()) {
                         StringBuilder mensagem = new StringBuilder("Vagas alugadas:");
                         for (Vagas vaga : vagasAlugadas) {
                             mensagem.append("\nNúmero: ").append(vaga.getNumero()).append(", Rua: ").append(vaga.getRua()).append(", Tipo: ").append(vaga.getTipoVeiculo());
                         }
-                        JOptionPane.showMessageDialog(null, mensagem.toString());
+                        Interface.exibirMensagem(mensagem.toString());
                     } else {
-                        JOptionPane.showMessageDialog(null, "Sem vagas alugadas!");
+                        Interface.exibirMensagem("Sem vagas alugadas!");
                     }
                     break;
-                case 4:
+                case 5:
                     exibir(Interface, instancias);
                     break;
-                case 5:
-                    JOptionPane.showMessageDialog(null, "Voltando ao menu principal...");
+                case 6:
+                    Interface.exibirMensagem("Voltando ao menu principal...");
                     break;
                 default:
-                    JOptionPane.showMessageDialog(null, "Opção inválida. Por favor, escolha uma opção válida.");
+                    Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcaoEstacionamento != 5);
+        } while (opcao != 6);
     }
 }
