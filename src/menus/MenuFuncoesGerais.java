@@ -21,16 +21,16 @@ public class MenuFuncoesGerais implements MenuInterface {
             opcao = Integer.parseInt(opcaoStr);
 
             switch (opcao) {
-                case 0:
+                case 1:
                     instancias.getTicketsIns().listarTickets();
                     break;
-                case 1:
+                case 2:
                     Interface.exibirMensagem("Voltando ao menu principal...");
                     break;
                 default:
-                    Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
+                    Interface.exibirErro("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcao != 1);
+        } while (opcao != 2);
     }
 }
  

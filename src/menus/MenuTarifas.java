@@ -23,7 +23,7 @@ public class MenuTarifas implements MenuInterface {
             opcao = Integer.parseInt(opcaoStr);
 
             switch (opcao) {
-                case 0:
+                case 1:
                     String dataStr = Interface.solicitarEntrada("Informe a data de início (formato dd/MM/yyyy):");
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate data = LocalDate.parse(dataStr, formatter);
@@ -32,22 +32,22 @@ public class MenuTarifas implements MenuInterface {
                     double taxaAdicional = Interface.solicitarDouble("Informe o valor das horas subsequentes:");
                     instancias.getTarifasIns().cadastrarTarifa(data, tarifaBase, taxaAdicional);
                     break;
-                case 1:
+                case 2:
                     dataStr = Interface.solicitarEntrada("Informe a data de início (formato dd/MM/yyyy):");
                     formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     data = LocalDate.parse(dataStr, formatter);
                     double taxaMensal = Interface.solicitarDouble("Informe a taxa mensal:");
                     instancias.getTarifasIns().cadastrarTarifaMensal(data, taxaMensal);
                     break;
-                case 2:
+                case 3:
                     instancias.getTarifasIns().listarTarifas();
                     break;
-                case 3:
+                case 4:
                     Interface.exibirMensagem("Voltando...");
                     break;
                 default:
                     Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcao != 3);
+        } while (opcao != 4);
     }
 }

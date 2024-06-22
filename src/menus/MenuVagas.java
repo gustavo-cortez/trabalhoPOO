@@ -4,9 +4,7 @@ import enums.EnumVagaStatus;
 import enums.EnumTipoVeiculo;
 import classes.*;
 import enums.EnumMenuVagas;
-import funcoesVisual.*;
 import interfaces.UserInterface;
-import javax.swing.JOptionPane;
 
 public class MenuVagas implements MenuInterface {
     private Instancias instancias;
@@ -25,7 +23,7 @@ public class MenuVagas implements MenuInterface {
             opcao = Integer.parseInt(opcaoStr);
 
             switch (opcao) {
-                case 0:
+                case 1:
                     int numeroVaga = Interface.solicitarInt("Digite o número da vaga");
                     String ruaVaga = Interface.solicitarEntrada("Digite a rua da vaga");
                     String tipoVeiculoStr = (String) Interface.solicitarEntradaMaior("Selecione o tipo da vaga.", "Tipo de Vaga", new String[]{"CARRO", "MOTO", "ÔNIBUS"}, "CARRO");
@@ -49,20 +47,21 @@ public class MenuVagas implements MenuInterface {
                         instancias.getVagasIns().cadastrarVaga(numeroVaga, ruaVaga, tipoVeiculo);
                     }
                     break;
-                case 1:
+                case 2:
                     int numVaga = Interface.solicitarInt("Informe o número da vaga que deseja ser consultada:");
                     Vagas vagaConsulta = instancias.getVagasIns().buscarVaga(numVaga);
                     if (vagaConsulta != null) {
-                        Interface.exibirMensagemVaga("Número: " + vagaConsulta.getNumero() + "\nRua: " + vagaConsulta.getRua() + "\nStatus: " + vagaConsulta.getStatus() + "\nTipo: " + vagaConsulta.getTipoVeiculo(), "Consulta de Vaga");
+                        String mensagemCompleta = String.format("Número: " + vagaConsulta.getNumero() + "\nRua: " + vagaConsulta.getRua() + "\nStatus: " + vagaConsulta.getStatus() + "\nTipo: " + vagaConsulta.getTipoVeiculo(), "Consulta de Vaga");
+                        Interface.exibirMensagem(mensagemCompleta);
                     } else {
-                        Interface.exibirMensagem("Vaga não encontrada.", "Consulta de Vaga");
+                        Interface.exibirMensagem("Vaga não encontrada.");
                     }
                     break;
-                case 2:
+                case 3:
                     int numeroVagaExcluir = Interface.solicitarInt("Informe o número da vaga a ser excluída:");
                     instancias.getVagasIns().excluirVaga(numeroVagaExcluir, instancias.getTicketsIns());
                     break;
-                case 3:
+                case 4:
                     int numeroVagaEditar = Interface.solicitarInt("Digite o número da vaga que deseja editar");
                     String ruaVagaEditar = Interface.solicitarEntrada("Digite a nova rua da vaga");
                     String tipoVagaEditar = (String) Interface.solicitarEntradaMaior("Selecione o novo tipo da vaga", "Tipo de Vaga",  new String[]{"CARRO", "MOTO", "ÔNIBUS"}, "CARRO");
@@ -86,9 +85,9 @@ public class MenuVagas implements MenuInterface {
                         instancias.getVagasIns().editarVaga(numeroVagaEditar, ruaVagaEditar, tipoVeiculoEditar);
                     }
                     break;
-                case 4:
+                case 5:
                     int numeroVagaDispo = Interface.solicitarInt("Digite o número da vaga que deseja editar o status");
-                    String statusVaga = (String) JOptionPane.showInputDialog(null, "Selecione o status que a vaga estará", "Status da Vaga", JOptionPane.QUESTION_MESSAGE, null, new String[]{"DISPONIVEL", "OCUPADA", "INDISPONIVEL"}, "DISPONIVEL");
+                    String statusVaga = (String) Interface.solicitarEntradaMaior("Selecione o status que a vaga estará", "Status da Vaga", new String[]{"DISPONIVEL", "OCUPADA", "INDISPONIVEL"}, "DISPONIVEL");
 
                     if (statusVaga != null) {
                         EnumVagaStatus vagaStatus;
@@ -109,13 +108,13 @@ public class MenuVagas implements MenuInterface {
                         instancias.getVagasIns().alterarDisponibilidadeVaga(numeroVagaDispo, vagaStatus);
                     }
                     break;
-                case 5:
+                case 6:
                     Interface.exibirMensagem("Voltando ao menu principal...");
                     instancias.exibirMenuPrincipal();
                     break;
                 default:
-                    Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
+                    Interface.exibirErro("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcao != 5);
+        } while (opcao != 6);
     }
 }

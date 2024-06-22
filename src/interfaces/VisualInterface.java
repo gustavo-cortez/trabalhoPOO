@@ -77,11 +77,4 @@ public class VisualInterface implements UserInterface {
     public String solicitarEntradaMaior(String mensagem, String titulo, String[] opcoes, String opcaoPadrao) {
         return (String) JOptionPane.showInputDialog(null, mensagem, titulo, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcaoPadrao);
     }
-    
-    @Override
-    public void exibirMensagemVaga (String numero, String rua, String status, String tipo, String mensagem){
-         String mensagemCompleta = String.format("Número: %s\nRua: %s\nStatus: %s\nTipo: %s\nMensagem: %s", numero, rua, status, tipo, mensagem);
-
-        JOptionPane.showMessageDialog(null, mensagemCompleta);
-    }
 }

@@ -26,7 +26,7 @@ public class MenuEstacionamento implements MenuInterface {
             
 
             switch (opcao) {
-                case 0:
+                case 1:
                     String placaEstacionar = Interface.solicitarEntrada("Digite a placa do veículo a ser estacionado"); 
                     int numVaga = (Interface.solicitarInt("Digite o número da vaga para estacionar o veículo"));
                     if(instancias.getClienteIns().consultarPlaca(placaEstacionar) != null){
@@ -41,7 +41,7 @@ public class MenuEstacionamento implements MenuInterface {
                         Interface.exibirErro("Veículo não encontrado ou cliente inexistente.");//mensagem de erro
                     }
                     break;
-                case 1:
+                case 2:
                     numVaga = Interface.solicitarInt("Digite o número da vaga para retirar o veículo");
                     if(instancias.getTicketsIns().buscarTicketPorVaga(numVaga) != null){
                         
@@ -57,7 +57,7 @@ public class MenuEstacionamento implements MenuInterface {
                     }
                     
                     break;
-                case 2:
+                case 3:
                     List<Vagas> vagasDisponiveis = instancias.getVagasIns().listarVagasDisponiveis();
                     if (!vagasDisponiveis.isEmpty()) {
                         StringBuilder mensagem = new StringBuilder("Vagas disponíveis:");
@@ -69,7 +69,7 @@ public class MenuEstacionamento implements MenuInterface {
                         Interface.exibirMensagem("Sem vagas disponíveis!");
                     }
                     break;
-                case 3:
+                case 4:
                     List<Vagas> vagasAlugadas = instancias.getVagasIns().listarVagasAlugadas();
                     if (!vagasAlugadas.isEmpty()) {
                         StringBuilder mensagem = new StringBuilder("Vagas alugadas:");
@@ -81,15 +81,15 @@ public class MenuEstacionamento implements MenuInterface {
                         Interface.exibirMensagem("Sem vagas alugadas!");
                     }
                     break;
-                case 4:
+                case 5:
                     exibir(Interface, instancias);
                     break;
-                case 5:
+                case 6:
                     Interface.exibirMensagem("Voltando ao menu principal...");
                     break;
                 default:
                     Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcao != 5);
+        } while (opcao != 6);
     }
 }

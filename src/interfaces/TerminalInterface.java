@@ -83,41 +83,35 @@ public class TerminalInterface implements UserInterface {
         return valor;
     }
     
-    @Override//CORRIGIR **************************
-     public String solicitarEntradaMaior(String mensagem, String[] opcoes, String opcaoPadrao) {
-        // Imprime a mensagem para o usuário
+    @Override
+    public String solicitarEntradaMaior(String mensagem, String titulo, String[] opcoes, String opcaoPadrao) {
+        // Exibir mensagem e título
+        System.out.println(titulo);
         System.out.println(mensagem);
 
-        // Imprime as opções disponíveis
+        // Exibir opções
         for (int i = 0; i < opcoes.length; i++) {
             System.out.println((i + 1) + ". " + opcoes[i]);
         }
 
-        // Solicita que o usuário digite a opção desejada
-        System.out.print("Escolha uma opção (1-" + opcoes.length + ", default: " + opcaoPadrao + "): ");
-        String escolha = scanner.nextLine().trim();
+        // Solicitar entrada do usuário
+        Scanner scanner = new Scanner(System.in);
+        int escolha = -1;
 
-        // Verifica se a entrada do usuário é vazia (usa a opção padrão) ou uma escolha válida
-        int indiceEscolhido;
-        try {
-            indiceEscolhido = Integer.parseInt(escolha) - 1;
-            if (indiceEscolhido < 0 || indiceEscolhido >= opcoes.length) {
-                indiceEscolhido = Integer.parseInt(opcaoPadrao) - 1;
+        while (escolha < 1 || escolha > opcoes.length) {
+            System.out.print("Escolha uma opção (1-" + opcoes.length + "): ");
+            if (scanner.hasNextInt()) {
+                escolha = scanner.nextInt();
+                if (escolha < 1 || escolha > opcoes.length) {
+                    System.out.println("Opção inválida. Tente novamente.");
+                }
+            } else {
+                System.out.println("Entrada inválida. Digite um número.");
+                scanner.next(); // Limpa a entrada inválida
             }
-        } catch (NumberFormatException e) {
-            indiceEscolhido = Integer.parseInt(opcaoPadrao) - 1;
         }
 
-        // Retorna a opção selecionada pelo usuário
-        return opcoes[indiceEscolhido];
-    }
-     
-    @Override
-    public void exibirMensagemVaga (String numero, String rua, String status, String tipo, String mensagem){
-        // Concatena todas as informações em uma única string formatada
-        String mensagemCompleta = String.format("Número: %s\nRua: %s\nStatus: %s\nTipo: %s\nMensagem: %s", numero, rua, status, tipo, mensagem);
-        
-        // Exibe a mensagem no terminal
-        System.out.println(mensagemCompleta);
+        // Retornar a opção escolhida
+        return opcoes[escolha - 1];
     }
 }

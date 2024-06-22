@@ -9,4 +9,4 @@ import interfaces.UserInterface;
 public interface MenuInterface {
     abstract void exibir(UserInterface Interface, Instancias instancias);
 }
- 
+   
