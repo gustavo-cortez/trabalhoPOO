@@ -1,38 +1,39 @@
 package menus;
 
 import enums.EnumTipoVeiculo;
-import classes.*;
 import enums.EnumUsoEstacionamento;
-import funcoesVisual.*;
 import interfaces.*;
 import javax.swing.JOptionPane;
+import enums.EnumMenuVeiculos;
 
 public class MenuVeiculos implements MenuInterface {
     private Instancias instancias;
 
     @Override
     public void exibir(UserInterface Interface, Instancias instancias) {
-        String[] opcoesSubMenuVeiculos = {
-            "Cadastrar veículo",
-            "Consultar veículo por documento",
-            "Excluir veículo do cliente",
-            "Voltar"
-        };
+        int opcao;
+        StringBuilder menu = new StringBuilder("Menu Principal:\n");
+            for (EnumMenuVeiculos option : EnumMenuVeiculos.values()) {
+                menu.append(option).append("\n");
+            }
+            menu.append("Escolha uma opção:");
 
-        int opcaoVeiculo;
+            String opcaoStr = Interface.solicitarEntrada(menu.toString());
+            opcao = Integer.parseInt(opcaoStr);
+
         do {
-            opcaoVeiculo = JOptionPane.showOptionDialog(null, "Submenu - Gerenciar veículos:", "Gerenciar veículos",
+            opcao = JOptionPane.showOptionDialog(null, "Submenu - Gerenciar veículos:", "Gerenciar veículos",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesSubMenuVeiculos, opcoesSubMenuVeiculos[0]);
 
-            switch (opcaoVeiculo) {
+            switch (opcao) {
                 case 0:
                     // Cadastrar veículo
-                    String documentoCli = JOptionPane.showInputDialog("Informe o documento:");
-                    String veiculoPlaca = JOptionPane.showInputDialog("Informe a placa do veículo:");
-                    String modeloVeiculo = JOptionPane.showInputDialog("Informe o modelo do veículo:");
-                    String corVeiculo = JOptionPane.showInputDialog("Informe a cor do veículo:");
+                    String documentoCli = Interface.solicitarEntrada("Informe o documento:");
+                    String veiculoPlaca = Interface.solicitarEntrada("Informe a placa do veículo:");
+                    String modeloVeiculo = Interface.solicitarEntrada("Informe o modelo do veículo:");
+                    String corVeiculo = Interface.solicitarEntrada("Informe a cor do veículo:");
                     String tipoUso = (String) JOptionPane.showInputDialog(null, "Selecione o tipo da vaga.", "Tipo de Vaga", JOptionPane.QUESTION_MESSAGE, null, new String[]{"HORISTA", "MENSALISTA"}, "HORISTA");
-                    String tipoVeiculoStr = (String) JOptionPane.showInputDialog(null, "Selecione o tipo da vaga.", "Tipo de Vaga", JOptionPane.QUESTION_MESSAGE, null, new String[]{"CARRO", "MOTO", "ÔNIBUS"}, "CARRO");
+                    String tipoVeiculoStr = (String) Interface.solicitarEntradaMaior("Selecione o tipo da vaga.", "Tipo de Vaga", new String[]{"CARRO", "MOTO", "ÔNIBUS"}, "CARRO");
                     if (tipoVeiculoStr != null) {
                         switch (tipoVeiculoStr.toUpperCase()) {
                             case "CARRO":
@@ -45,14 +46,14 @@ public class MenuVeiculos implements MenuInterface {
 
                 case 1:
                     // Consultar veículo por documento
-                    documentoCli = JOptionPane.showInputDialog("Informe o documento:");
+                    documentoCli = Interface.solicitarEntrada("Informe o documento:");
                     instancias.getClienteIns().consultarVeiculo(documentoCli);
                     break;
 
                 case 2:
                     // Excluir veículo do cliente
-                    documentoCli = JOptionPane.showInputDialog("Informe o documento do cliente:");
-                    veiculoPlaca = JOptionPane.showInputDialog("Informe a placa do veículo que deseja excluir:"); 
+                    documentoCli = Interface.solicitarEntrada("Informe o documento do cliente:");
+                    veiculoPlaca = Interface.solicitarEntrada("Informe a placa do veículo que deseja excluir:"); 
                     if(instancias.getClienteIns().excluirVeiculo(documentoCli, veiculoPlaca, instancias.getTicketsIns()) == false){
                         JOptionPane.showMessageDialog(null, "Erro ao excluir o veículo do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
@@ -63,12 +64,12 @@ public class MenuVeiculos implements MenuInterface {
 
                 case 3:
                     // Voltar
-                    JOptionPane.showMessageDialog(null, "Voltando ao menu de clientes...");
+                    Interface.exibirMensagem("Voltando ao menu de clientes...");
                     break;
 
                 default:
-                    JOptionPane.showMessageDialog(null, "Opção inválida. Por favor, escolha uma opção válida.");
+                    Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcaoVeiculo != 3);
+        } while (opcao != 3);
     }
 }
