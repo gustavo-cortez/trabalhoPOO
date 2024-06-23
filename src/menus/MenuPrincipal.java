@@ -16,7 +16,7 @@ public class MenuPrincipal implements MenuInterface{
     public void exibir(UserInterface Interface , Instancias instancias) {
         if(Interface instanceof VisualInterface){
             
-            System.out.println("Palhaço Caçarola");
+            Interface.exibirMensagem("Palhaço Caçarola");
             
         }
         
@@ -27,9 +27,9 @@ public class MenuPrincipal implements MenuInterface{
                 menu.append(option).append("\n");
             }
             menu.append("Escolha uma opção:");
-
-            String opcaoStr = Interface.solicitarEntrada(menu.toString());
-            opcao = Integer.parseInt(opcaoStr);
+            
+            opcao = Interface.solicitarInt(menu.toString());
+           
 
             try{
                 EnumMenuPrincipal opcaoEscolhida = EnumMenuPrincipal.porNumero(opcao);
@@ -69,6 +69,7 @@ public class MenuPrincipal implements MenuInterface{
                         break;
                     case SAIR:
                         Interface.exibirMensagem("Saindo do programa...");
+                        instancias.getPersistenciaIns().salvarDados("DadosEstacionamento.json");
                         break;
                     default:
                         Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");

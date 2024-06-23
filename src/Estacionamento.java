@@ -29,7 +29,6 @@ public class Estacionamento {
             case 1:
                 VisualInterface visualIns = new VisualInterface();
                 visualIns.exibirMenuPrincipal();
-                
                 break;
             default:
                 break;

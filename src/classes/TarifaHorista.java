@@ -1,6 +1,7 @@
 package classes;
 import enums.EnumTipoVeiculo;
 import enums.EnumDiaSemana;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Duration;
@@ -9,7 +10,7 @@ import java.time.Duration;
  * @author Gustavo
  */
 /* Subclasse de Tarifa para tarifas horistas */
-public class TarifaHorista extends Tarifa {
+public class TarifaHorista extends Tarifa implements Serializable  {
     protected double valorPrimeiraHora;
     protected double valorHoraSubsequente;
     protected EnumDiaSemana[] diasSemana;

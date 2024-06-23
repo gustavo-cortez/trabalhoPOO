@@ -23,8 +23,9 @@ public class FunVagas {
     
     public List<Vagas> vagas;
     private Instancias instancias;
-    public FunVagas() {
+    public FunVagas(Instancias instancias) {
         this.vagas = new ArrayList<>();
+        this.instancias = instancias;
     }
     
     /*Método para cadastrar uma nova vaga, não entendi muito bem por que da rua na vaga, muito sem sentido pra mim*/

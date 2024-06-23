@@ -18,8 +18,9 @@ public class FunTickets {
     
     public List<Ticket> tickets;
     private Instancias instancias;
-    public FunTickets() {
+    public FunTickets(Instancias instancias) {
         this.tickets = new ArrayList<>();
+        this.instancias = instancias;
     }
     
     /*Método para cadastrar um novo ticket, o valor de fim nesses cadastros será sempre nulo e o valor 0.0*/

@@ -17,8 +17,7 @@ public class MenuClientes implements MenuInterface {
             }
             menu.append("Escolha uma opção:");
 
-            String opcaoStr = Interface.solicitarEntrada(menu.toString());
-            opcao = Integer.parseInt(opcaoStr);
+            opcao = Interface.solicitarInt(menu.toString());
 
             try{
                 EnumMenuClientes opcaoEscolhida = EnumMenuClientes.porNumero(opcao);

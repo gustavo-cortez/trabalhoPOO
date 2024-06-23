@@ -1,5 +1,6 @@
 package classes;
 import funcoes.*;
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import javax.swing.JOptionPane;
  * @author Gustavo
  */
 /* Subclasse específica para representar tickets horistas */
-public class TicketHorista extends Ticket {
+public class TicketHorista extends Ticket implements Serializable {
     /* Construtor */
     private TarifaHorista tarifa;
     public TicketHorista(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga, TarifaHorista tarifa) {

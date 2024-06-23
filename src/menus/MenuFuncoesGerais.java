@@ -17,8 +17,7 @@ public class MenuFuncoesGerais implements MenuInterface {
             }
             menu.append("Escolha uma opção:");
 
-            String opcaoStr = Interface.solicitarEntrada(menu.toString());
-            opcao = Integer.parseInt(opcaoStr);
+            opcao = Interface.solicitarInt(menu.toString());
 
             switch (opcao) {
                 case 1:

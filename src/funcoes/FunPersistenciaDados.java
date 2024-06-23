@@ -9,13 +9,13 @@ import java.util.List;
 import menus.Instancias;
 import classes.*;
 
-/**
- *
- * @author Gustavo
- */
 public class FunPersistenciaDados {
     private Instancias instancias;
-    // Método para salvar os dados do estacionamento em um arquivo
+    
+    public FunPersistenciaDados(Instancias instancias) {
+        this.instancias = instancias;
+    }
+    
     public void salvarDados(String nomeArquivo) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(nomeArquivo))) {
             outputStream.writeObject(instancias.getClienteIns().clientes);
@@ -29,17 +29,16 @@ public class FunPersistenciaDados {
         }
     }
 
-    // Método para carregar os dados do estacionamento de um arquivo
     public void carregarDados(String nomeArquivo) {
-    try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(nomeArquivo))) {
-        instancias.getClienteIns().clientes = (List<Cliente>) inputStream.readObject();
-        instancias.getVagasIns().vagas = (List<Vagas>) inputStream.readObject();
-        instancias.getTicketsIns().tickets = (List<Ticket>) inputStream.readObject();
-        instancias.getTarifasIns().tarifasHoristas = (List<TarifaHorista>) inputStream.readObject();
-        instancias.getTarifasIns().tarifasMensalistas = (List<TarifaMensalista>) inputStream.readObject();
-        System.out.println("Dados do estacionamento carregados com sucesso!");
-    } catch (IOException | ClassNotFoundException e) {
-        System.err.println("Erro ao carregar os dados do estacionamento: " + e.getMessage());
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(nomeArquivo))) {
+            instancias.getClienteIns().clientes = (List<Cliente>) inputStream.readObject();
+            instancias.getVagasIns().vagas = (List<Vagas>) inputStream.readObject();
+            instancias.getTicketsIns().tickets = (List<Ticket>) inputStream.readObject();
+            instancias.getTarifasIns().tarifasHoristas = (List<TarifaHorista>) inputStream.readObject();
+            instancias.getTarifasIns().tarifasMensalistas = (List<TarifaMensalista>) inputStream.readObject();
+            System.out.println("Dados do estacionamento carregados com sucesso!");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Erro ao carregar os dados do estacionamento: " + e.getMessage());
+        }
     }
-}
 }

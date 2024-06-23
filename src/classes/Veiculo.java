@@ -1,13 +1,14 @@
 package classes;
 
 import enums.*;
+import java.io.Serializable;
 
 /**
  *
  * @author Gustavo
  */
 /*Classe Veiculo para representar um veículo*/
-public class Veiculo {
+public class Veiculo implements Serializable  {
     private String placa;
     private String cor;
     private String modelo;

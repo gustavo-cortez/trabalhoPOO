@@ -27,10 +27,11 @@ public class FunTarifas {
     public List<TarifaMensalista> tarifasMensalistas;
     public List<Ticket> ticketsMensalistas;
     private Instancias instancias;
-    public FunTarifas(){
+    public FunTarifas(Instancias instancias){
         this.tarifasHoristas = new ArrayList<>();
         this.tarifasMensalistas = new ArrayList<>();
         this.ticketsMensalistas = new ArrayList<>();
+        this.instancias = instancias;
     }
     /*Método para cadastrar uma nova tarifa, é nescessário para cadastrar a tarifa informar os dias da semana 
     atráves de número do ENUM: 1-DOMINGO 2-SEGUNDA-FEIRA, ETC..., numero abaixo de 1 e maior que 7 para a leitura dos dias*/;

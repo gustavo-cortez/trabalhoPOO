@@ -13,6 +13,7 @@ public class Instancias {
     private static FunTarifas tarifasIns;
     private static FunTickets ticketsIns;
     private static FunVagas vagasIns;
+    private static FunPersistenciaDados persistenciaIns;
 
     private static MenuPrincipal menuPrincipal;
     private static MenuClientes menuClientes;
@@ -22,18 +23,20 @@ public class Instancias {
     private static MenuVeiculos menuVeiculos;
     
     public static UserInterface Interface;
+    private static Instancias instance;
     
     public Instancias(UserInterface Interface) {
+        Instancias.Interface = Interface;
         inicializarFuncoes();
         inicializarMenus();
-        Instancias.Interface = Interface;
     }
 
     private void inicializarFuncoes() {
-        clienteIns = new FunCliente();
-        tarifasIns = new FunTarifas();
-        ticketsIns = new FunTickets();
-        vagasIns = new FunVagas();
+        clienteIns = new FunCliente(this);
+        tarifasIns = new FunTarifas(this);
+        ticketsIns = new FunTickets(this);
+        vagasIns = new FunVagas(this);
+        persistenciaIns = new FunPersistenciaDados(this);
 
     }
 
@@ -85,6 +88,10 @@ public class Instancias {
 
     public FunVagas getVagasIns() {
         return vagasIns;
+    }
+
+    public FunPersistenciaDados getPersistenciaIns() {
+        return persistenciaIns;
     }
 
     public MenuPrincipal getMenuPrincipal() {

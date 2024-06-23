@@ -1,5 +1,6 @@
 package classes;
 import funcoes.FunTarifas;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -8,7 +9,7 @@ import java.time.LocalDate;
  * @author Gustavo
  */
 /* Subclasse específica para representar tickets mensalistas */
-public class TicketMensalista extends Ticket {
+public class TicketMensalista extends Ticket implements Serializable  {
     /* Construtor */
     TarifaMensalista tarifaMensal;
     public TicketMensalista(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga, TarifaMensalista tarifaMensal) {

@@ -9,11 +9,18 @@ import menus.Instancias;
  * @author Gustavo
  */
 public class TerminalInterface implements UserInterface {
-    private final Instancias instancia = new Instancias(this);
+    private final Instancias instancia;
     private final Scanner scanner;
 
     public TerminalInterface() {
         scanner = new Scanner(System.in);
+        instancia = new Instancias(this);
+        instancia.getPersistenciaIns().carregarDados("DadosEstacionamento.json");
+        InicializacaoDados.inicializarClientes(instancia.getClienteIns());
+        InicializacaoDados.inicializarTarifas(instancia.getTarifasIns());
+        InicializacaoDados.inicializarVagas(instancia.getVagasIns());
+        InicializacaoDados.inicializarVeiculos(instancia.getClienteIns());
+        
     }
 
     @Override
@@ -23,7 +30,9 @@ public class TerminalInterface implements UserInterface {
 
     @Override
     public String solicitarEntrada(String mensagem) {
+        
         System.out.println(mensagem);
+        scanner.next();
         return scanner.nextLine();
     }
 
@@ -36,7 +45,6 @@ public class TerminalInterface implements UserInterface {
     public int solicitarInt(String mensagem) {
         int valor = 0;
         boolean entradaValida = false;
-
         while (!entradaValida) {
             try {
                 System.out.println(mensagem);

@@ -14,13 +14,19 @@ public class FunCliente {
     
     public List<Cliente> clientes;
     private Instancias instancias;
-    public FunCliente(){
+    public FunCliente(Instancias instancias){
         this.clientes = new ArrayList<>();
+        this.instancias = instancias;
     }
     /*Método para cadastrar um novo cliente*/
     public void cadastrarCliente(String nome, String documento) {
-        Cliente cliente = new Cliente(nome, documento);
-        clientes.add(cliente);
+        if(consultarCliente(documento) == null){
+            Cliente cliente = new Cliente(nome, documento);
+            clientes.add(cliente);
+        }
+        else{
+            instancias.getInterface().exibirErro("Cliente já existente no sistema!");
+        }
     }
 
     /*Método para consultar um cliente pelo documento*/
@@ -122,12 +128,17 @@ public class FunCliente {
         String nomeCliente;
         Cliente cliente = consultarCliente(documentoCliente);
         if (cliente != null) {
-            Veiculo veiculo = new Veiculo(placa, cliente ,tipoVeiculo, cor, modelo, tipoUso);
-            cliente.adicionarVeiculo(veiculo);
-            nomeCliente = cliente.getNome();
-            instancias.getInterface().exibirSucesso("Veículo adicionado com sucesso ao cliente " + nomeCliente);
+            if(consultarPlaca(placa) == null){
+                Veiculo veiculo = new Veiculo(placa, cliente ,tipoVeiculo, cor, modelo, tipoUso);
+                cliente.adicionarVeiculo(veiculo);
+                nomeCliente = cliente.getNome();
+                instancias.getInterface().exibirSucesso("Veículo adicionado com sucesso ao cliente " + nomeCliente);
+            }
+            else{
+                instancias.getInterface().exibirErro("Veículo com placa identica já existente");
+            }
         } else {
-            instancias.getInterface().exibirErro("Cliente não encontrado.");
+            instancias.getInterface().exibirErro("Cliente não encontrado");
         }
     }
     

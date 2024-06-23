@@ -2,6 +2,7 @@ package classes;
 
 import enums.EnumVagaStatus;
 import enums.EnumTipoVeiculo;
+import java.io.Serializable;
 
 /**
  *
@@ -9,7 +10,7 @@ import enums.EnumTipoVeiculo;
  */
 
 // Classe Vaga para representar uma vaga de estacionamento
-public class Vagas{
+public class Vagas implements Serializable {
     private int numero;
     private String rua;
     private EnumVagaStatus status;

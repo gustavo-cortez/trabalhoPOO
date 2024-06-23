@@ -1,13 +1,14 @@
 package classes;
 import enums.EnumStatus;
 import funcoes.FunTarifas;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 /**
  *
  * @author Gustavo
  */
 /*Classe Ticket para representar um ticket de estacionamento*/
-public abstract class Ticket {
+public abstract class Ticket  implements Serializable {
     private LocalDateTime inicio;
     private LocalDateTime fim;
     private Veiculo veiculo;
