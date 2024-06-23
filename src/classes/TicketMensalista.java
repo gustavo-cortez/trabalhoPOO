@@ -1,6 +1,5 @@
 package classes;
 import funcoes.FunTarifas;
-import funcoesVisual.FunTarifasVisual;
 import java.time.LocalDateTime;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -32,12 +31,6 @@ public class TicketMensalista extends Ticket {
         if (LocalDateTime.now().isAfter(this.getFim())){
             valorTotal *= 1.5;
         }
-        
-        return valorTotal;
-    }
-    public double calcularValor(FunTarifasVisual tarifaIns) {
-        double valorTotal;
-        valorTotal = tarifaMensal.getValorMensal(this.getVeiculo().getTipo());
         
         return valorTotal;
     }

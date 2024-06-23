@@ -62,7 +62,7 @@ public class MenuClientes implements MenuInterface {
 
                 case GERENCIAR_VEICULOS:
                     // Gerenciar veículos
-                    
+                    instancias.getMenuVeiculos().exibir(Interface, instancias);
                     break;
 
                 case LISTAR_CADASTROS:

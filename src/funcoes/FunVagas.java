@@ -9,11 +9,11 @@ import enums.EnumTipoVeiculo;
 import enums.EnumVagaStatus;
 import classes.Vagas;
 import classes.Veiculo;
-import funcoesVisual.FunTarifasVisual;
-import funcoesVisual.FunTicketsVisual;
+import interfaces.UserInterface;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import menus.Instancias;
 
 /**
  *
@@ -22,7 +22,7 @@ import java.util.List;
 public class FunVagas {
     
     public List<Vagas> vagas;
-    
+    private Instancias instancias;
     public FunVagas() {
         this.vagas = new ArrayList<>();
     }
@@ -32,10 +32,10 @@ public class FunVagas {
         if(buscarVaga(numero) == null){
             Vagas vaga = new Vagas(numero, rua, EnumVagaStatus.DISPONIVEL, tipoVeiculo);  
             vagas.add(vaga);
-            System.out.println("Vaga cadastrada com sucesso!");
+            instancias.getInterface().exibirSucesso("Vaga cadastrada com sucesso!");
         }
         else{
-            System.out.println("Erro ao cadastrar a vaga, vaga com numéro informado já existente");
+            instancias.getInterface().exibirErro("Erro ao cadastrar a vaga, vaga com numéro informado já existente");
         }
     }
     
@@ -54,11 +54,11 @@ public class FunVagas {
         for (Vagas vaga : vagas) {
             if (vaga.getNumero() == numeroVaga && vaga.getStatus() == EnumVagaStatus.DISPONIVEL && consultarTicketsVaga(vaga, ticketIns).isEmpty()) {
                 vagas.remove(vaga);
-                System.out.println("Vaga excluída com sucesso!");
+                instancias.getInterface().exibirSucesso("Vaga excluída com sucesso!");
                 return true;
             }
         }
-        System.out.println("Vaga não encontrada ou não está disponível.");
+        instancias.getInterface().exibirMensagem("Vaga não encontrada ou não está disponível.");
         return false;
     }
     
@@ -128,10 +128,10 @@ public class FunVagas {
                 // Ticket mensalista já existe e é válido, atualiza a vaga para ocupada
                 if (numeroVaga == ticketExistente.getVaga().getNumero()) {
                     vaga.setStatus(EnumVagaStatus.OCUPADA);
-                    System.out.println("Veículo estacionado com sucesso usando ticket mensalista existente!");
+                    instancias.getInterface().exibirSucesso("Veículo estacionado com sucesso usando ticket mensalista existente!");
                 }
                 else{
-                    System.out.println("Não foi possivel estacionar usando um ticket mensalista afinal a vaga não corresponde à vaga previamente cadastrada para esse ticket!");
+                    instancias.getInterface().exibirErro("Não foi possivel estacionar usando um ticket mensalista afinal a vaga não corresponde à vaga previamente cadastrada para esse ticket!");
                 }
             } else {
                 // Cria um novo ticket mensalista
@@ -141,10 +141,10 @@ public class FunVagas {
                 Ticket ticket = new TicketMensalista(inicio, fim, veiculo, valor, vaga, tarifaIns.encontrarTarifaMensalista());
                 cadastrarTicket(ticket, ticketIns);
                 vaga.setStatus(EnumVagaStatus.OCUPADA);
-                System.out.println("Veículo estacionado com sucesso com novo ticket mensalista!");
+                instancias.getInterface().exibirSucesso("Veículo estacionado com sucesso com novo ticket mensalista!");
             }
         }else {
-            System.out.println("Erro ao estacionar veículo: vaga não correspondente ou indisponível.");
+            instancias.getInterface().exibirErro("Erro ao estacionar veículo: vaga não correspondente ou indisponível.");
         }
     }
 
@@ -156,9 +156,9 @@ public class FunVagas {
             LocalDateTime inicio = LocalDateTime.now();
             Ticket ticket = new TicketHorista(inicio, null, veiculo, 0.0, vaga, tarifaIns.encontrarTarifaHorista(inicio.getDayOfWeek()));
             cadastrarTicket(ticket, ticketIns);
-            System.out.println("Veículo estacionado com sucesso!");
+            instancias.getInterface().exibirSucesso("Veículo estacionado com sucesso!");
         } else {
-            System.out.println("Erro ao estacionar veículo: vaga não correspondente ou indisponível.");
+            instancias.getInterface().exibirErro("Erro ao estacionar veículo: vaga não correspondente ou indisponível.");
         }
     }
 
@@ -173,19 +173,19 @@ public class FunVagas {
                     vaga.setStatus(EnumVagaStatus.DISPONIVEL);
                     ticket.setValor(valorTotal);
                     ticket.setStatus(EnumStatus.FINALIZADO);
-                    System.out.println("Veículo retirado com sucesso! Valor total: " + valorTotal);
+                    instancias.getInterface().exibirSucesso("Veículo retirado com sucesso! Valor total: " + valorTotal);
                     return valorTotal;
                 } else {
                     ticket.setFim(null);
-                    System.out.println("Erro ao calcular o valor do ticket.");
+                    instancias.getInterface().exibirErro("Erro ao calcular o valor do ticket.");
                     return -1.0;
                 }
             } else {
-                System.out.println("Nenhum ticket encontrado para a vaga especificada.");
+                instancias.getInterface().exibirMensagem("Nenhum ticket encontrado para a vaga especificada.");
                 return -1.0;
             }
         } else {
-            System.out.println("Vaga não ocupada ou inexistente.");
+            instancias.getInterface().exibirMensagem("Vaga não ocupada ou inexistente.");
             return -1.0;
         }
     }
@@ -197,15 +197,15 @@ public class FunVagas {
                 if (ticket instanceof TicketMensalista) {
                     // Ticket mensalista, apenas libera a vaga sem encerrar o ticket
                     vaga.setStatus(EnumVagaStatus.ALUGADA_MENSAL);
-                    System.out.println("Veículo retirado com sucesso! Ticket mensalista ainda válido.");
+                    instancias.getInterface().exibirSucesso("Veículo retirado com sucesso! Ticket mensalista ainda válido.");
                     return ticket.getValor();
                 }
             } else {
-                System.out.println("Nenhum ticket encontrado para a vaga especificada.");
+                instancias.getInterface().exibirMensagem("Nenhum ticket encontrado para a vaga especificada.");
                 return -1.0;
             }
         } else {
-            System.out.println("Vaga não ocupada ou inexistente.");
+            instancias.getInterface().exibirMensagem("Vaga não ocupada ou inexistente.");
             return -1.0;
         }
         
@@ -223,7 +223,7 @@ public class FunVagas {
     
     public void cadastrarTicket(Ticket ticket, FunTickets ticketIns) {
         ticketIns.tickets.add(ticket);
-        System.out.println("Ticket cadastrado com sucesso!");
+        instancias.getInterface().exibirMensagem("Ticket cadastrado com sucesso!");
     }
 
 

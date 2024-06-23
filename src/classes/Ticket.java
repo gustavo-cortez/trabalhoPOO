@@ -1,7 +1,6 @@
 package classes;
 import enums.EnumStatus;
 import funcoes.FunTarifas;
-import funcoesVisual.FunTarifasVisual;
 import java.time.LocalDateTime;
 /**
  *
@@ -88,8 +87,4 @@ public abstract class Ticket {
     
     // Método abstrato para calcular o valor do ticket
     public abstract double calcularValor(FunTarifas tarifaIns);
-    
-    public abstract double calcularValor(FunTarifasVisual tarifaIns);
-
-    // Outros métodos comuns a todos os tipos de tickets
 }

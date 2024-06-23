@@ -3,10 +3,12 @@ import enums.EnumVagaStatus;
 import enums.EnumStatus;
 import enums.EnumUsoEstacionamento;
 import classes.*;
+import interfaces.UserInterface;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import menus.Instancias;
 
 /**
  *
@@ -15,9 +17,8 @@ import java.util.List;
 public class FunTickets {
     
     public List<Ticket> tickets;
-
+    private Instancias instancias;
     public FunTickets() {
-        
         this.tickets = new ArrayList<>();
     }
     
@@ -26,12 +27,12 @@ public class FunTickets {
         Ticket ticket;
         if(veiculo.getTipoUso().equals(EnumUsoEstacionamento.HORISTA)){
             ticket = new TicketHorista(inicio, null, veiculo, 0.0, vaga, null);
-            System.out.println("Ticket cadastrado com sucesso!");
+            instancias.getInterface().exibirSucesso("Ticket cadastrado com sucesso!");
         }
         else{
             LocalDateTime fim = inicio.plusDays(30); // Definir o final 30 dias após o início
             ticket = new TicketMensalista(inicio, fim, veiculo, 0.0, vaga, null);
-            System.out.println("Ticket cadastrado com sucesso!");
+            instancias.getInterface().exibirSucesso("Ticket cadastrado com sucesso!");
         }
         tickets.add(ticket);
     }
@@ -48,7 +49,7 @@ public class FunTickets {
     /*Método para listar todos tickets gerados*/
     public void listarTickets() {
         for (Ticket ticket : tickets) {
-            System.out.println("Inicio: " + ticket.getInicio() + ", Fim: " + ticket.getFim() + ", Valor: " + ticket.getValor() + ", Veiculo: " + ticket.getVeiculo().getPlaca() + ", Vaga: " + ticket.getVaga().getNumero() + ", Tipo de uso: " + ticket.getTipo());
+            instancias.getInterface().exibirMensagem("Inicio: " + ticket.getInicio() + ", Fim: " + ticket.getFim() + ", Valor: " + ticket.getValor() + ", Veiculo: " + ticket.getVeiculo().getPlaca() + ", Vaga: " + ticket.getVaga().getNumero() + ", Tipo de uso: " + ticket.getTipo());
         }
     }
     

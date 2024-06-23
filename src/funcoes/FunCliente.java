@@ -4,6 +4,7 @@ import enums.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import menus.Instancias;
 
 /**
  *
@@ -12,7 +13,8 @@ import java.util.List;
 public class FunCliente {
     
     public List<Cliente> clientes;
-    public FunCliente() {
+    private Instancias instancias;
+    public FunCliente(){
         this.clientes = new ArrayList<>();
     }
     /*Método para cadastrar um novo cliente*/
@@ -93,20 +95,24 @@ public class FunCliente {
     
     /*Método para listar todos os clientes cadastrados e seus respectivos veículos*/
     public void listarClientes() {
-        System.out.println("\nLista de todos os clientes cadastrados:");
-        for (Cliente cliente : clientes) {
-            System.out.println("Nome: " + cliente.getNome());
-            System.out.println("Documento: " + cliente.getDocumento());
-            System.out.println("Veículos:");
-            List<Veiculo> veiculos = cliente.getVeiculos();
-            if (veiculos.isEmpty()) {
-                System.out.println("Nenhum veículo cadastrado para este cliente.");
-            } else {
-                for (Veiculo veiculo : veiculos) {
-                    System.out.println("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo() + "- Cor: " + veiculo.getCor() + ", Tipo: " + veiculo.getTipo());
+        if(clientes.isEmpty()){
+            instancias.getInterface().exibirMensagem("aaaa");
+        }else{ 
+            instancias.getInterface().exibirMensagem("\nLista de todos os clientes cadastrados:");
+            for (Cliente cliente : clientes) {
+                instancias.getInterface().exibirMensagem("Nome: " + cliente.getNome());
+                instancias.getInterface().exibirMensagem("Documento: " + cliente.getDocumento());
+                instancias.getInterface().exibirMensagem("Veículos:");
+                List<Veiculo> veiculos = cliente.getVeiculos();
+                if (veiculos.isEmpty()) {
+                    instancias.getInterface().exibirErro("Nenhum veículo cadastrado para este cliente.");
+                } else {
+                    for (Veiculo veiculo : veiculos) {
+                        instancias.getInterface().exibirMensagem("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo() + "- Cor: " + veiculo.getCor() + ", Tipo: " + veiculo.getTipo());
+                    }
                 }
-            }
-            System.out.println();
+                instancias.getInterface().exibirMensagem("");
+            }   
         }
     }
 
@@ -119,9 +125,9 @@ public class FunCliente {
             Veiculo veiculo = new Veiculo(placa, cliente ,tipoVeiculo, cor, modelo, tipoUso);
             cliente.adicionarVeiculo(veiculo);
             nomeCliente = cliente.getNome();
-            System.out.println("Veículo adicionado com sucesso ao cliente " + nomeCliente);
+            instancias.getInterface().exibirSucesso("Veículo adicionado com sucesso ao cliente " + nomeCliente);
         } else {
-            System.out.println("Cliente não encontrado.");
+            instancias.getInterface().exibirErro("Cliente não encontrado.");
         }
     }
     
@@ -131,15 +137,15 @@ public class FunCliente {
         if (cliente != null) {
             List<Veiculo> veiculosCliente = cliente.getVeiculos();
             if (veiculosCliente.isEmpty()) {
-                System.out.println("O cliente não possui veículos cadastrados.");
+                instancias.getInterface().exibirMensagem("O cliente não possui veículos cadastrados.");
             } else {
-                System.out.println("Veículos do cliente:");
+                instancias.getInterface().exibirMensagem("Veículos do cliente:");
                 for (Veiculo veiculo : veiculosCliente) {
-                    System.out.println("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo() + "- Cor: " + veiculo.getCor() + ", Tipo: " + veiculo.getTipo());
+                    instancias.getInterface().exibirMensagem("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo() + "- Cor: " + veiculo.getCor() + ", Tipo: " + veiculo.getTipo());
                 }
             }
         } else {
-            System.out.println("Cliente não encontrado.");
+            instancias.getInterface().exibirErro("Cliente não encontrado.");
         }
     }
     
