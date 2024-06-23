@@ -15,7 +15,7 @@ public class Vagas implements Serializable {
     private String rua;
     private EnumVagaStatus status;
     private EnumTipoVeiculo tipoVeiculo; // Indica o tipo de veículo que pode estacionar nesta vaga
-
+    private static final long serialVersionUID = 1L;
     // Construtor e métodos getters e setters
 
     public Vagas(int numero, String rua, EnumVagaStatus status, EnumTipoVeiculo tipoVeiculo) {

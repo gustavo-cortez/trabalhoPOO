@@ -15,6 +15,7 @@ public class Veiculo implements Serializable  {
     private Cliente proprietario;
     private EnumTipoVeiculo tipo;
     private EnumUsoEstacionamento TipoUso;
+    private static final long serialVersionUID = 1L;
     /*Construtor e métodos getters e setters do véiculo*/
 
     public Veiculo(String placa, Cliente proprietario, EnumTipoVeiculo tipo, String modelo, String cor, EnumUsoEstacionamento TipoUso) {

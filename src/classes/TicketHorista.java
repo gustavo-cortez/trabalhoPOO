@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 public class TicketHorista extends Ticket implements Serializable {
     /* Construtor */
     private TarifaHorista tarifa;
+    private static final long serialVersionUID = 1L;
     public TicketHorista(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga, TarifaHorista tarifa) {
         super(inicio, fim, veiculo, valor, vaga);
         this.tarifa = tarifa;

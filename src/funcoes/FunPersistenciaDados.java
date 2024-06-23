@@ -23,9 +23,9 @@ public class FunPersistenciaDados {
             outputStream.writeObject(instancias.getTicketsIns().tickets);
             outputStream.writeObject(instancias.getTarifasIns().tarifasHoristas);
             outputStream.writeObject(instancias.getTarifasIns().tarifasMensalistas);
-            System.out.println("Dados do estacionamento salvos com sucesso!");
+            instancias.getInterface().exibirSucesso("Dados do estacionamento salvos com sucesso!");
         } catch (IOException e) {
-            System.err.println("Erro ao salvar os dados do estacionamento: " + e.getMessage());
+            instancias.getInterface().exibirErro("Erro ao salvar os dados do estacionamento: " + e.getMessage());
         }
     }
 
@@ -36,9 +36,9 @@ public class FunPersistenciaDados {
             instancias.getTicketsIns().tickets = (List<Ticket>) inputStream.readObject();
             instancias.getTarifasIns().tarifasHoristas = (List<TarifaHorista>) inputStream.readObject();
             instancias.getTarifasIns().tarifasMensalistas = (List<TarifaMensalista>) inputStream.readObject();
-            System.out.println("Dados do estacionamento carregados com sucesso!");
+            instancias.getInterface().exibirSucesso("Dados do estacionamento carregados com sucesso!");
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Erro ao carregar os dados do estacionamento: " + e.getMessage());
+            instancias.getInterface().exibirErro("Erro ao carregar os dados do estacionamento: " + e.getMessage());
         }
     }
 }

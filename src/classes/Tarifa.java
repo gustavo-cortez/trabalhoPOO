@@ -9,7 +9,7 @@ import java.io.Serializable;
 /*Classe Tarifa para armazenar os valores das tarifas*/
 public abstract class Tarifa implements Serializable {
     protected LocalDate inicio;
-
+    
     public Tarifa(LocalDate inicio) {
         this.inicio = inicio;
     }

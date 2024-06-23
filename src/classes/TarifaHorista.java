@@ -14,6 +14,7 @@ public class TarifaHorista extends Tarifa implements Serializable  {
     protected double valorPrimeiraHora;
     protected double valorHoraSubsequente;
     protected EnumDiaSemana[] diasSemana;
+    private static final long serialVersionUID = 1L;
     public TarifaHorista(LocalDate inicio, double valorPrimeiraHora, double valorHoraSubsequente, EnumDiaSemana[] diasSemana) {
         super(inicio);
         this.valorPrimeiraHora = valorPrimeiraHora;

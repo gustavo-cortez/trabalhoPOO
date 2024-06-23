@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class TicketMensalista extends Ticket implements Serializable  {
     /* Construtor */
     TarifaMensalista tarifaMensal;
+    private static final long serialVersionUID = 1L;
     public TicketMensalista(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga, TarifaMensalista tarifaMensal) {
         super(inicio, fim, veiculo, valor, vaga);
         this.tarifaMensal = tarifaMensal;
