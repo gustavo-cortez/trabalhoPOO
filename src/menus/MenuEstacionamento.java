@@ -81,7 +81,7 @@ public class MenuEstacionamento implements MenuInterface {
                     }
                     break;
                 case 5:
-                    exibir(Interface, instancias);
+                    instancias.getMenuTarifas().exibir(Interface, instancias);
                     break;
                 case 6:
                     Interface.exibirMensagem("Voltando ao menu principal...");

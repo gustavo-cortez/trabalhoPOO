@@ -2,9 +2,7 @@ package classes;
 import funcoes.*;
 import java.io.Serializable;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import javax.swing.JOptionPane;
 /**
  *
  * @author Gustavo
@@ -40,20 +38,20 @@ public class TicketHorista extends Ticket implements Serializable {
 
         // Calcula o valor da primeira hora se a diferença for menor que 60 minutos
         if (diffInMinutes <= 60) {
-            valorTotal = tarifa.getValorPrimeiraHora(this.getVeiculo().getTipo());
+            valorTotal = (tarifa.getValorPrimeiraHora() * this.getVeiculo().getTipo().getMultiplicador());
         } else {
             // Primeira hora completa
-            valorTotal = tarifa.getValorPrimeiraHora(this.getVeiculo().getTipo()) + tarifa.getValorHoraSubsequente(this.getVeiculo().getTipo());
+            valorTotal = (tarifa.getValorPrimeiraHora() + tarifa.getValorHoraSubsequente()) * this.getVeiculo().getTipo().getMultiplicador();
 
             // Horas subsequentes
             long horasSubsequentes = (long) Math.ceil((double) (diffInMinutes - 60) / 60);
-            valorTotal += horasSubsequentes * tarifa.getValorHoraSubsequente(this.getVeiculo().getTipo());
+            valorTotal += (horasSubsequentes * tarifa.getValorHoraSubsequente()) * this.getVeiculo().getTipo().getMultiplicador();
 
             // Lógica adicional para verificar se o ticket cobre mais de um dia completo ou se começa e termina em dias diferentes
             if (inicio.toLocalDate().isBefore(fim.toLocalDate())) {
                 Duration diffAtraso = Duration.between(fim, LocalDateTime.now());
                 long diffAtrasoMin = diffAtraso.toMinutes();
-                valorTotal += (tarifa.getValorPrimeiraHora(this.getVeiculo().getTipo()) * 2) * Math.ceil((double) diffAtrasoMin / 60);
+                valorTotal += (tarifa.getValorPrimeiraHora() * Math.ceil((double) diffAtrasoMin / 60)) * this.getVeiculo().getTipo().getMultiplicador();
             }
         }
 

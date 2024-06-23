@@ -15,6 +15,7 @@ public abstract class Ticket  implements Serializable {
     private double valor;
     private Vagas vaga;
     private EnumStatus status;
+    
     public Ticket(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga) {
         this.inicio = inicio;
         this.fim = fim;

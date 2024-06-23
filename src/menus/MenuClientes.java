@@ -56,7 +56,7 @@ public class MenuClientes implements MenuInterface {
                     // Editar cliente
                     nomeCli = Interface.solicitarEntrada("Digite o novo nome do cliente:");
                     documentoCli = Interface.solicitarEntrada("Digite o CPF do cliente a ser alterado:");
-                    instancias.getClienteIns().editarCliente(nomeCli, documentoCli);
+                    instancias.getClienteIns().editarCliente(documentoCli, nomeCli);
                     break;
 
                 case GERENCIAR_VEICULOS:

@@ -8,7 +8,17 @@ import menus.*;
  * @author Gustavo
  */
 public class VisualInterface implements UserInterface {
-    private final Instancias instancia = new Instancias(this);
+    private Instancias instancia = new Instancias(this);
+    
+    public VisualInterface() {
+        instancia = new Instancias(this);
+        instancia.getPersistenciaIns().carregarDados("DadosEstacionamento.json");
+        InicializacaoDados.inicializarClientes(instancia.getClienteIns());
+        InicializacaoDados.inicializarTarifas(instancia.getTarifasIns());
+        InicializacaoDados.inicializarVagas(instancia.getVagasIns());
+        InicializacaoDados.inicializarVeiculos(instancia.getClienteIns());
+        
+    }
     
     @Override
     public void exibirMensagem(String mensagem) {

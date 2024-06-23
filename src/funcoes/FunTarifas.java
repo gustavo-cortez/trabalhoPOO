@@ -1,13 +1,10 @@
 package funcoes;
 import enums.EnumDiaSemana;
-import classes.Tarifa;
 import classes.TarifaMensalista;
-import classes.TicketMensalista;
 import classes.TarifaHorista;
 import classes.Veiculo;
 import classes.Ticket;
 import enums.EnumTipoVeiculo;
-import interfaces.UserInterface;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +38,7 @@ public class FunTarifas {
         /*Solicitar os dias da semana ao usuário atráves de números do ENUM*/
         int dia;
         instancias.getInterface().exibirMensagem("Informe os dias da semana em que a tarifa será aplicada(Com número como: 1-DOMINGO 2-SEGUNDA-FEIRA, ETC...):");
-        dia = scanner.nextInt();
+        dia = instancias.getInterface().solicitarInt("");
         while(dia <= 7 && dia > 0){
             EnumDiaSemana diaSemana = EnumDiaSemana.getByOpcao(dia); /*Obtém o enum correspondente ao dia informado*/
             diasSemana.add(diaSemana); /*Adiciona o dia à lista*/
@@ -65,7 +62,7 @@ public class FunTarifas {
             mensagem.append("Inicio: ").append(tarifa.getInicio());
                     
             mensagem.append(", Valor Mensal: ")
-                    .append(tarifa.getValorMensal(EnumTipoVeiculo.CARRO))
+                    .append(tarifa.getValorMensal())
                     .append(", Tipo da tarifa : Mensalista");
             mensagem.append("\n");
         }
@@ -152,7 +149,7 @@ public class FunTarifas {
         }
 
         // Calcula o valor da tarifa mensalista
-        double valorTotal = tarifaMensalista.getValorMensal(ticket.getVaga().getTipoVeiculo()); // Valor fixo mensal
+        double valorTotal = tarifaMensalista.getValorMensal(); // Valor fixo mensal
 
         return valorTotal;
     }

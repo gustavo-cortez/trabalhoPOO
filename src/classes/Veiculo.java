@@ -10,15 +10,15 @@ import java.io.Serializable;
 /*Classe Veiculo para representar um veículo*/
 public class Veiculo implements Serializable  {
     private String placa;
-    private String cor;
-    private String modelo;
+    private Cor cor;
+    private Modelo modelo;
     private Cliente proprietario;
     private EnumTipoVeiculo tipo;
     private EnumUsoEstacionamento TipoUso;
     private static final long serialVersionUID = 1L;
     /*Construtor e métodos getters e setters do véiculo*/
 
-    public Veiculo(String placa, Cliente proprietario, EnumTipoVeiculo tipo, String modelo, String cor, EnumUsoEstacionamento TipoUso) {
+    public Veiculo(String placa, Cliente proprietario, EnumTipoVeiculo tipo, Modelo modelo, Cor cor, EnumUsoEstacionamento TipoUso) {
         this.placa = placa;
         this.proprietario = proprietario;
         this.tipo = tipo;
@@ -39,11 +39,11 @@ public class Veiculo implements Serializable  {
         return tipo;
     }
 
-    public String getCor() {
+    public Cor getCor() {
         return cor;
     }
 
-    public String getModelo() {
+    public Modelo getModelo() {
         return modelo;
     }
 
@@ -67,11 +67,11 @@ public class Veiculo implements Serializable  {
         this.proprietario = proprietario;
     }
 
-    public void setCor(String cor) {
+    public void setCor(Cor cor) {
         this.cor = cor;
     }
 
-    public void setModelo(String modelo) {
+    public void setModelo(Modelo modelo) {
         this.modelo = modelo;
     } 
     

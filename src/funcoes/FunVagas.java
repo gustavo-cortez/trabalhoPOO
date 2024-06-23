@@ -4,12 +4,10 @@ import enums.EnumStatus;
 import classes.Ticket;
 import classes.TicketHorista;
 import classes.TicketMensalista;
-import enums.EnumUsoEstacionamento;
 import enums.EnumTipoVeiculo;
 import enums.EnumVagaStatus;
 import classes.Vagas;
 import classes.Veiculo;
-import interfaces.UserInterface;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +136,7 @@ public class FunVagas {
                 // Cria um novo ticket mensalista
                 LocalDateTime inicio = LocalDateTime.now();
                 LocalDateTime fim = inicio.plusDays(30); // Fim do período de 30 dias
-                double valor = tarifaIns.encontrarTarifaMensalista().getValorMensal(veiculo.getTipo()); // Valor único da tarifa mensalista
+                double valor = tarifaIns.encontrarTarifaMensalista().getValorMensal(); // Valor único da tarifa mensalista
                 Ticket ticket = new TicketMensalista(inicio, fim, veiculo, valor, vaga, tarifaIns.encontrarTarifaMensalista());
                 cadastrarTicket(ticket, ticketIns);
                 vaga.setStatus(EnumVagaStatus.OCUPADA);

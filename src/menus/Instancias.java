@@ -21,6 +21,7 @@ public class Instancias {
     private static MenuEstacionamento menuEstacionamento;
     private static MenuFuncoesGerais menuFuncoesGerais;
     private static MenuVeiculos menuVeiculos;
+    private static MenuTarifas menuTarifas;
     
     public static UserInterface Interface;
     private static Instancias instance;
@@ -46,6 +47,7 @@ public class Instancias {
         menuEstacionamento = new MenuEstacionamento();
         menuFuncoesGerais = new MenuFuncoesGerais();
         menuVeiculos = new MenuVeiculos();
+        menuTarifas = new MenuTarifas();
 
         menuPrincipal = new MenuPrincipal();
     }
@@ -101,6 +103,9 @@ public class Instancias {
     public UserInterface getInterface() {
         return Interface;
     }
-    
+
+    public MenuTarifas getMenuTarifas() {
+        return menuTarifas;
+    }
     
 }

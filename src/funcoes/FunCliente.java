@@ -114,7 +114,7 @@ public class FunCliente {
                     instancias.getInterface().exibirErro("Nenhum veículo cadastrado para este cliente.");
                 } else {
                     for (Veiculo veiculo : veiculos) {
-                        instancias.getInterface().exibirMensagem("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo() + "- Cor: " + veiculo.getCor() + ", Tipo: " + veiculo.getTipo());
+                        instancias.getInterface().exibirMensagem("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo().getModelo() + "- Cor: " + veiculo.getCor().getNome() + ", Tipo: " + veiculo.getTipo());
                     }
                 }
                 instancias.getInterface().exibirMensagem("");
@@ -124,12 +124,14 @@ public class FunCliente {
 
     
     /*Método para adicionar um veículo a um cliente*/
-    public void adicionarVeiculoCliente(String placa, EnumTipoVeiculo tipoVeiculo, String documentoCliente, String cor, String modelo, EnumUsoEstacionamento tipoUso) {
+    public void adicionarVeiculoCliente(String placa, EnumTipoVeiculo tipoVeiculo, String documentoCliente, String cor_veiculo, String modelo_veiculo, EnumUsoEstacionamento tipoUso) {
         String nomeCliente;
         Cliente cliente = consultarCliente(documentoCliente);
         if (cliente != null) {
             if(consultarPlaca(placa) == null){
-                Veiculo veiculo = new Veiculo(placa, cliente ,tipoVeiculo, cor, modelo, tipoUso);
+                Cor cor = new Cor(cor_veiculo);
+                Modelo modelo = new Modelo(modelo_veiculo);
+                Veiculo veiculo = new Veiculo(placa, cliente ,tipoVeiculo, modelo, cor, tipoUso);
                 cliente.adicionarVeiculo(veiculo);
                 nomeCliente = cliente.getNome();
                 instancias.getInterface().exibirSucesso("Veículo adicionado com sucesso ao cliente " + nomeCliente);
@@ -152,7 +154,7 @@ public class FunCliente {
             } else {
                 instancias.getInterface().exibirMensagem("Veículos do cliente:");
                 for (Veiculo veiculo : veiculosCliente) {
-                    instancias.getInterface().exibirMensagem("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo() + "- Cor: " + veiculo.getCor() + ", Tipo: " + veiculo.getTipo());
+                    instancias.getInterface().exibirMensagem("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo().getModelo() + "- Cor: " + veiculo.getCor().getNome() + ", Tipo: " + veiculo.getTipo());
                 }
             }
         } else {

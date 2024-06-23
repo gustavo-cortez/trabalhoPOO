@@ -14,16 +14,7 @@ public class TarifaMensalista extends Tarifa implements Serializable {
         super(inicio);
         this.valorMensal = valorMensal;
     }
-    public double getValorMensal(EnumTipoVeiculo tipo) {
-        
-        if(tipo.equals(EnumTipoVeiculo.ÔNIBUS)){
-           return valorMensal * 1.5; 
-        }
-        else{
-            if(tipo.equals(EnumTipoVeiculo.MOTO)){
-                return valorMensal / 2; 
-            }
-        }
+    public double getValorMensal() {
         return valorMensal;
     }
 

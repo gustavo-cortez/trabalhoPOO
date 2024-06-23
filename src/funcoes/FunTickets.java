@@ -3,8 +3,6 @@ import enums.EnumVagaStatus;
 import enums.EnumStatus;
 import enums.EnumUsoEstacionamento;
 import classes.*;
-import interfaces.UserInterface;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

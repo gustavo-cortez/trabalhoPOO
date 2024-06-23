@@ -30,31 +30,6 @@ public class TarifaHorista extends Tarifa implements Serializable  {
         return valorHoraSubsequente;
     }
     
-    public double getValorPrimeiraHora(EnumTipoVeiculo tipo) {
-        if(tipo.equals(EnumTipoVeiculo.ÔNIBUS)){
-           return valorPrimeiraHora * 1.5; 
-        }
-        else{
-            if(tipo.equals(EnumTipoVeiculo.MOTO)){
-                return valorPrimeiraHora / 2; 
-            }
-        }
-        return valorPrimeiraHora;
-    }
-
-    public double getValorHoraSubsequente(EnumTipoVeiculo tipo) {
-        if(tipo.equals(EnumTipoVeiculo.ÔNIBUS)){
-           return valorHoraSubsequente * 1.5; 
-        }
-        else{
-            if(tipo.equals(EnumTipoVeiculo.MOTO)){
-                return valorHoraSubsequente / 2; 
-            }
-        }
-        return valorHoraSubsequente;
-    }
-
-    
     public EnumDiaSemana[] getDiasSemana() {
         return diasSemana;
     }
@@ -74,5 +49,7 @@ public class TarifaHorista extends Tarifa implements Serializable  {
     public void setDiasSemana(EnumDiaSemana[] diasSemana) {
         this.diasSemana = diasSemana;
     }
+    
+    
     
 }

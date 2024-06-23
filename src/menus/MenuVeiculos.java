@@ -33,7 +33,7 @@ public class MenuVeiculos implements MenuInterface {
                     if (tipoVeiculoStr != null) {
                         switch (tipoVeiculoStr.toUpperCase()) {
                             case "CARRO":
-                                instancias.getClienteIns().adicionarVeiculoCliente(veiculoPlaca, EnumTipoVeiculo.valueOf(tipoVeiculoStr), documentoCli, modeloVeiculo, corVeiculo, EnumUsoEstacionamento.valueOf(tipoUso));
+                                instancias.getClienteIns().adicionarVeiculoCliente(veiculoPlaca, EnumTipoVeiculo.valueOf(tipoVeiculoStr), documentoCli, corVeiculo, modeloVeiculo, EnumUsoEstacionamento.valueOf(tipoUso));
                                 break;
                         }
                     }

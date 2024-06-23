@@ -2,8 +2,6 @@ package classes;
 import funcoes.FunTarifas;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.Duration;
-import java.time.LocalDate;
 /**
  *
  * @author Gustavo
@@ -29,10 +27,7 @@ public class TicketMensalista extends Ticket implements Serializable  {
     @Override
     public double calcularValor(FunTarifas tarifaIns) {
         double valorTotal;
-        valorTotal = tarifaMensal.getValorMensal(this.getVeiculo().getTipo());
-        if (LocalDateTime.now().isAfter(this.getFim())){
-            valorTotal *= 1.5;
-        }
+        valorTotal = tarifaMensal.getValorMensal() * this.getVeiculo().getTipo().getMultiplicador();
         
         return valorTotal;
     }
