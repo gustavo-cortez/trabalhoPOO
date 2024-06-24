@@ -14,16 +14,20 @@ public class MenuVagas implements MenuInterface {
     public void exibir(UserInterface Interface, Instancias instancias) {
         int opcao;
         do {
+            /*Imprimir o menu principal dependendo da interface escolhida*/
             List<EnumMenuVagas> opcoesMenuVagas = List.of(EnumMenuVagas.values());
             
             opcao = Interface.exibirMenus("Submenu - Vagas", opcoesMenuVagas);
 
             switch (opcao) {
+                /*Caso 1 - Cadastra uma vaga com o número da vaga, o nome da rua e o tipo de vaga*/
                 case 1:
                     int numeroVaga = Interface.solicitarInt("Digite o número da vaga");
                     String ruaVaga = Interface.solicitarEntrada("Digite a rua da vaga");
                     String tipoVeiculoStr = (String) Interface.solicitarEntradaMaior("Selecione o tipo da vaga.", "Tipo de Vaga", new String[]{"CARRO", "MOTO", "ÔNIBUS"}, "CARRO");
-
+                    if(ruaVaga == null){
+                        break;
+                    }
                     if (tipoVeiculoStr != null) {
                         EnumTipoVeiculo tipoVeiculo;
                         switch (tipoVeiculoStr.toUpperCase()) {
@@ -43,6 +47,7 @@ public class MenuVagas implements MenuInterface {
                         instancias.getVagasIns().cadastrarVaga(numeroVaga, ruaVaga, tipoVeiculo);
                     }
                     break;
+                /*Caso 2 - Consulta uma vaga através do número da vaga*/
                 case 2:
                     int numVaga = Interface.solicitarInt("Informe o número da vaga que deseja ser consultada:");
                     Vagas vagaConsulta = instancias.getVagasIns().buscarVaga(numVaga);
@@ -53,38 +58,30 @@ public class MenuVagas implements MenuInterface {
                         Interface.exibirMensagem("Vaga não encontrada.");
                     }
                     break;
+                /*Caso 3 - Exclui uma vaga através do número da vaga, 
+                apenas se ela não tiver tickets ocupados ou alugados relacionados a ela*/
                 case 3:
                     int numeroVagaExcluir = Interface.solicitarInt("Informe o número da vaga a ser excluída:");
                     instancias.getVagasIns().excluirVaga(numeroVagaExcluir);
                     break;
+                /*Caso 4 - Edita uma vaga através do número da vaga, podendo mudar a rua e o tipo da vaga*/
                 case 4:
                     int numeroVagaEditar = Interface.solicitarInt("Digite o número da vaga que deseja editar");
                     String ruaVagaEditar = Interface.solicitarEntrada("Digite a nova rua da vaga");
                     String tipoVagaEditar = (String) Interface.solicitarEntradaMaior("Selecione o novo tipo da vaga", "Tipo de Vaga",  new String[]{"CARRO", "MOTO", "ÔNIBUS"}, "CARRO");
-
-                    if (tipoVagaEditar != null) {
-                        EnumTipoVeiculo tipoVeiculoEditar;
-                        switch (tipoVagaEditar.toUpperCase()) {
-                            case "CARRO":
-                                tipoVeiculoEditar = EnumTipoVeiculo.CARRO;
-                                break;
-                            case "MOTO":
-                                tipoVeiculoEditar = EnumTipoVeiculo.MOTO;
-                                break;
-                            case "CAMINHAO":
-                                tipoVeiculoEditar = EnumTipoVeiculo.ÔNIBUS;
-                                break;
-                            default:
-                                tipoVeiculoEditar = EnumTipoVeiculo.CARRO;
-                                break;
-                        }
-                        instancias.getVagasIns().editarVaga(numeroVagaEditar, ruaVagaEditar, tipoVeiculoEditar);
+                    if(ruaVagaEditar == null || tipoVagaEditar == null){
+                        break;
                     }
+                    instancias.getVagasIns().editarVaga(numeroVagaEditar, ruaVagaEditar, EnumTipoVeiculo.valueOf(tipoVagaEditar));
                     break;
+                /*Caso 4 - Edita uma vaga através do número da vaga, podendo o status da vaga para indisponível ou disponível
+                nunca podendo alterar se ela estiver ocupada ou alugada mensal*/
                 case 5:
                     int numeroVagaDispo = Interface.solicitarInt("Digite o número da vaga que deseja editar o status");
                     String statusVaga = (String) Interface.solicitarEntradaMaior("Selecione o status que a vaga estará", "Status da Vaga", new String[]{"DISPONIVEL", "OCUPADA", "INDISPONIVEL"}, "DISPONIVEL");
-
+                    if(statusVaga == null){
+                        break;
+                    }
                     if (statusVaga != null) {
                         EnumVagaStatus vagaStatus;
                         switch (statusVaga.toUpperCase()) {
@@ -104,6 +101,7 @@ public class MenuVagas implements MenuInterface {
                         instancias.getVagasIns().alterarDisponibilidadeVaga(numeroVagaDispo, vagaStatus);
                     }
                     break;
+                /*Caso 6 - Volta para o menu principal*/    
                 case 6:
                     Interface.exibirMensagem("Voltando ao menu principal...");
                     break;

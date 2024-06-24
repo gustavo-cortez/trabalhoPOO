@@ -17,9 +17,5 @@ public class TarifaMensalista extends Tarifa implements Serializable {
     public double getValorMensal() {
         return valorMensal;
     }
-
-    public void setValorMensal(double valorMensal) {
-        this.valorMensal = valorMensal;
-    }
     
 }

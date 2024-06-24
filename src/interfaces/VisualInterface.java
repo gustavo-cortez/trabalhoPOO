@@ -1,6 +1,4 @@
 package interfaces;
-
-import enums.EnumMenuPrincipal;
 import java.util.List;
 import javax.swing.JOptionPane;
 import menus.*;
@@ -15,11 +13,9 @@ public class VisualInterface implements UserInterface {
     public VisualInterface() {
         instancia = new Instancias(this);
         instancia.getPersistenciaIns().carregarDados("DadosEstacionamento.json");
-        /*InicializacaoDados.inicializarClientes(instancia.getClienteIns());
-        InicializacaoDados.inicializarTarifas(instancia.getTarifasIns());
+        InicializacaoDados.inicializarClientes(instancia.getClienteIns());
         InicializacaoDados.inicializarVagas(instancia.getVagasIns());
         InicializacaoDados.inicializarVeiculos(instancia.getClienteIns());
-        */
     }
     
     @Override

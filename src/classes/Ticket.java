@@ -63,16 +63,8 @@ public abstract class Ticket  implements Serializable {
         
     }
 
-    public void setInicio(LocalDateTime inicio) {
-        this.inicio = inicio;
-    }
-
     public void setFim(LocalDateTime fim) {
         this.fim = fim;
-    }
-
-    public void setVeiculo(Veiculo veiculo) {
-        this.veiculo = veiculo;
     }
 
     public void setValor(double valor) {

@@ -1,9 +1,7 @@
 package menus;
 
-import classes.*;
 import funcoes.*;
 import interfaces.*;
-import menus.*;
 /**
  *
  * @author Gustavo
@@ -14,7 +12,8 @@ public class Instancias {
     private static FunTickets ticketsIns;
     private static FunVagas vagasIns;
     private static FunPersistenciaDados persistenciaIns;
-
+    private static FunFaturamento faturamentoIns;
+        
     private static MenuPrincipal menuPrincipal;
     private static MenuClientes menuClientes;
     private static MenuVagas menuVagas;
@@ -24,7 +23,6 @@ public class Instancias {
     private static MenuTarifas menuTarifas;
     
     public static UserInterface Interface;
-    private static Instancias instance;
     
     public Instancias(UserInterface Interface) {
         Instancias.Interface = Interface;
@@ -37,6 +35,7 @@ public class Instancias {
         tarifasIns = new FunTarifas(this);
         ticketsIns = new FunTickets(this);
         vagasIns = new FunVagas(this);
+        faturamentoIns = new FunFaturamento(this);
         persistenciaIns = new FunPersistenciaDados(this);
 
     }
@@ -92,6 +91,10 @@ public class Instancias {
         return vagasIns;
     }
 
+    public FunFaturamento getFaturamentoIns() {
+        return faturamentoIns;
+    }
+    
     public FunPersistenciaDados getPersistenciaIns() {
         return persistenciaIns;
     }

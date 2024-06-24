@@ -1,6 +1,5 @@
 package interfaces;
 
-import enums.EnumMenuPrincipal;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -19,7 +18,6 @@ public class TerminalInterface implements UserInterface {
         instancia = new Instancias(this);
         instancia.getPersistenciaIns().carregarDados("DadosEstacionamento.json");
         InicializacaoDados.inicializarClientes(instancia.getClienteIns());
-        InicializacaoDados.inicializarTarifas(instancia.getTarifasIns());
         InicializacaoDados.inicializarVagas(instancia.getVagasIns());
         InicializacaoDados.inicializarVeiculos(instancia.getClienteIns());
         

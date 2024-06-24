@@ -51,9 +51,15 @@ public class FunTickets {
     
     /*Método para listar todos tickets gerados*/
     public void listarTickets() {
-        for (Ticket ticket : tickets) {
-            instancias.getInterface().exibirMensagem("Inicio: " + ticket.getInicio() + ", Fim: " + ticket.getFim() + ", Valor: " + ticket.getValor() + ", Veiculo: " + ticket.getVeiculo().getPlaca() + ", Vaga: " + ticket.getVaga().getNumero() + ", Tipo de uso: " + ticket.getTipo());
+        if(!tickets.isEmpty()){
+            for (Ticket ticket : tickets) {
+                instancias.getInterface().exibirMensagem("Inicio: " + ticket.getInicio() + ", Fim: " + ticket.getFim() + ", Valor: " + ticket.getValor() + ", Veiculo: " + ticket.getVeiculo().getPlaca() + ", Vaga: " + ticket.getVaga().getNumero() + ", Tipo de uso: " + ticket.getTipo());
+            }
         }
+        else{
+            instancias.getInterface().exibirErro("Nenhum ticket gerado!");
+        }
+
     }
     
     /*Método para calcular o valor total do ticket com base nas tarifas disponivel antes da data atual e do dia da semana atual*/
@@ -61,13 +67,11 @@ public class FunTickets {
         try {
             double valorTotal;
             if(ticket instanceof TicketHorista){
-                TicketHorista ticketHo = new TicketHorista(ticket.getInicio(), ticket.getFim(), ticket.getVeiculo(), ticket.getValor(), ticket.getVaga(), instancias.getTarifasIns().encontrarTarifaHorista(ticket.getInicio().getDayOfWeek()));
-                valorTotal = ticketHo.calcularValor(instancias.getTarifasIns());
+                valorTotal = ticket.calcularValor(instancias.getTarifasIns());
             }
             else{
                 if(instancias.getVagasIns().buscarTicketMensalistaValido(ticket.getVeiculo()) == null){
-                    TicketMensalista ticketMensal = new TicketMensalista(ticket.getInicio(), ticket.getFim(), ticket.getVeiculo(), ticket.getValor(), ticket.getVaga(), instancias.getTarifasIns().encontrarTarifaMensalista());
-                    valorTotal = ticketMensal.calcularValor(instancias.getTarifasIns());
+                    valorTotal = ticket.calcularValor(instancias.getTarifasIns());
                     return valorTotal; 
                 }
                 else{
@@ -80,24 +84,8 @@ public class FunTickets {
             return -1; // Indica que ocorreu um erro
         }
     }
-    /*Método para consultar o faturamento em um período específico, buscando todos tickets que 
-    foram gerados nesse meio tempo e fazendo a soma dos valores*/
-    public double consultarFaturamentoPeriodo(LocalDateTime inicioPeriodo, LocalDateTime fimPeriodo) {
-        try {
-            double faturamento = 0;
-            for (Ticket ticket : tickets) {
-                LocalDateTime fimTicket = ticket.getFim();
-                if (fimTicket != null && fimTicket.isAfter(inicioPeriodo) && fimTicket.isBefore(fimPeriodo)) {
-                    faturamento += ticket.getValor();
-                }
-            }
-            return faturamento;
-        } catch (Exception e) {
-            instancias.getInterface().exibirErro("Erro ao consultar faturamento do período: " + e.getMessage());
-            return -1; // Indica que ocorreu um erro
-        }
-    }
-    
+        
+    /*Método usado para verificar todos os tickets mensalistas existentes e atualiza-los conforme a data de hoje */
     public void verificarTicketsMensalistas() {
         try {
             LocalDateTime hoje = LocalDateTime.now();

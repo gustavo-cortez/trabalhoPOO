@@ -119,4 +119,12 @@ public class FunTarifas {
         return tarifaMensalistaEncontrada; // Retorna a tarifa mensalista mais recente encontrada ou null se nenhuma tarifa mensalista for encontrada
     }
     
+    public boolean tarifasVazias(){
+        
+        if(tarifasHoristas.isEmpty() && tarifasMensalistas.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+    
 }

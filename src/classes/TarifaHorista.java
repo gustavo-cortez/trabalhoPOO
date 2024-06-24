@@ -32,24 +32,6 @@ public class TarifaHorista extends Tarifa implements Serializable  {
     
     public EnumDiaSemana[] getDiasSemana() {
         return diasSemana;
-    }
-
-    public void setInicio(LocalDate inicio) {
-        this.inicio = inicio;
-    }
-
-    public void setValorPrimeiraHora(double valorPrimeiraHora) {
-        this.valorPrimeiraHora = valorPrimeiraHora;
-    }
-
-    public void setValorHoraSubsequente(double valorHoraSubsequente) {
-        this.valorHoraSubsequente = valorHoraSubsequente;
-    }
-
-    public void setDiasSemana(EnumDiaSemana[] diasSemana) {
-        this.diasSemana = diasSemana;
-    }
-    
-    
+    }    
     
 }

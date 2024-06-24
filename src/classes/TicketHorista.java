@@ -17,44 +17,55 @@ public class TicketHorista extends Ticket implements Serializable {
         this.tarifa = tarifa;
     }
     
-    // Implementação do método calcularValor() para tickets horistas
+    // Implementação do método calcularValor() para tickets horista
     @Override
     public double calcularValor(FunTarifas tarifaIns) {
-        double valorTotal;
         LocalDateTime inicio = this.getInicio();
         LocalDateTime fim = this.getFim();
+        long diferenca = (long) Math.floor((double) Duration.between(inicio, fim).toHours());
+        double valorTotal = 0.0;
+        double multiplicador = this.getVeiculo().getTipo().getMultiplicador();
 
-        // Calcular a diferença em minutos entre início e fim
-        Duration diff = Duration.between(inicio, fim);
-        long diffInMinutes = diff.toMinutes();
-
-        // Encontrar a tarifa correspondente ao dia da semana do início do ticket
-        TarifaHorista tarifa = tarifaIns.encontrarTarifaHorista(inicio.getDayOfWeek());
-
-        if (tarifa == null) {
-            return -1.0; // Se não haver tarifas para o dia da semana ele retorna menos um e uma mensagem de aviso
-        }
-
-        // Calcula o valor da primeira hora se a diferença for menor que 60 minutos
-        if (diffInMinutes <= 60) {
-            valorTotal = (tarifa.getValorPrimeiraHora() * this.getVeiculo().getTipo().getMultiplicador());
+        if (diferenca <= 1) {
+            // Calcula o valor para o período de até uma hora
+            valorTotal = tarifa.getValorPrimeiraHora();
         } else {
-            // Primeira hora completa
-            valorTotal = (tarifa.getValorPrimeiraHora() + tarifa.getValorHoraSubsequente()) * this.getVeiculo().getTipo().getMultiplicador();
+            // Calcula o valor para a primeira hora
+            valorTotal = tarifa.getValorPrimeiraHora();
 
-            // Horas subsequentes
-            long horasSubsequentes = (long) Math.ceil((double) (diffInMinutes - 60) / 60);
-            valorTotal += (horasSubsequentes * tarifa.getValorHoraSubsequente()) * this.getVeiculo().getTipo().getMultiplicador();
+            // Calcula o valor para as horas subsequentes
+            long horasSubsequentes = diferenca;
 
-            // Lógica adicional para verificar se o ticket cobre mais de um dia completo ou se começa e termina em dias diferentes
             if (inicio.toLocalDate().isBefore(fim.toLocalDate())) {
-                Duration diffAtraso = Duration.between(fim, LocalDateTime.now());
-                long diffAtrasoMin = diffAtraso.toMinutes();
-                valorTotal += (tarifa.getValorPrimeiraHora() * Math.ceil((double) diffAtrasoMin / 60)) * this.getVeiculo().getTipo().getMultiplicador();
+                // Se o período cruza dias diferentes
+                LocalDateTime fimDiaInicio = inicio.toLocalDate().atTime(23, 59);
+                long horasSubsequentesInicio = (long) Math.floor((double) Duration.between(inicio, fimDiaInicio).toHours());
+
+                if (horasSubsequentesInicio > 1) {
+                    // Ajusta valorTotal para o primeiro dia (se maior que 60 minutos)
+                    valorTotal = tarifa.getValorPrimeiraHora();
+                    valorTotal += horasSubsequentesInicio * tarifa.getValorHoraSubsequente();
+                } else {
+                    // Ajusta valorTotal para o primeiro dia (se menor ou igual a 60 minutos)
+                    valorTotal = tarifa.getValorPrimeiraHora();
+                }
+
+                // Calcula as horas de atraso após a meia-noite do segundo dia
+                LocalDateTime inicioDiaFim = fim.toLocalDate().atStartOfDay();
+                long horasAtraso = (long) Math.floor((double) Duration.between(inicioDiaFim, fim).toHours());
+
+                if (horasAtraso > 0) {
+                    // Calcula as horas de atraso após a meia-noite
+                    valorTotal += horasAtraso * (tarifa.getValorPrimeiraHora() * 2);
+                }
+            } else {
+                // Se o período não cruza dias diferentes
+                valorTotal += horasSubsequentes * tarifa.getValorHoraSubsequente();
             }
         }
 
-        return valorTotal;
+        return valorTotal * multiplicador;
     }
+
 
 }

@@ -22,14 +22,15 @@ public class FunCliente {
     /*Método para cadastrar um novo cliente*/
     public void cadastrarCliente(String nome, String documento) {
         try {
-            if(consultarCliente(documento) == null){
-                Cliente cliente = new Cliente(nome, documento);
-                clientes.add(cliente);
-            } else {
+            if (consultarCliente(documento) != null) {
                 throw new Exception("Cliente já existente no sistema!");
             }
+
+            Cliente cliente = new Cliente(nome, documento);
+            clientes.add(cliente);
+            instancias.getInterface().exibirSucesso("Cliente adicionado com sucesso!");
         } catch (Exception e) {
-            instancias.getInterface().exibirErro(e.getMessage());
+            instancias.getInterface().exibirErro("Erro ao cadastrar cliente: " + e.getMessage());
         }
     }
 
@@ -71,40 +72,47 @@ public class FunCliente {
         }
         return ticketsDoCliente;
     }
-
+    
+    private List<Ticket> consultarTicketsVeiculo(Veiculo veiculo) {
+        List<Ticket> ticketsDoCliente = new ArrayList<>();
+        for (Ticket ticket : instancias.getTicketsIns().tickets) {
+            if (ticket.getVeiculo().equals(veiculo)) {
+                ticketsDoCliente.add(ticket);
+            }
+        }
+        return ticketsDoCliente;
+    }
     
     /*Método para excluir um veiculo do cliente*/
     public boolean excluirVeiculo(String documento, String placa) {
         try {
             Cliente cliente = consultarCliente(documento);
             Veiculo veiculo = consultarPlaca(placa);
-            if (cliente!= null && veiculo!= null) {
-                // Obtém a lista de veículos do cliente
-                List<Veiculo> veiculosCliente = cliente.getVeiculos();
 
-                // Itera sobre a lista de veículos do cliente
-                Iterator<Veiculo> iterator = veiculosCliente.iterator();
-                while (iterator.hasNext()) {
-                    Veiculo v = iterator.next();
-                    // Verifica se o veículo atual é o veículo que queremos remover
-                    if (v.getPlaca().equals(placa) && consultarTicketsCliente(cliente).isEmpty()) {
-                        // Remove o veículo da lista
-                        iterator.remove();
-                        // Retorna verdadeiro indicando que o veículo foi removido com sucesso
-                        return true;
-                    }
-                }
-            } else {
-                throw new Exception("Cliente ou veículo não encontrado");
+            if (cliente == null) {
+                throw new Exception("Cliente não encontrado");
             }
-        } catch (Exception e) {
-            instancias.getInterface().exibirErro(e.getMessage());
+
+            if (veiculo == null) {
+                throw new Exception("Veículo não encontrado");
+            }
+
+            List<Veiculo> veiculosCliente = cliente.getVeiculos();
+            Iterator<Veiculo> iterator = veiculosCliente.iterator();
+
+            while (iterator.hasNext()) {
+                Veiculo v = iterator.next();
+                if (v.getPlaca().equals(placa) && consultarTicketsVeiculo(v).isEmpty()) {
+                    iterator.remove();
+                    return true;
+                }
+            }
+        }catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao excluir veículo: " + e.getMessage());
             return false;
-        } 
-        // Retorna falso se o cliente ou o veículo não foram encontrados ou há tickets com o veículo cadastrados
+        }
         return false;
     }
-
 
     /*Método para editar os dados de um cliente*/
     public void editarCliente(String documento, String novoNome) {
@@ -127,22 +135,9 @@ public class FunCliente {
         if(clientes.isEmpty()){
             instancias.getInterface().exibirMensagem("Não há clientes cadastrados!");
         }else{ 
-            StringBuilder mensagem = new StringBuilder("\nLista de todos os clientes cadastrados:\n");
+            instancias.getInterface().exibirMensagem("\nLista de todos os clientes cadastrados:\n");
             for (Cliente cliente : clientes) {
-                mensagem.append("Nome: ").append(cliente.getNome()).append("\n");
-                mensagem.append("Documento: ").append(cliente.getDocumento()).append("\n");
-                mensagem.append("Veículos:\n");
-                List<Veiculo> veiculos = cliente.getVeiculos();
-                if (veiculos.isEmpty()) {
-                    mensagem.append("Nenhum veículo cadastrado para este cliente.\n");
-                } else {
-                    for (Veiculo veiculo : veiculos) {
-                        mensagem.append("- Placa: ").append(veiculo.getPlaca()).append(" - Modelo: ").append(veiculo.getModelo().getModelo()).append(" - Cor: ").append(veiculo.getCor().getNome()).append(", Tipo: ").append(veiculo.getTipo()).append("\n");
-                    }
-                }
-                mensagem.append("\n");
-                instancias.getInterface().exibirMensagem(mensagem.toString());
-                mensagem.delete(0 , mensagem.length());
+                imprimirCliente(cliente);
             }
             
         }
@@ -170,21 +165,26 @@ public class FunCliente {
         }
     }
     
-    /*Método para consultar os veículos de um cliente por documento, esse métodos lista TODOS os veículos*/
-    public void consultarVeiculo(String documentoCliente) {
-        Cliente cliente = consultarCliente(documentoCliente);
-        if (cliente != null) {
-            List<Veiculo> veiculosCliente = cliente.getVeiculos();
-            if (veiculosCliente.isEmpty()) {
-                instancias.getInterface().exibirMensagem("O cliente não possui veículos cadastrados.");
-            } else {
-                instancias.getInterface().exibirMensagem("Veículos do cliente:");
-                for (Veiculo veiculo : veiculosCliente) {
-                    instancias.getInterface().exibirMensagem("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo().getModelo() + "- Cor: " + veiculo.getCor().getNome() + ", Tipo: " + veiculo.getTipo());
-                }
-            }
+    /*Método para consultar veículo pela placa*/
+    public void consultarVeiculo(String placa) {
+        Veiculo veiculo = consultarPlaca(placa);
+        if (veiculo != null) {
+            instancias.getInterface().exibirMensagem("- Placa: " + veiculo.getPlaca() + "- Modelo: " + veiculo.getModelo().getModelo() + "- Cor: " + veiculo.getCor().getNome() + ", Tipo: " + veiculo.getTipo());
         } else {
             instancias.getInterface().exibirErro("Cliente não encontrado.");
+        }
+    }
+    
+    public void imprimirCliente(Cliente clienteConsulta) {
+        StringBuilder mensagem = new StringBuilder("Nome: " + clienteConsulta.getNome() + "\nDocumento: " + clienteConsulta.getDocumento());
+        List<Veiculo> veiculos = clienteConsulta.getVeiculos();
+        if (veiculos.isEmpty()) {
+            instancias.getInterface().exibirErro("Nenhum veículo cadastrado para este cliente.\n");
+        } else {
+            for (Veiculo veiculo : veiculos) {
+                mensagem.append("\n- Placa: ").append(veiculo.getPlaca()).append(" - Modelo: ").append(veiculo.getModelo().getModelo()).append(" - Cor: ").append(veiculo.getCor().getNome()).append(", Tipo: ").append(veiculo.getTipo()).append("\n");
+            }
+            instancias.getInterface().exibirMensagem(mensagem.toString());
         }
     }
     

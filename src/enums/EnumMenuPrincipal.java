@@ -9,7 +9,8 @@ public enum EnumMenuPrincipal {
     ESTACIONAMENTO(3, "Estacionamento"),
     FUNCOES_GERAIS(4, "Funções Gerais"),
     CONSULTAR_FATURAMENTO(5, "Consultar Faturamento por Período"),
-    SAIR(6, "Sair");
+    CONSULTAR_FATURAMENTO_VEICULO(6, "Consultar Faturamento por Veículo"),
+    SAIR(7, "Sair");
 
     private final int num;
     private final String opDesc;

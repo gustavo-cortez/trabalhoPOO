@@ -1,5 +1,6 @@
 import javax.swing.JOptionPane;
-import interfaces.*;
+import interfaces.VisualInterface;
+import interfaces.TerminalInterface;
 /**
  * Trabalho POO Estacionamento
  * @author Gustavo e Gabriel

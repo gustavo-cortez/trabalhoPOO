@@ -12,18 +12,22 @@ public class MenuVeiculos implements MenuInterface {
     public void exibir(UserInterface Interface, Instancias instancias) {
         int opcao;
         do {
+            /*Imprimir o menu principal dependendo da interface escolhida*/
             List<EnumMenuVeiculos> opcoesMenuVeiculos = List.of(EnumMenuVeiculos.values());
             
             opcao = Interface.exibirMenus("Submenu - Veículos", opcoesMenuVeiculos);
 
             switch (opcao) {
                 case 1:
-                    // Cadastrar veículo
+                    // Caso 1 - Cadastra veículo com base no documento do cliente, placa do veiculo, modelo, cor e tipo do veiculo
                     String documentoCli = Interface.solicitarEntrada("Informe o documento:");
                     String veiculoPlaca = Interface.solicitarEntrada("Informe a placa do veículo:");
                     String modeloVeiculo = Interface.solicitarEntrada("Informe o modelo do veículo:");
                     String corVeiculo = Interface.solicitarEntrada("Informe a cor do veículo:");
                     String tipoVeiculoStr = (String) Interface.solicitarEntradaMaior("Selecione o tipo da vaga.", "Tipo de Vaga", new String[]{"CARRO", "MOTO", "ÔNIBUS"}, "CARRO");
+                    if(documentoCli == null || veiculoPlaca == null || modeloVeiculo == null || corVeiculo == null){
+                        break;
+                    }
                     if (tipoVeiculoStr != null) {
                         instancias.getClienteIns().adicionarVeiculoCliente(veiculoPlaca, EnumTipoVeiculo.valueOf(tipoVeiculoStr), documentoCli, corVeiculo, modeloVeiculo, null);
                     }
@@ -31,15 +35,21 @@ public class MenuVeiculos implements MenuInterface {
                     break;
 
                 case 2:
-                    // Consultar veículo por documento
-                    documentoCli = Interface.solicitarEntrada("Informe o documento:");
-                    instancias.getClienteIns().consultarVeiculo(documentoCli);
+                    // Caso 2 - Consultar veículo por placa
+                    String placa = Interface.solicitarEntrada("Informe a placa do veiculo:");
+                    if(placa == null){
+                        break;
+                    }
+                    instancias.getClienteIns().consultarVeiculo(placa);
                     break;
 
                 case 3:
-                    // Excluir veículo do cliente
+                    // Caso 3 - Excluir veículo do cliente
                     documentoCli = Interface.solicitarEntrada("Informe o documento do cliente:");
                     veiculoPlaca = Interface.solicitarEntrada("Informe a placa do veículo que deseja excluir:"); 
+                    if(documentoCli == null || veiculoPlaca == null){
+                        break;
+                    }
                     if(instancias.getClienteIns().excluirVeiculo(documentoCli, veiculoPlaca) == false){
                         Interface.exibirErro("Erro ao excluir o veículo do cliente.");
                     }
@@ -49,7 +59,7 @@ public class MenuVeiculos implements MenuInterface {
                     break;
 
                 case 4:
-                    // Voltar
+                    // Caso 4 - Voltar
                     Interface.exibirMensagem("Voltando ao menu de clientes...");
                     break;
 

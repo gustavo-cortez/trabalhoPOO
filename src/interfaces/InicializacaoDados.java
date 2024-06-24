@@ -9,16 +9,6 @@ import funcoes.*;
  */
 public class InicializacaoDados {
   
-    public static void inicializarTarifas(FunTarifas tarifasIns) {
-        // Adicionando tarifas horistas
-        tarifasIns.cadastrarTarifa(LocalDate.of(2024, 8, 12), 20.0, 5.0);// Tarifa para todos os dias
-        
-        // Adicionando tarifas mensalistas
-        tarifasIns.cadastrarTarifaMensal(LocalDate.of(2024, 1, 1), 125.0);
-        tarifasIns.cadastrarTarifaMensal(LocalDate.of(2023, 1, 1), 200.0);
-        tarifasIns.cadastrarTarifaMensal(LocalDate.of(2025, 1, 1), 170.0);
-    }
-
     public static void inicializarVagas(FunVagas vagasIns) {
         // Adicionando vagas
         vagasIns.cadastrarVaga(1, "Rua A", EnumTipoVeiculo.CARRO);

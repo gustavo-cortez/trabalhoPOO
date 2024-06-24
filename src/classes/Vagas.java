@@ -41,10 +41,6 @@ public class Vagas implements Serializable {
         return status;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
     public void setRua(String rua) {
         this.rua = rua;
     }
