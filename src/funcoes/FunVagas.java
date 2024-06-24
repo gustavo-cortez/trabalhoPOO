@@ -28,13 +28,17 @@ public class FunVagas {
     
     /*Método para cadastrar uma nova vaga, não entendi muito bem por que da rua na vaga, muito sem sentido pra mim*/
     public void cadastrarVaga(int numero, String rua, EnumTipoVeiculo tipoVeiculo) {
-        if(buscarVaga(numero) == null){
-            Vagas vaga = new Vagas(numero, rua, EnumVagaStatus.DISPONIVEL, tipoVeiculo);  
-            vagas.add(vaga);
-            instancias.getInterface().exibirSucesso("Vaga cadastrada com sucesso!");
-        }
-        else{
-            instancias.getInterface().exibirErro("Erro ao cadastrar a vaga, vaga com numéro informado já existente");
+        try {
+            if(buscarVaga(numero) == null){
+                Vagas vaga = new Vagas(numero, rua, EnumVagaStatus.DISPONIVEL, tipoVeiculo);  
+                vagas.add(vaga);
+                instancias.getInterface().exibirSucesso("Vaga cadastrada com sucesso!");
+            }
+            else{
+                throw new Exception("Erro ao cadastrar a vaga, vaga com numéro informado já existente");
+            }
+        } catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao cadastrar vaga: " + e.getMessage());
         }
     }
     
@@ -50,15 +54,19 @@ public class FunVagas {
     
     /*Método para excluir uma vaga pelo número apenas é excluido se a vaga está disponivel*/
     public boolean excluirVaga(int numeroVaga, FunTickets ticketIns) {
-        for (Vagas vaga : vagas) {
-            if (vaga.getNumero() == numeroVaga && vaga.getStatus() == EnumVagaStatus.DISPONIVEL && consultarTicketsVaga(vaga, ticketIns).isEmpty()) {
-                vagas.remove(vaga);
-                instancias.getInterface().exibirSucesso("Vaga excluída com sucesso!");
-                return true;
+        try {
+            for (Vagas vaga : vagas) {
+                if (vaga.getNumero() == numeroVaga && vaga.getStatus() == EnumVagaStatus.DISPONIVEL && consultarTicketsVaga(vaga, ticketIns).isEmpty()) {
+                    vagas.remove(vaga);
+                    instancias.getInterface().exibirSucesso("Vaga excluída com sucesso!");
+                    return true;
+                }
             }
+            throw new Exception("Vaga não encontrada ou está sendo utilizada.");
+        } catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao excluir vaga: " + e.getMessage());
+            return false;
         }
-        instancias.getInterface().exibirMensagem("Vaga não encontrada ou não está disponível.");
-        return false;
     }
     
     private List<Ticket> consultarTicketsVaga(Vagas vaga, FunTickets ticketIns) {
@@ -86,13 +94,18 @@ public class FunVagas {
     /*Método para alterar a disponibilidade de uma vaga pelo número apenas se a vaga estiver disponivel e indisponivel, 
     nunca ocupada, afinal não faz sentido mudar sua disponibilidade se ela estiver ocupada ainda*/
     public boolean alterarDisponibilidadeVaga(int numeroVaga, EnumVagaStatus novoStatus) {
-        for (Vagas vaga : vagas) {
-            if (vaga.getNumero() == numeroVaga && vaga.getStatus() != EnumVagaStatus.OCUPADA) {
-                vaga.setStatus(novoStatus);
-                return true; /*True simbolizando que a disponibilidade da vaga foi alterada com sucesso*/
+        try {
+            for (Vagas vaga : vagas) {
+                if (vaga.getNumero() == numeroVaga && vaga.getStatus() != EnumVagaStatus.OCUPADA) {
+                    vaga.setStatus(novoStatus);
+                    return true; /*True simbolizando que a disponibilidade da vaga foi alterada com sucesso*/
+                }
             }
+            throw new Exception("Vaga não encontrada.");
+        } catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao alterar disponibilidade da vaga: " + e.getMessage());
+            return false;
         }
-        return false; /*False simbolizando que a vaga não foi encontrada */
     }
 
     /*Método para listar todas as vagas disponíveis*/
@@ -117,94 +130,107 @@ public class FunVagas {
     }
     /*Método que estaciona um veículo na vaga específica e assim gerando um ticket novo com a inicio no dia atual e o fim nulo se a vaga não estiver ocupada e se o veículo seja compatível com a vaga*/
     public void estacionarVeiculoMensalista(FunTickets ticketIns, Veiculo veiculo, int numeroVaga, FunTarifas tarifaIns) {
-        Vagas vaga = buscarVaga(numeroVaga);
-        if (vaga != null && veiculo != null && (vaga.getStatus() == EnumVagaStatus.DISPONIVEL || vaga.getStatus() == EnumVagaStatus.ALUGADA_MENSAL) && veiculo.getTipo() == vaga.getTipoVeiculo()) {
+        try {
+            Vagas vaga = buscarVaga(numeroVaga);
+            if (vaga != null && veiculo != null && (vaga.getStatus() == EnumVagaStatus.DISPONIVEL || vaga.getStatus() == EnumVagaStatus.ALUGADA_MENSAL) && veiculo.getTipo() == vaga.getTipoVeiculo()) {
 
-            // Verifica se já existe um ticket mensalista válido para o veículo
-            Ticket ticketExistente = buscarTicketMensalistaValido(veiculo, ticketIns);
+                // Verifica se já existe um ticket mensalista válido para o veículo
+                Ticket ticketExistente = buscarTicketMensalistaValido(veiculo, ticketIns);
 
-            if (ticketExistente != null) {
-                // Ticket mensalista já existe e é válido, atualiza a vaga para ocupada
-                if (numeroVaga == ticketExistente.getVaga().getNumero()) {
+                if (ticketExistente != null) {
+                    // Ticket mensalista já existe e é válido, atualiza a vaga para ocupada
+                    if (numeroVaga == ticketExistente.getVaga().getNumero()) {
+                        vaga.setStatus(EnumVagaStatus.OCUPADA);
+                        instancias.getInterface().exibirSucesso("Veículo estacionado com sucesso usando ticket mensalista existente!");
+                    }
+                    else{
+                        throw new Exception("Não foi possivel estacionar usando um ticket mensalista afinal a vaga não corresponde à vaga previamente cadastrada para esse ticket!");
+                    }
+                } else {
+                    // Cria um novo ticket mensalista
+                    LocalDateTime inicio = LocalDateTime.now();
+                    LocalDateTime fim = inicio.plusDays(30); // Fim do período de 30 dias
+                    double valor = tarifaIns.encontrarTarifaMensalista().getValorMensal(); // Valor único da tarifa mensalista
+                    Ticket ticket = new TicketMensalista(inicio, fim, veiculo, valor, vaga, tarifaIns.encontrarTarifaMensalista());
+                    cadastrarTicket(ticket, ticketIns);
                     vaga.setStatus(EnumVagaStatus.OCUPADA);
-                    instancias.getInterface().exibirSucesso("Veículo estacionado com sucesso usando ticket mensalista existente!");
+                    instancias.getInterface().exibirSucesso("Veículo estacionado com sucesso com novo ticket mensalista!");
                 }
-                else{
-                    instancias.getInterface().exibirErro("Não foi possivel estacionar usando um ticket mensalista afinal a vaga não corresponde à vaga previamente cadastrada para esse ticket!");
-                }
-            } else {
-                // Cria um novo ticket mensalista
-                LocalDateTime inicio = LocalDateTime.now();
-                LocalDateTime fim = inicio.plusDays(30); // Fim do período de 30 dias
-                double valor = tarifaIns.encontrarTarifaMensalista().getValorMensal(); // Valor único da tarifa mensalista
-                Ticket ticket = new TicketMensalista(inicio, fim, veiculo, valor, vaga, tarifaIns.encontrarTarifaMensalista());
-                cadastrarTicket(ticket, ticketIns);
-                vaga.setStatus(EnumVagaStatus.OCUPADA);
-                instancias.getInterface().exibirSucesso("Veículo estacionado com sucesso com novo ticket mensalista!");
+            }else {
+                throw new Exception("Erro ao estacionar veículo: vaga não correspondente ou indisponível.");
             }
-        }else {
-            instancias.getInterface().exibirErro("Erro ao estacionar veículo: vaga não correspondente ou indisponível.");
+        } catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao estacionar veículo mensalista: " + e.getMessage());
         }
     }
 
     /*Método que estaciona um veículo na vaga específica e assim gerando um ticket novo com a inicio no dia atual e o fim nulo se a vaga não estiver ocupada e se o veículo seja compatível com a vaga*/
     public void estacionarVeiculo(FunTickets ticketIns, Veiculo veiculo, int numeroVaga, FunTarifas tarifaIns) {
-        Vagas vaga = buscarVaga(numeroVaga);
-        if (vaga != null && veiculo != null && vaga.getStatus() == EnumVagaStatus.DISPONIVEL && veiculo.getTipo() == vaga.getTipoVeiculo()) {
-            vaga.setStatus(EnumVagaStatus.OCUPADA);
-            LocalDateTime inicio = LocalDateTime.now();
-            Ticket ticket = new TicketHorista(inicio, null, veiculo, 0.0, vaga, tarifaIns.encontrarTarifaHorista(inicio.getDayOfWeek()));
-            cadastrarTicket(ticket, ticketIns);
-            instancias.getInterface().exibirSucesso("Veículo estacionado com sucesso!");
-        } else {
-            instancias.getInterface().exibirErro("Erro ao estacionar veículo: vaga não correspondente ou indisponível.");
+        try{
+            Vagas vaga = buscarVaga(numeroVaga);
+            if (vaga != null && veiculo != null && vaga.getStatus() == EnumVagaStatus.DISPONIVEL && veiculo.getTipo() == vaga.getTipoVeiculo()) {
+                vaga.setStatus(EnumVagaStatus.OCUPADA);
+                LocalDateTime inicio = LocalDateTime.now();
+                Ticket ticket = new TicketHorista(inicio, null, veiculo, 0.0, vaga, tarifaIns.encontrarTarifaHorista(inicio.getDayOfWeek()));
+                cadastrarTicket(ticket, ticketIns);
+                instancias.getInterface().exibirSucesso("Veículo estacionado com sucesso!");
+            } else {
+                throw new Exception("Vaga não correspondente ou indisponível.");
+            }
+        }catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao retirar veículo: " + e.getMessage());
         }
     }
 
     public double retirarVeiculo(FunTickets ticketIns, int numeroVaga, FunTarifas tarifaIns) {
-        Vagas vaga = buscarVaga(numeroVaga);
-        if (vaga != null && vaga.getStatus() == EnumVagaStatus.OCUPADA) {
-            Ticket ticket = ticketIns.buscarTicketPorVaga(numeroVaga);
-            if (ticket != null) {
-                ticket.setFim(LocalDateTime.now());
-                double valorTotal = ticketIns.calcularValorTicket(ticket, tarifaIns);
-                if (valorTotal != -1.0) {
-                    vaga.setStatus(EnumVagaStatus.DISPONIVEL);
-                    ticket.setValor(valorTotal);
-                    ticket.setStatus(EnumStatus.FINALIZADO);
-                    instancias.getInterface().exibirSucesso("Veículo retirado com sucesso! Valor total: " + valorTotal);
-                    return valorTotal;
+        try {
+            Vagas vaga = buscarVaga(numeroVaga);
+            if (vaga != null && vaga.getStatus() == EnumVagaStatus.OCUPADA) {
+                Ticket ticket = ticketIns.buscarTicketPorVaga(numeroVaga);
+                if (ticket != null) {
+                    ticket.setFim(LocalDateTime.now());
+                    double valorTotal = ticketIns.calcularValorTicket(ticket, tarifaIns);
+                    if (valorTotal != -1.0) {
+                        vaga.setStatus(EnumVagaStatus.DISPONIVEL);
+                        ticket.setValor(valorTotal);
+                        ticket.setStatus(EnumStatus.FINALIZADO);
+                        instancias.getInterface().exibirSucesso("Veículo retirado com sucesso! Valor total: " + valorTotal);
+                        return valorTotal;
+                    } else {
+                        ticket.setFim(null);
+                        throw new Exception("Erro ao calcular o valor do ticket.");
+                    }
                 } else {
-                    ticket.setFim(null);
-                    instancias.getInterface().exibirErro("Erro ao calcular o valor do ticket.");
-                    return -1.0;
+                    throw new Exception("Nenhum ticket encontrado para a vaga especificada.");
                 }
             } else {
-                instancias.getInterface().exibirMensagem("Nenhum ticket encontrado para a vaga especificada.");
-                return -1.0;
+                throw new Exception("Vaga não ocupada ou inexistente.");
             }
-        } else {
-            instancias.getInterface().exibirMensagem("Vaga não ocupada ou inexistente.");
+        } catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao retirar veículo: " + e.getMessage());
             return -1.0;
         }
     }
     public double retirarVeiculoMensalista(FunTickets ticketIns, int numeroVaga, FunTarifas tarifaIns) {
-        Vagas vaga = buscarVaga(numeroVaga);
-        if (vaga != null && vaga.getStatus() == EnumVagaStatus.OCUPADA) {
-            Ticket ticket = ticketIns.buscarTicketPorVaga(numeroVaga);
-            if (ticket != null) {
-                if (ticket instanceof TicketMensalista) {
-                    // Ticket mensalista, apenas libera a vaga sem encerrar o ticket
-                    vaga.setStatus(EnumVagaStatus.ALUGADA_MENSAL);
-                    instancias.getInterface().exibirSucesso("Veículo retirado com sucesso! Ticket mensalista ainda válido.");
-                    return ticket.getValor();
+        try{
+            Vagas vaga = buscarVaga(numeroVaga);
+            if (vaga != null && vaga.getStatus() == EnumVagaStatus.OCUPADA) {
+                Ticket ticket = ticketIns.buscarTicketPorVaga(numeroVaga);
+                if (ticket != null) {
+                    if (ticket instanceof TicketMensalista) {
+                        // Ticket mensalista, apenas libera a vaga sem encerrar o ticket
+                        vaga.setStatus(EnumVagaStatus.ALUGADA_MENSAL);
+                        instancias.getInterface().exibirSucesso("Veículo retirado com sucesso! Ticket mensalista ainda válido.");
+                        return ticket.getValor();
+                    }
+                } else {
+                    throw new Exception("Nenhum ticket encontrado para a vaga especificada.");
                 }
             } else {
-                instancias.getInterface().exibirMensagem("Nenhum ticket encontrado para a vaga especificada.");
-                return -1.0;
+                throw new Exception("Vaga não ocupada ou inexistente.");
             }
-        } else {
-            instancias.getInterface().exibirMensagem("Vaga não ocupada ou inexistente.");
+        } catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao retirar veículo: " + e.getMessage());
             return -1.0;
         }
         

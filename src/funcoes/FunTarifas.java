@@ -33,26 +33,34 @@ public class FunTarifas {
     /*Método para cadastrar uma nova tarifa, é nescessário para cadastrar a tarifa informar os dias da semana 
     atráves de número do ENUM: 1-DOMINGO 2-SEGUNDA-FEIRA, ETC..., numero abaixo de 1 e maior que 7 para a leitura dos dias*/;
     public void cadastrarTarifa(LocalDate inicio, double valorPrimeiraHora, double valorHoraSubsequente) {
-        Scanner scanner = new Scanner(System.in);
-        List<EnumDiaSemana> diasSemana = new ArrayList<>();
-        /*Solicitar os dias da semana ao usuário atráves de números do ENUM*/
-        int dia;
-        instancias.getInterface().exibirMensagem("Informe os dias da semana em que a tarifa será aplicada(Com número como: 1-DOMINGO 2-SEGUNDA-FEIRA, ETC...):");
-        dia = instancias.getInterface().solicitarInt("");
-        while(dia <= 7 && dia > 0){
-            EnumDiaSemana diaSemana = EnumDiaSemana.getByOpcao(dia); /*Obtém o enum correspondente ao dia informado*/
-            diasSemana.add(diaSemana); /*Adiciona o dia à lista*/
-            dia = instancias.getInterface().solicitarInt("Informe os dias da semana em que a tarifa será aplicada(Com número como: 1-DOMINGO 2-SEGUNDA-FEIRA, ETC...):");
+        try {
+            Scanner scanner = new Scanner(System.in);
+            List<EnumDiaSemana> diasSemana = new ArrayList<>();
+            /*Solicitar os dias da semana ao usuário atráves de números do ENUM*/
+            int dia;
+            instancias.getInterface().exibirMensagem("Informe os dias da semana em que a tarifa será aplicada(Com número como: 1-DOMINGO 2-SEGUNDA-FEIRA, ETC...):");
+            dia = instancias.getInterface().solicitarInt("");
+            while(dia <= 7 && dia > 0){
+                EnumDiaSemana diaSemana = EnumDiaSemana.getByOpcao(dia); /*Obtém o enum correspondente ao dia informado*/
+                diasSemana.add(diaSemana); /*Adiciona o dia à lista*/
+                dia = instancias.getInterface().solicitarInt("Informe os dias da semana em que a tarifa será aplicada(Com número como: 1-DOMINGO 2-SEGUNDA-FEIRA, ETC...):");
+            }
+            TarifaHorista tarifa = new TarifaHorista(inicio, valorPrimeiraHora, valorHoraSubsequente, diasSemana.toArray(EnumDiaSemana[]::new));
+            tarifasHoristas.add(tarifa);
+            instancias.getInterface().exibirSucesso("Tarifa cadastrada com sucesso!");
+        } catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao cadastrar tarifa: " + e.getMessage());
         }
-        TarifaHorista tarifa = new TarifaHorista(inicio, valorPrimeiraHora, valorHoraSubsequente, diasSemana.toArray(EnumDiaSemana[]::new));
-        tarifasHoristas.add(tarifa);
-        instancias.getInterface().exibirSucesso("Tarifa cadastrada com sucesso!");
     }
     
     public void cadastrarTarifaMensal(LocalDate inicio, double valorMensal) {
-        TarifaMensalista tarifa = new TarifaMensalista(inicio, valorMensal);
-        tarifasMensalistas.add(tarifa);
-        instancias.getInterface().exibirSucesso("Tarifa cadastrada com sucesso!");
+        try {
+            TarifaMensalista tarifa = new TarifaMensalista(inicio, valorMensal);
+            tarifasMensalistas.add(tarifa);
+            instancias.getInterface().exibirSucesso("Tarifa cadastrada com sucesso!");
+        } catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao cadastrar tarifa mensal: " + e.getMessage());
+        }
     }
     
     /*Método para listar todas as tarifas*/
@@ -82,25 +90,31 @@ public class FunTarifas {
         instancias.getInterface().exibirMensagem(mensagem.toString());
     }
     public double calcularValorTarifaHorista(Ticket ticket, LocalDateTime horaSaida) {
-        // Obtém a tarifa horista aplicável para o dia da semana da entrada do veículo
-        TarifaHorista tarifa = encontrarTarifaHorista(ticket.getInicio().getDayOfWeek());
+        double valorTotal;
+        try {
+            // Obtém a tarifa horista aplicável para o dia da semana da entrada do veículo
+            TarifaHorista tarifa = encontrarTarifaHorista(ticket.getInicio().getDayOfWeek());
 
-        if (tarifa == null) {
-            instancias.getInterface().exibirMensagem("Tarifa não encontrada para o dia da semana.");
-            return -1; // Indica que não foi encontrada uma tarifa válida
+            if (tarifa == null) {
+                throw new Exception("Tarifa não encontrada para o dia da semana.");
+            }
+
+            // Calcula a diferença de tempo entre a entrada e a saída do veículo
+            Duration duracaoEstacionamento = Duration.between(ticket.getInicio(), horaSaida);
+            long minutosEstacionados = duracaoEstacionamento.toMinutes();
+
+            // Calcula o valor total da tarifa com base no tempo estacionado
+            valorTotal = tarifa.getValorPrimeiraHora(); // Valor inicial é o da primeira hora
+
+            if (minutosEstacionados > 60) {
+                // Se o veículo permaneceu estacionado por mais de uma hora
+                long horasExtras = (long) Math.ceil((minutosEstacionados - 60) / 60.0); // Calcula horas extras
+                valorTotal += horasExtras * tarifa.getValorHoraSubsequente(); // Adiciona o valor das horas extras
+            }
         }
-
-        // Calcula a diferença de tempo entre a entrada e a saída do veículo
-        Duration duracaoEstacionamento = Duration.between(ticket.getInicio(), horaSaida);
-        long minutosEstacionados = duracaoEstacionamento.toMinutes();
-
-        // Calcula o valor total da tarifa com base no tempo estacionado
-        double valorTotal = tarifa.getValorPrimeiraHora(); // Valor inicial é o da primeira hora
-
-        if (minutosEstacionados > 60) {
-            // Se o veículo permaneceu estacionado por mais de uma hora
-            long horasExtras = (long) Math.ceil((minutosEstacionados - 60) / 60.0); // Calcula horas extras
-            valorTotal += horasExtras * tarifa.getValorHoraSubsequente(); // Adiciona o valor das horas extras
+        catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao calcular valor da tarifa horista: " + e.getMessage());
+            return -1; // Indica que ocorreu um erro
         }
 
         return valorTotal;
@@ -123,34 +137,37 @@ public class FunTarifas {
     }
 
     public double calcularValorTarifaMensalista(Ticket ticket, LocalDate dataAtual) {
-        // Verifica se já existe um ticket mensalista para o veículo
-        if (existeTicketMensalista(ticket.getVeiculo())) {
-            instancias.getInterface().exibirErro("Já existe um ticket mensalista para este veículo.");
-            return -1; // Indica que já existe um ticket mensalista para o veículo
+        double valorTotal;
+        try{
+            // Verifica se já existe um ticket mensalista para o veículo
+            if (existeTicketMensalista(ticket.getVeiculo())) {
+                throw new Exception("Já existe um ticket mensalista para este veículo.");
+            }
+
+            // Obtém a tarifa mensalista aplicável
+            TarifaMensalista tarifaMensalista = encontrarTarifaMensalista();
+
+            if (tarifaMensalista == null) {
+                throw new Exception("Tarifa mensalista não encontrada.");
+            }
+
+            // Calcula a duração do período mensal
+            LocalDate dataInicio = ticket.getInicio().toLocalDate();
+            LocalDate dataFim = dataInicio.plusDays(30); // Adiciona 30 dias ao início para obter o fim do período
+            LocalDateTime horaAtual = LocalDateTime.of(dataAtual, LocalTime.now());
+
+            // Verifica se o período mensal já terminou
+            if (horaAtual.isAfter(LocalDateTime.of(dataFim, LocalTime.MAX))) {
+                instancias.getInterface().exibirMensagem("Período mensal já expirou.");
+                return -1; // Indica que o período mensal já expirou
+            }
+
+            // Calcula o valor da tarifa mensalista
+            valorTotal = tarifaMensalista.getValorMensal(); // Valor fixo mensal
+        } catch (Exception e) {
+            instancias.getInterface().exibirErro("Erro ao calcular valor da tarifa mensalista: " + e.getMessage());
+            return -1; // Indica que ocorreu um erro
         }
-
-        // Obtém a tarifa mensalista aplicável
-        TarifaMensalista tarifaMensalista = encontrarTarifaMensalista();
-
-        if (tarifaMensalista == null) {
-            instancias.getInterface().exibirMensagem("Tarifa mensalista não encontrada.");
-            return -1; // Indica que não foi encontrada uma tarifa mensalista válida
-        }
-
-        // Calcula a duração do período mensal
-        LocalDate dataInicio = ticket.getInicio().toLocalDate();
-        LocalDate dataFim = dataInicio.plusDays(30); // Adiciona 30 dias ao início para obter o fim do período
-        LocalDateTime horaAtual = LocalDateTime.of(dataAtual, LocalTime.now());
-
-        // Verifica se o período mensal já terminou
-        if (horaAtual.isAfter(LocalDateTime.of(dataFim, LocalTime.MAX))) {
-            instancias.getInterface().exibirMensagem("Período mensal já expirou.");
-            return -1; // Indica que o período mensal já expirou
-        }
-
-        // Calcula o valor da tarifa mensalista
-        double valorTotal = tarifaMensalista.getValorMensal(); // Valor fixo mensal
-
         return valorTotal;
     }
 

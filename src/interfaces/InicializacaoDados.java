@@ -2,11 +2,7 @@ package interfaces;
 import enums.EnumTipoVeiculo;
 import enums.EnumUsoEstacionamento;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import classes.*;
 import funcoes.*;
-import java.util.List;
 /**
  *
  * @author Gusta
