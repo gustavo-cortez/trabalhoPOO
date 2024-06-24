@@ -31,13 +31,4 @@ public enum EnumMenuVagas {
     public String toString() {
         return num + " - " + opDesc;
     }
-
-    public static EnumMenuVagas porNumero(int numero) {
-        for (EnumMenuVagas opcao : EnumMenuVagas.values()) {
-            if (opcao.getNum() == numero) {
-                return opcao;
-            }
-        }
-        throw new IllegalArgumentException("Opção inválida: " + numero);
-    }
 }

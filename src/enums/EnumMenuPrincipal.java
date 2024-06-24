@@ -31,13 +31,4 @@ public enum EnumMenuPrincipal {
     public String toString() {
         return num + " - " + opDesc;
     }
-
-    public static EnumMenuPrincipal porNumero(int numero) {
-        for (EnumMenuPrincipal opcao : EnumMenuPrincipal.values()) {
-            if (opcao.getNum() == numero) {
-                return opcao;
-            }
-        }
-        throw new IllegalArgumentException("Opção inválida: " + numero);
-    }
 }

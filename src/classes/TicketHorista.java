@@ -32,7 +32,6 @@ public class TicketHorista extends Ticket implements Serializable {
         TarifaHorista tarifa = tarifaIns.encontrarTarifaHorista(inicio.getDayOfWeek());
 
         if (tarifa == null) {
-            System.out.println("Tarifa não encontrada para o dia da semana");
             return -1.0; // Se não haver tarifas para o dia da semana ele retorna menos um e uma mensagem de aviso
         }
 

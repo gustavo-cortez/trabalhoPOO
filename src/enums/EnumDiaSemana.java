@@ -6,13 +6,14 @@ package enums;
  */
 /*Enumeração para os dias da semana*/
 public enum EnumDiaSemana {
-    DOMINGO(1, "DOMINGO"),
-    SEGUNDA(2, "SEGUNDA-FEIRA"),
-    TERCA(3, "TERÇA-FEIRA"),
-    QUARTA(4, "QUARTA-FEIRA"),
-    QUINTA(5, "QUINTA-FEIRA"),
-    SEXTA(6, "SEXTA-FEIRA"),
-    SABADO(7, "SABADO");
+    
+    SEGUNDA(1, "SEGUNDA-FEIRA"),
+    TERCA(2, "TERÇA-FEIRA"),
+    QUARTA(3, "QUARTA-FEIRA"),
+    QUINTA(4, "QUINTA-FEIRA"),
+    SEXTA(5, "SEXTA-FEIRA"),
+    SABADO(6, "SABADO"),
+    DOMINGO(7, "DOMINGO");
     
     
     private final int opcaodia;

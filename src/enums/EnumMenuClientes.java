@@ -32,13 +32,4 @@ public enum EnumMenuClientes {
     public String toString() {
         return num + " - " + opDesc;
     }
-
-    public static EnumMenuClientes porNumero(int numero) {
-        for (EnumMenuClientes opcao : EnumMenuClientes.values()) {
-            if (opcao.getNum() == numero) {
-                return opcao;
-            }
-        }
-        throw new IllegalArgumentException("Opção inválida: " + numero);
-    }
 }

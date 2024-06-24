@@ -12,28 +12,26 @@ public class MenuEstacionamento implements MenuInterface {
     @Override
     public void exibir(UserInterface Interface, Instancias instancias) {
         
-        instancias.getTicketsIns().verificarTicketsMensalistas(instancias.getVagasIns());
+        instancias.getTicketsIns().verificarTicketsMensalistas();
         int opcao;
         do {
-            StringBuilder menu = new StringBuilder("Menu Clientes:\n");
-            for (EnumMenuEstacionamento option : EnumMenuEstacionamento.values()) {
-                menu.append(option).append("\n");
-            }
-            menu.append("Escolha uma opção:");
-
-            opcao = Interface.solicitarInt(menu.toString());
+            List<EnumMenuEstacionamento> opcoesMenuEstacionamento = List.of(EnumMenuEstacionamento.values());
+            
+            opcao = Interface.exibirMenus("Submenu - Gerenciamento do Estacionamento", opcoesMenuEstacionamento);
             
 
             switch (opcao) {
                 case 1:
                     String placaEstacionar = Interface.solicitarEntrada("Digite a placa do veículo a ser estacionado"); 
                     int numVaga = (Interface.solicitarInt("Digite o número da vaga para estacionar o veículo"));
+                    String tipoUso = (String) Interface.solicitarEntradaMaior("Selecione como deseja usar a vaga, por hora ou mensal.", "Tipo de Vaga", new String[]{"HORISTA", "MENSALISTA"}, "HORISTA");
+                    instancias.getClienteIns().consultarPlaca(placaEstacionar).setUsoEstacionamento(EnumUsoEstacionamento.valueOf(tipoUso));
                     if(instancias.getClienteIns().consultarPlaca(placaEstacionar) != null){
                         if(instancias.getClienteIns().consultarPlaca(placaEstacionar).getTipoUso().equals(EnumUsoEstacionamento.HORISTA)){
-                            instancias.getVagasIns().estacionarVeiculo(instancias.getTicketsIns(), instancias.getClienteIns().consultarPlaca(placaEstacionar), numVaga, instancias.getTarifasIns());
+                            instancias.getVagasIns().estacionarVeiculo(instancias.getClienteIns().consultarPlaca(placaEstacionar), numVaga);
                         }
                         else{
-                            instancias.getVagasIns().estacionarVeiculoMensalista(instancias.getTicketsIns(), instancias.getClienteIns().consultarPlaca(placaEstacionar), numVaga, instancias.getTarifasIns());
+                            instancias.getVagasIns().estacionarVeiculoMensalista(instancias.getClienteIns().consultarPlaca(placaEstacionar), numVaga);
                         }
                     }
                     else{
@@ -45,10 +43,10 @@ public class MenuEstacionamento implements MenuInterface {
                     if(instancias.getTicketsIns().buscarTicketPorVaga(numVaga) != null){
                         
                         if(instancias.getTicketsIns().buscarTicketPorVaga(numVaga) instanceof TicketHorista){
-                            instancias.getVagasIns().retirarVeiculo(instancias.getTicketsIns(), numVaga, instancias.getTarifasIns());
+                            instancias.getVagasIns().retirarVeiculo(numVaga);
                         }
                         else{
-                            instancias.getVagasIns().retirarVeiculoMensalista(instancias.getTicketsIns(), numVaga, instancias.getTarifasIns()); 
+                            instancias.getVagasIns().retirarVeiculoMensalista(numVaga); 
                         }
                     }
                     else{
@@ -81,14 +79,15 @@ public class MenuEstacionamento implements MenuInterface {
                     }
                     break;
                 case 5:
-                    instancias.getMenuTarifas().exibir(Interface, instancias);
-                    break;
-                case 6:
                     Interface.exibirMensagem("Voltando ao menu principal...");
                     break;
                 default:
+                    if(opcao == 0){
+                        opcao = 5;
+                        break;
+                    }
                     Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcao != 6);
+        } while (opcao != 5);
     }
 }

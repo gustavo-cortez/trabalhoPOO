@@ -1,4 +1,7 @@
 package interfaces;
+
+import java.util.List;
+
 /**
  *
  * @author Gustavo
@@ -12,5 +15,6 @@ public interface UserInterface {
     void exibirSucesso(String sucesso);
     double solicitarDouble(String mensagem);
     String solicitarEntradaMaior(String mensagem, String titulo, String[] opcoes, String opcaoPadrao);
+    <T> int exibirMenus(String mensagem, List<T> opcoes);
 }
 

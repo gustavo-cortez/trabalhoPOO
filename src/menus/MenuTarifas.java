@@ -3,9 +3,9 @@ package menus;
 import enums.EnumMenuTarifas;
 import interfaces.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 public class MenuTarifas implements MenuInterface {
     private Instancias instancias;
@@ -15,13 +15,9 @@ public class MenuTarifas implements MenuInterface {
        
         int opcao;
         do {
-            StringBuilder menu = new StringBuilder("Menu Principal:\n");
-            for (EnumMenuTarifas option : EnumMenuTarifas.values()) {
-                menu.append(option).append("\n");
-            }
-            menu.append("Escolha uma opção:");
-
-            opcao = Interface.solicitarInt(menu.toString());
+            List<EnumMenuTarifas> opcoesMenuTarifas = List.of(EnumMenuTarifas.values());
+            
+            opcao = Interface.exibirMenus("Submenu - Tarifas", opcoesMenuTarifas);
 
             switch (opcao) {
                 case 1:
@@ -68,6 +64,10 @@ public class MenuTarifas implements MenuInterface {
                     Interface.exibirMensagem("Voltando...");
                     break;
                 default:
+                    if(opcao == 0){
+                        opcao = 4;
+                        break;
+                    }
                     Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
             }
         } while (opcao != 4);

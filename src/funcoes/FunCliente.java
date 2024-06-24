@@ -46,10 +46,10 @@ public class FunCliente {
     }
 
     /*Método para excluir um cliente se ele não possuir veiculos*/
-    public boolean excluirCliente(String documento, FunTickets ticketIns) {
+    public boolean excluirCliente(String documento) {
         try {
             Cliente cliente = consultarCliente(documento);
-            if (cliente!= null && cliente.getVeiculos().isEmpty() && consultarTicketsCliente(cliente, ticketIns).isEmpty()) {
+            if (cliente!= null && cliente.getVeiculos().isEmpty() && consultarTicketsCliente(cliente).isEmpty()) {
                 clientes.remove(cliente);
                 return true; /* Cliente removido com sucesso */
             } else {
@@ -62,9 +62,9 @@ public class FunCliente {
     }
 
     /*Método para consultar os tickets de um cliente, precisa ser implementado de acordo com a estrutura do seu sistema*/
-    private List<Ticket> consultarTicketsCliente(Cliente cliente, FunTickets ticketIns) {
+    private List<Ticket> consultarTicketsCliente(Cliente cliente) {
         List<Ticket> ticketsDoCliente = new ArrayList<>();
-        for (Ticket ticket : ticketIns.tickets) {
+        for (Ticket ticket : instancias.getTicketsIns().tickets) {
             if (ticket.getVeiculo().getProprietario().equals(cliente)) {
                 ticketsDoCliente.add(ticket);
             }
@@ -74,7 +74,7 @@ public class FunCliente {
 
     
     /*Método para excluir um veiculo do cliente*/
-    public boolean excluirVeiculo(String documento, String placa, FunTickets ticketIns) {
+    public boolean excluirVeiculo(String documento, String placa) {
         try {
             Cliente cliente = consultarCliente(documento);
             Veiculo veiculo = consultarPlaca(placa);
@@ -87,7 +87,7 @@ public class FunCliente {
                 while (iterator.hasNext()) {
                     Veiculo v = iterator.next();
                     // Verifica se o veículo atual é o veículo que queremos remover
-                    if (v.getPlaca().equals(placa) && consultarTicketsCliente(cliente, ticketIns).isEmpty()) {
+                    if (v.getPlaca().equals(placa) && consultarTicketsCliente(cliente).isEmpty()) {
                         // Remove o veículo da lista
                         iterator.remove();
                         // Retorna verdadeiro indicando que o veículo foi removido com sucesso

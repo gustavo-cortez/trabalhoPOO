@@ -1,5 +1,7 @@
 package interfaces;
 
+import enums.EnumMenuPrincipal;
+import java.util.List;
 import javax.swing.JOptionPane;
 import menus.*;
 
@@ -13,11 +15,11 @@ public class VisualInterface implements UserInterface {
     public VisualInterface() {
         instancia = new Instancias(this);
         instancia.getPersistenciaIns().carregarDados("DadosEstacionamento.json");
-        InicializacaoDados.inicializarClientes(instancia.getClienteIns());
+        /*InicializacaoDados.inicializarClientes(instancia.getClienteIns());
         InicializacaoDados.inicializarTarifas(instancia.getTarifasIns());
         InicializacaoDados.inicializarVagas(instancia.getVagasIns());
         InicializacaoDados.inicializarVeiculos(instancia.getClienteIns());
-        
+        */
     }
     
     @Override
@@ -86,5 +88,25 @@ public class VisualInterface implements UserInterface {
     @Override
     public String solicitarEntradaMaior(String mensagem, String titulo, String[] opcoes, String opcaoPadrao) {
         return (String) JOptionPane.showInputDialog(null, mensagem, titulo, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcaoPadrao);
+    }
+    
+    /*Método para exibir menu em JOPTIONPANE com botões, onde tem o uso de método genérico <T> 
+    onde ele se adequa dependo do List de enum que vier como parâmetro*/
+    @Override
+    public <T> int exibirMenus(String mensagem, List<T> opcoes) {
+        String[] opcoesArray = new String[opcoes.size()];
+        for (int i = 0; i < opcoes.size(); i++) {
+            opcoesArray[i] = opcoes.get(i).toString();
+        }
+        return JOptionPane.showOptionDialog(
+            null, 
+            mensagem, 
+            mensagem,
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.INFORMATION_MESSAGE, 
+            null, 
+            opcoesArray, 
+            opcoesArray[0]
+        ) + 1;
     }
 }

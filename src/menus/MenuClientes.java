@@ -3,6 +3,7 @@ package menus;
 import classes.*;
 import enums.EnumMenuClientes;
 import interfaces.UserInterface;
+import java.util.List;
 
 public class MenuClientes implements MenuInterface {
     private Instancias instancias;
@@ -11,26 +12,20 @@ public class MenuClientes implements MenuInterface {
     public void exibir(UserInterface Interface, Instancias instancias) {
         int opcao;
         do {
-            StringBuilder menu = new StringBuilder("Menu Clientes:\n");
-            for (EnumMenuClientes option : EnumMenuClientes.values()) {
-                menu.append(option).append("\n");
-            }
-            menu.append("Escolha uma opção:");
-
-            opcao = Interface.solicitarInt(menu.toString());
+            List<EnumMenuClientes> opcoesMenuCliente = List.of(EnumMenuClientes.values());
+            
+            opcao = Interface.exibirMenus("Submenu - Cliente", opcoesMenuCliente);
 
             try{
-                EnumMenuClientes opcaoEscolhida = EnumMenuClientes.porNumero(opcao);
-
-                switch (opcaoEscolhida) {
-                case CADASTRAR_CLIENTE:
+                switch (opcao) {
+                case 1:
                     // Cadastrar cliente
                     String nomeCli = Interface.solicitarEntrada("Digite o nome do cliente:");
                     String documentoCli = Interface.solicitarEntrada("Digite o CPF do cliente:");
                     instancias.getClienteIns().cadastrarCliente(nomeCli, documentoCli);
                     break;
 
-                case CONSULTAR_CLIENTE:
+                case 2:
                     // Consultar cliente por documento
                     documentoCli = Interface.solicitarEntrada("Digite o CPF do cliente a ser consultado:");
                     Cliente clienteConsulta = instancias.getClienteIns().consultarCliente(documentoCli);
@@ -41,10 +36,10 @@ public class MenuClientes implements MenuInterface {
                     }
                     break;
 
-                case EXCLUIR_CLIENTE:
+                case 3:
                     // Excluir cliente
                     documentoCli = Interface.solicitarEntrada("Digite o CPF do cliente a ser excluído:");
-                    if(instancias.getClienteIns().excluirCliente(documentoCli, instancias.getTicketsIns()) == false){
+                    if(instancias.getClienteIns().excluirCliente(documentoCli) == false){
                         Interface.exibirErro("Erro ao excluir o cliente.");
                     }
                     else{
@@ -52,35 +47,39 @@ public class MenuClientes implements MenuInterface {
                     }
                     break;
 
-                case EDITAR_CLIENTE:
+                case 4:
                     // Editar cliente
                     nomeCli = Interface.solicitarEntrada("Digite o novo nome do cliente:");
                     documentoCli = Interface.solicitarEntrada("Digite o CPF do cliente a ser alterado:");
                     instancias.getClienteIns().editarCliente(documentoCli, nomeCli);
                     break;
 
-                case GERENCIAR_VEICULOS:
+                case 5:
                     // Gerenciar veículos
                     instancias.getMenuVeiculos().exibir(Interface, instancias);
                     break;
 
-                case LISTAR_CADASTROS:
+                case 6:
                     // Listar todos os cadastros
                     instancias.getClienteIns().listarClientes();
                     break;
 
-                case VOLTAR:
+                case 7:
                     // Voltar
                     Interface.exibirMensagem("Voltando ao menu principal...");
                     break;
 
                 default:
+                    if(opcao == 0){
+                        opcao = 7;
+                        break;
+                    }
                     Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
             }
             }
             catch (IllegalArgumentException e) {
                 Interface.exibirMensagem(e.getMessage());
             }
-        } while (opcao != EnumMenuClientes.VOLTAR.getNum());
+        } while (opcao != 7);
     }
 }

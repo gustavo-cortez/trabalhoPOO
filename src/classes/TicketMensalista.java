@@ -8,9 +8,11 @@ import java.time.LocalDateTime;
  */
 /* Subclasse específica para representar tickets mensalistas */
 public class TicketMensalista extends Ticket implements Serializable  {
-    /* Construtor */
+
     TarifaMensalista tarifaMensal;
     private static final long serialVersionUID = 1L;
+    
+    /* Construtor */
     public TicketMensalista(LocalDateTime inicio, LocalDateTime fim, Veiculo veiculo, double valor, Vagas vaga, TarifaMensalista tarifaMensal) {
         super(inicio, fim, veiculo, valor, vaga);
         this.tarifaMensal = tarifaMensal;
@@ -27,9 +29,12 @@ public class TicketMensalista extends Ticket implements Serializable  {
     @Override
     public double calcularValor(FunTarifas tarifaIns) {
         double valorTotal;
-        valorTotal = tarifaMensal.getValorMensal() * this.getVeiculo().getTipo().getMultiplicador();
-        
-        return valorTotal;
+        TarifaMensalista tarifa = tarifaIns.encontrarTarifaMensalista();
+        if(tarifa != null){
+            valorTotal = tarifa.getValorMensal() * this.getVeiculo().getTipo().getMultiplicador();
+            return valorTotal;
+        }
+        return -1;
     }
 }
 

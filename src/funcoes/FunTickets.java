@@ -57,16 +57,22 @@ public class FunTickets {
     }
     
     /*Método para calcular o valor total do ticket com base nas tarifas disponivel antes da data atual e do dia da semana atual*/
-    public double calcularValorTicket(Ticket ticket, FunTarifas tarifaIns) {
+    public double calcularValorTicket(Ticket ticket) {
         try {
             double valorTotal;
             if(ticket instanceof TicketHorista){
-                TicketHorista ticketHo = new TicketHorista(ticket.getInicio(), ticket.getFim(), ticket.getVeiculo(), ticket.getValor(), ticket.getVaga(), tarifaIns.encontrarTarifaHorista(ticket.getInicio().getDayOfWeek()));
-                valorTotal = ticketHo.calcularValor(tarifaIns);
+                TicketHorista ticketHo = new TicketHorista(ticket.getInicio(), ticket.getFim(), ticket.getVeiculo(), ticket.getValor(), ticket.getVaga(), instancias.getTarifasIns().encontrarTarifaHorista(ticket.getInicio().getDayOfWeek()));
+                valorTotal = ticketHo.calcularValor(instancias.getTarifasIns());
             }
             else{
-                TicketMensalista ticketMensal = new TicketMensalista(ticket.getInicio(), ticket.getFim(), ticket.getVeiculo(), ticket.getValor(), ticket.getVaga(), tarifaIns.encontrarTarifaMensalista());
-                valorTotal = ticketMensal.calcularValor(tarifaIns);
+                if(instancias.getVagasIns().buscarTicketMensalistaValido(ticket.getVeiculo()) == null){
+                    TicketMensalista ticketMensal = new TicketMensalista(ticket.getInicio(), ticket.getFim(), ticket.getVeiculo(), ticket.getValor(), ticket.getVaga(), instancias.getTarifasIns().encontrarTarifaMensalista());
+                    valorTotal = ticketMensal.calcularValor(instancias.getTarifasIns());
+                    return valorTotal; 
+                }
+                else{
+                    return instancias.getVagasIns().buscarTicketMensalistaValido(ticket.getVeiculo()).getValor();
+                }
             }
             return valorTotal; 
         } catch (Exception e) {
@@ -74,7 +80,6 @@ public class FunTickets {
             return -1; // Indica que ocorreu um erro
         }
     }
-    
     /*Método para consultar o faturamento em um período específico, buscando todos tickets que 
     foram gerados nesse meio tempo e fazendo a soma dos valores*/
     public double consultarFaturamentoPeriodo(LocalDateTime inicioPeriodo, LocalDateTime fimPeriodo) {
@@ -93,15 +98,15 @@ public class FunTickets {
         }
     }
     
-    public void verificarTicketsMensalistas(FunVagas vagasIns) {
+    public void verificarTicketsMensalistas() {
         try {
             LocalDateTime hoje = LocalDateTime.now();
             for (Ticket ticket : tickets) {
                 if (ticket instanceof TicketMensalista && ticket.getFim().isBefore(hoje)) {
                     ticket.setStatus(EnumStatus.FINALIZADO);
-                    Vagas vaga = vagasIns.buscarVaga(ticket.getVaga().getNumero());
+                    Vagas vaga = instancias.getVagasIns().buscarVaga(ticket.getVaga().getNumero());
                     if (vaga != null) {
-                        vaga.setStatus(EnumVagaStatus.DISPONIVEL);
+                        vaga.desocupar();
                     }
                 }
             }

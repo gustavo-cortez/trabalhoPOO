@@ -4,6 +4,7 @@ import interfaces.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 /**
  *
@@ -22,32 +23,32 @@ public class MenuPrincipal implements MenuInterface{
         
         int opcao;
         do {
-            StringBuilder menu = new StringBuilder("Menu Principal:\n");
-            for (EnumMenuPrincipal option : EnumMenuPrincipal.values()) {
-                menu.append(option).append("\n");
-            }
-            menu.append("Escolha uma opção:");
+            List<EnumMenuPrincipal> opcoesMenuPrincipal = List.of(EnumMenuPrincipal.values());
             
-            opcao = Interface.solicitarInt(menu.toString());
+            opcao = Interface.exibirMenus("Menu principal", opcoesMenuPrincipal);
            
 
             try{
-                EnumMenuPrincipal opcaoEscolhida = EnumMenuPrincipal.porNumero(opcao);
 
-                switch (opcaoEscolhida) {
-                    case CLIENTES:
+                switch (opcao) {
+                    case 1:
                         instancias.getMenuClientes().exibir(Interface, instancias);
                         break;
-                    case VAGAS:
+                    case 2:
                         instancias.getMenuVagas().exibir(Interface, instancias);
                         break;
-                    case ESTACIONAMENTO:
-                        instancias.getMenuEstacionamento().exibir(Interface, instancias);
+                    case 3:
+                        if(!instancias.getClienteIns().clientes.isEmpty() && !instancias.getVagasIns().vagas.isEmpty()){
+                            instancias.getMenuEstacionamento().exibir(Interface, instancias);  
+                        }
+                        else{
+                            Interface.exibirErro("Há cadastros vazios em clientes, vagas ou tarifas!");
+                        }
                         break;
-                    case FUNCOES_GERAIS:
+                    case 4:
                         instancias.getMenuFuncoesGerais().exibir(Interface, instancias);
                         break;
-                    case CONSULTAR_FATURAMENTO:
+                    case 5:
                         boolean continua = false;
                         do{
                             try{
@@ -67,11 +68,15 @@ public class MenuPrincipal implements MenuInterface{
                             }
                         }while(continua == false);
                         break;
-                    case SAIR:
+                    case 6:
                         Interface.exibirMensagem("Saindo do programa...");
                         instancias.getPersistenciaIns().salvarDados("DadosEstacionamento.json");
                         break;
                     default:
+                        if(opcao == 0){
+                            opcao = 6;
+                            break;
+                        }
                         Interface.exibirMensagem("Opção inválida. Por favor, escolha uma opção válida.");
                 }
             }

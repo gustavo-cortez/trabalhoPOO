@@ -2,34 +2,38 @@ package menus;
 
 import enums.EnumMenuFuncoesGerais;
 import interfaces.*;
+import java.util.List;
 
 public class MenuFuncoesGerais implements MenuInterface {
     private Instancias instancias;
 
     @Override
     public void exibir(UserInterface Interface,Instancias instancias) {
-
+        instancias.getTicketsIns().verificarTicketsMensalistas();
         int opcao;
         do {
-            StringBuilder menu = new StringBuilder("Menu Clientes:\n");
-            for (EnumMenuFuncoesGerais option : EnumMenuFuncoesGerais.values()) {
-                menu.append(option).append("\n");
-            }
-            menu.append("Escolha uma opção:");
-
-            opcao = Interface.solicitarInt(menu.toString());
+            List<EnumMenuFuncoesGerais> opcoesMenuFuncoesGerais = List.of(EnumMenuFuncoesGerais.values());
+            
+            opcao = Interface.exibirMenus("Submenu - Funções Gerais", opcoesMenuFuncoesGerais);
 
             switch (opcao) {
                 case 1:
                     instancias.getTicketsIns().listarTickets();
                     break;
                 case 2:
+                    instancias.getMenuTarifas().exibir(Interface, instancias);
+                    break;
+                case 3:
                     Interface.exibirMensagem("Voltando ao menu principal...");
                     break;
                 default:
+                    if(opcao == 0){
+                        opcao = 3;
+                        break;
+                    }
                     Interface.exibirErro("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcao != 2);
+        } while (opcao != 3);
     }
 }
  

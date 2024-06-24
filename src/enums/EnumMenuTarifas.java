@@ -29,13 +29,4 @@ public enum EnumMenuTarifas {
     public String toString() {
         return num + " - " + opDesc;
     }
-
-    public static EnumMenuTarifas porNumero(int numero) {
-        for (EnumMenuTarifas opcao : EnumMenuTarifas.values()) {
-            if (opcao.getNum() == numero) {
-                return opcao;
-            }
-        }
-        throw new IllegalArgumentException("Opção inválida: " + numero);
-    }
 }

@@ -1,10 +1,9 @@
 package menus;
 
 import enums.EnumTipoVeiculo;
-import enums.EnumUsoEstacionamento;
 import interfaces.*;
-import javax.swing.JOptionPane;
 import enums.EnumMenuVeiculos;
+import java.util.List;
 
 public class MenuVeiculos implements MenuInterface {
     private Instancias instancias;
@@ -13,13 +12,9 @@ public class MenuVeiculos implements MenuInterface {
     public void exibir(UserInterface Interface, Instancias instancias) {
         int opcao;
         do {
-            StringBuilder menu = new StringBuilder("Menu Principal:\n");
-            for (EnumMenuVeiculos option : EnumMenuVeiculos.values()) {
-                menu.append(option).append("\n");
-            }
-            menu.append("Escolha uma opção:");
-
-            opcao = Interface.solicitarInt(menu.toString());
+            List<EnumMenuVeiculos> opcoesMenuVeiculos = List.of(EnumMenuVeiculos.values());
+            
+            opcao = Interface.exibirMenus("Submenu - Veículos", opcoesMenuVeiculos);
 
             switch (opcao) {
                 case 1:
@@ -28,14 +23,9 @@ public class MenuVeiculos implements MenuInterface {
                     String veiculoPlaca = Interface.solicitarEntrada("Informe a placa do veículo:");
                     String modeloVeiculo = Interface.solicitarEntrada("Informe o modelo do veículo:");
                     String corVeiculo = Interface.solicitarEntrada("Informe a cor do veículo:");
-                    String tipoUso = (String) Interface.solicitarEntradaMaior("Selecione o tipo da vaga.", "Tipo de Vaga", new String[]{"HORISTA", "MENSALISTA"}, "HORISTA");
                     String tipoVeiculoStr = (String) Interface.solicitarEntradaMaior("Selecione o tipo da vaga.", "Tipo de Vaga", new String[]{"CARRO", "MOTO", "ÔNIBUS"}, "CARRO");
                     if (tipoVeiculoStr != null) {
-                        switch (tipoVeiculoStr.toUpperCase()) {
-                            case "CARRO":
-                                instancias.getClienteIns().adicionarVeiculoCliente(veiculoPlaca, EnumTipoVeiculo.valueOf(tipoVeiculoStr), documentoCli, corVeiculo, modeloVeiculo, EnumUsoEstacionamento.valueOf(tipoUso));
-                                break;
-                        }
+                        instancias.getClienteIns().adicionarVeiculoCliente(veiculoPlaca, EnumTipoVeiculo.valueOf(tipoVeiculoStr), documentoCli, corVeiculo, modeloVeiculo, null);
                     }
                     
                     break;
@@ -50,7 +40,7 @@ public class MenuVeiculos implements MenuInterface {
                     // Excluir veículo do cliente
                     documentoCli = Interface.solicitarEntrada("Informe o documento do cliente:");
                     veiculoPlaca = Interface.solicitarEntrada("Informe a placa do veículo que deseja excluir:"); 
-                    if(instancias.getClienteIns().excluirVeiculo(documentoCli, veiculoPlaca, instancias.getTicketsIns()) == false){
+                    if(instancias.getClienteIns().excluirVeiculo(documentoCli, veiculoPlaca) == false){
                         Interface.exibirErro("Erro ao excluir o veículo do cliente.");
                     }
                     else{
@@ -64,6 +54,10 @@ public class MenuVeiculos implements MenuInterface {
                     break;
 
                 default:
+                    if(opcao == 0){
+                        opcao = 4;
+                        break;
+                    }
                     Interface.exibirErro("Opção inválida. Por favor, escolha uma opção válida.");
             }
         } while (opcao != 4);

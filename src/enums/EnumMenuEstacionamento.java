@@ -6,10 +6,9 @@ package enums;
 public enum EnumMenuEstacionamento {
     ESTACIONAR(1, "Estacionar veiculo"),
     RETIRAR(2, "Retirar Veiculo"),
-    LISTAR_VAGAS_DISPONIVEIS(3, "Listar vaagas disponiveis"),
+    LISTAR_VAGAS_DISPONIVEIS(3, "Listar vagas disponiveis"),
     lISTAR_VAGAS_ALUGADAS(4, "Listar vagas alugadas"),
-    GERENCIAR_TARIFAS(5, "Gerenciar tarifas"),
-    VOLTAR(6, "Voltar");
+    VOLTAR(5, "Voltar");
 
     private final int num;
     private final String opDesc;
@@ -30,14 +29,5 @@ public enum EnumMenuEstacionamento {
     @Override
     public String toString() {
         return num + " - " + opDesc;
-    }
-
-    public static EnumMenuEstacionamento porNumero(int numero) {
-        for (EnumMenuEstacionamento opcao : EnumMenuEstacionamento.values()) {
-            if (opcao.getNum() == numero) {
-                return opcao;
-            }
-        }
-        throw new IllegalArgumentException("Opção inválida: " + numero);
     }
 }

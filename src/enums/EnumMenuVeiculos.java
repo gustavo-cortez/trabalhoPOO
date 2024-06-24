@@ -29,13 +29,4 @@ public enum EnumMenuVeiculos {
     public String toString() {
         return num + " - " + opDesc;
     }
-
-    public static EnumMenuVeiculos porNumero(int numero) {
-        for (EnumMenuVeiculos opcao : EnumMenuVeiculos.values()) {
-            if (opcao.getNum() == numero) {
-                return opcao;
-            }
-        }
-        throw new IllegalArgumentException("Opção inválida: " + numero);
-    }
 }

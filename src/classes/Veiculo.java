@@ -14,7 +14,7 @@ public class Veiculo implements Serializable  {
     private Modelo modelo;
     private Cliente proprietario;
     private EnumTipoVeiculo tipo;
-    private EnumUsoEstacionamento TipoUso;
+    private EnumUsoEstacionamento UsoEstacionamento;
     private static final long serialVersionUID = 1L;
     /*Construtor e métodos getters e setters do véiculo*/
 
@@ -24,7 +24,7 @@ public class Veiculo implements Serializable  {
         this.tipo = tipo;
         this.modelo = modelo;
         this.cor = cor;
-        this.TipoUso = TipoUso;
+        this.UsoEstacionamento = TipoUso;
     }
 
     public String getPlaca() {
@@ -48,31 +48,11 @@ public class Veiculo implements Serializable  {
     }
 
     public EnumUsoEstacionamento getTipoUso() {
-        return TipoUso;
+        return UsoEstacionamento;
     }
 
-    public void setTipoUso(EnumUsoEstacionamento TipoUso) {
-        this.TipoUso = TipoUso;
+    public void setUsoEstacionamento(EnumUsoEstacionamento TipoUso) {
+        this.UsoEstacionamento = TipoUso;
     }
-
-    public void setTipo(EnumTipoVeiculo tipo) {
-        this.tipo = tipo;
-    }
-    
-    public void setPlaca(String placa) {
-        this.placa = placa;
-    }
-
-    public void setProprietario(Cliente proprietario) {
-        this.proprietario = proprietario;
-    }
-
-    public void setCor(Cor cor) {
-        this.cor = cor;
-    }
-
-    public void setModelo(Modelo modelo) {
-        this.modelo = modelo;
-    } 
     
 }

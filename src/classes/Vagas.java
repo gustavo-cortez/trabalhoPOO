@@ -49,10 +49,22 @@ public class Vagas implements Serializable {
         this.rua = rua;
     }
 
-    public void setStatus(EnumVagaStatus status) {
-        this.status = status;
+    public void ocupar() {
+        this.status = EnumVagaStatus.OCUPADA;
     }
-
+    
+    public void desocupar() {
+        this.status = EnumVagaStatus.DISPONIVEL;
+    }
+    
+    public void alugar() {
+        this.status = EnumVagaStatus.ALUGADA_MENSAL;
+    }
+    
+    public void indisponibilizar() {
+        this.status = EnumVagaStatus.INDISPONIVEL;
+    }
+    
     public void setTipoVeiculo(EnumTipoVeiculo tipoVeiculo) {
         this.tipoVeiculo = tipoVeiculo;
     }

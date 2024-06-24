@@ -5,7 +5,8 @@ package enums;
  */
 public enum EnumMenuFuncoesGerais {
     LISTAR_TICEKT(1, "Listar tickets"),
-    VOLTAR(2, "Voltar");
+    TARIFAS(2, "Gerenciar Tarifas"),
+    VOLTAR(3, "Voltar");
 
     private final int num;
     private final String opDesc;
@@ -26,14 +27,5 @@ public enum EnumMenuFuncoesGerais {
     @Override
     public String toString() {
         return num + " - " + opDesc;
-    }
-
-    public static EnumMenuFuncoesGerais porNumero(int numero) {
-        for (EnumMenuFuncoesGerais opcao : EnumMenuFuncoesGerais.values()) {
-            if (opcao.getNum() == numero) {
-                return opcao;
-            }
-        }
-        throw new IllegalArgumentException("Opção inválida: " + numero);
     }
 }

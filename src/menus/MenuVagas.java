@@ -5,6 +5,7 @@ import enums.EnumTipoVeiculo;
 import classes.*;
 import enums.EnumMenuVagas;
 import interfaces.UserInterface;
+import java.util.List;
 
 public class MenuVagas implements MenuInterface {
     private Instancias instancias;
@@ -13,13 +14,9 @@ public class MenuVagas implements MenuInterface {
     public void exibir(UserInterface Interface, Instancias instancias) {
         int opcao;
         do {
-            StringBuilder menu = new StringBuilder("Menu Principal:\n");
-            for (EnumMenuVagas option : EnumMenuVagas.values()) {
-                menu.append(option).append("\n");
-            }
-            menu.append("Escolha uma opção:");
-
-            opcao = Interface.solicitarInt(menu.toString());
+            List<EnumMenuVagas> opcoesMenuVagas = List.of(EnumMenuVagas.values());
+            
+            opcao = Interface.exibirMenus("Submenu - Vagas", opcoesMenuVagas);
 
             switch (opcao) {
                 case 1:
@@ -58,7 +55,7 @@ public class MenuVagas implements MenuInterface {
                     break;
                 case 3:
                     int numeroVagaExcluir = Interface.solicitarInt("Informe o número da vaga a ser excluída:");
-                    instancias.getVagasIns().excluirVaga(numeroVagaExcluir, instancias.getTicketsIns());
+                    instancias.getVagasIns().excluirVaga(numeroVagaExcluir);
                     break;
                 case 4:
                     int numeroVagaEditar = Interface.solicitarInt("Digite o número da vaga que deseja editar");
@@ -109,9 +106,12 @@ public class MenuVagas implements MenuInterface {
                     break;
                 case 6:
                     Interface.exibirMensagem("Voltando ao menu principal...");
-                    instancias.exibirMenuPrincipal();
                     break;
                 default:
+                    if(opcao == 0){
+                        opcao = 6;
+                        break;
+                    }
                     Interface.exibirErro("Opção inválida. Por favor, escolha uma opção válida.");
             }
         } while (opcao != 6);

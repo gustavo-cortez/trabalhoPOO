@@ -1,6 +1,8 @@
 package interfaces;
 
+import enums.EnumMenuPrincipal;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 import menus.Instancias;
 
@@ -121,5 +123,23 @@ public class TerminalInterface implements UserInterface {
 
         // Retornar a opção escolhida
         return opcoes[escolha - 1];
+    }
+    
+    /*Método para exibir menu em terminal onde tem o uso de método genérico <T> 
+    onde ele se adequa dependo do List de enum que vier como parâmetro*/
+    @Override
+    public <T> int exibirMenus(String mensagem, List<T> opcoes) {
+        StringBuilder menu = new StringBuilder(mensagem + ":\n");
+        for (int i = 0; i < opcoes.size(); i++) {
+            menu.append(opcoes.get(i)).append("\n");
+        }
+        menu.append("Escolha uma opção:");
+
+        System.out.println(menu.toString());
+
+        Scanner scanner = new Scanner(System.in);
+        int opcao = scanner.nextInt();
+
+        return opcao;
     }
 }
